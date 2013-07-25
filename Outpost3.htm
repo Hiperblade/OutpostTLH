@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+	<!--script src="http://code.jquery.com/jquery-1.9.1.js"></script-->
+	<script src="lib\jquery-1.10.0.min.js"></script>
+	<script src="lib\jquery-ui.min.js"></script>
+
+	<script src="script\SystemLib.js" type="text/javascript"></script>
+	<script src="script\ImagesLib.js" type="text/javascript"></script>
+	<script src="script\ImagesLibData.js" type="text/javascript"></script>
+	<script src="script\IsometricView.js" type="text/javascript"></script>
+	<script src="script\MapView.js" type="text/javascript"></script>
+	<script src="script\TerrainMap.js" type="text/javascript"></script>
+	<script src="script\PrototypeLib.js" type="text/javascript"></script>
+	<script src="script\PrototypeLibData.js" type="text/javascript"></script>
+	<script src="script\ResearchLib.js" type="text/javascript"></script>
+	<script src="script\ResearchLibData.js" type="text/javascript"></script>
+	<script src="script\ProductionLib.js" type="text/javascript"></script>
+	<script src="script\ProductionLibData.js" type="text/javascript"></script>
+	<script src="script\Generations.js" type="text/javascript"></script>
+	<script src="script\ColonyState.js" type="text/javascript"></script>
+	<script src="script\Engine.js" type="text/javascript"></script>
+	<script src="script\BuildingSelectorView.js" type="text/javascript"></script>
+	<script src="script\QueueView.js" type="text/javascript"></script>
+	<script src="script\TextRepository.js" type="text/javascript"></script>
+	<script src="script\Main.js" type="text/javascript"></script>
+	
+	<style type="text/css"> 
+		.slider_container { overflow: hidden; float:left; }
+		.scroll-content { height: auto; float: left; }
+	</style> 
+	
+	<script type="text/javascript">
+		function onUpdateLoading()
+		{
+			var loadingScreen = document.getElementById("loadingScreenBar");
+			loadingScreen.style.width = Math.floor((ImagesLib.loadingMax - ImagesLib.loading) / ImagesLib.loadingMax * 300) + "px";
+			if(ImagesLib.loading == 0)
+			{
+				var loadingScreen = document.getElementById("loadingScreen");
+				loadingScreen.style.display = 'none';
+				initialize();
+				var mainScreen = document.getElementById("mainScreen");
+				mainScreen.style.display = 'block';
+			}
+		}
+		
+		ImagesLib.initialize("tileArea", imagesList, onUpdateLoading);
+	</script>
+</head>
+<body bgcolor="black">
+	<div id="loadingScreen">
+		<div style="border:1px solid #77cf3c; background-color: #1c4103; position: absolute; top: 150px; left: 150px; height: 20px; width: 300px;"></div>
+		<div id="loadingScreenBar" style="border:1px solid #a0d77b; border-right:0px; background-color: #478f16; position: absolute; top: 150px; left: 150px; height: 20px; width: 0px;"></div>
+	</div>
+	<div id="mainScreen" style="display: none">
+		<canvas id="tileArea" style="border:1px solid #77cf3c; position: absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
+		<canvas id="mapArea" style="border:1px solid #77cf3c; position: absolute;"></canvas>
+		<canvas id="buildingArea" style="border:1px solid #77cf3c; border-top:0px; border-bottom:0px; position: absolute;"></canvas>
+		<div id="queueDiv_wrapper">
+			<canvas id="queueCanvas" style="border:1px solid #77cf3c; position: absolute;"></canvas>
+			<div id="queueDiv" class="slider_container" style="border:1px solid #77cf3c; position: absolute;">
+				<div id="queueDiv_content" class="scroll-content"></div>
+			</div>
+			<div id="queueDiv_sliderCursor" style="border:1px solid #77cf3c; position: absolute;"></div>
+			<div id="queueDiv_slider" style="border:1px solid #77cf3c; border-left:0px; position: absolute;"></div>
+		</div>
+	</div>
+
+	<div id="debug">
+		<div style="position: absolute; left: 1000px; top: 5px;">
+			<div style="border:1px solid #77cf3c;">
+				<input type="button" id="nextTurnButton" value="Update State" onclick="showState();" />
+			</div>
+			<div id="showStateDiv" style="border:1px solid #77cf3c;"></div>
+		</div>
+		<div style="position: absolute; top: 600px; left: 5px;">
+			<table>
+				<tr>
+					<td>
+						<div id="showResearchStateDiv" style="border:1px solid #77cf3c;"></div>
+					</td>
+					<td style="vertical-align:top;">
+						<div id="showResearchState2Div" style="border:1px solid #77cf3c;"></div>
+					</td>
+				</tr>
+			<table>
+		</div>
+	</div>
+
+	<script>
+		var main;
+		function initialize()
+		{
+			//FILE: http://www.html5rocks.com/en/tutorials/file/dndfiles/
+			//context.globalAlpha=0.5;
+
+			var site = new Site(Typology.Vulcanic, "Site_vulcanic_1");
+			//var site = new Site(Typology.Asteroid, "Site_vulcanic_1");
+			//var site = new Site(Typology.Ice, "Site_vulcanic_1");
+			//var site = new Site(Typology.Desert, "Site_vulcanic_1");
+			//var site = new Site(Typology.Jungle, "Site_vulcanic_1");
+			//var site = new Site(Typology.Rock, "Site_vulcanic_1");
+			//var site = new Site(Typology.Stone, "Site_vulcanic_1");
+
+			main = new MainSystem("tileArea", "mapArea", "buildingArea", site);
+
+			//buildMap(main.getTerrainMap());
+
+			//------------------------
+			
+			var map = main.getTerrainMap();
+			for(var i = 0; i < 60; i++)
+			{
+				map.addResource("Metal", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
+			}
+			for(var i = 0; i < 40; i++)
+			{
+				map.addResource("Mineral", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
+			}
+			for(var i = 0; i < 10; i++)
+			{
+				map.addResource("Radioactive", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
+			}
+			for(var i = 0; i < 10; i++)
+			{
+				map.addResource("Fumarole", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
+			}
+			
+			var state = main.getState();
+			state.addKnowledge({ discovery: ["ElectrostaticDischarge"] });
+			state.addKnowledge({ discovery: ["Robotics"] });
+			state.addKnowledge({ theory: ["Extraction_Metal"] });
+			
+			state.addKnowledge({ technology: ["LandingModule"] });
+			
+			/*
+			state.addKnowledge({ technology: [
+				"LandingModule",
+				"MicrowavePlant",
+				"ElectrostaticCoil",
+				"Geothermal",
+				"StorageArea",
+				"Tokamak",
+				"TokamakAdv",
+				"Capacitor",
+				"CommandCenter",
+				"MaintenanceCenter",
+				"RoboRemittance",
+				"RoboRemittanceAdv",
+				"RoboCommander",
+				"RoboCommanderAdv",
+				"EnvironmentalControl",
+				"EnvironmentalControlAdv",
+				"Agridome",
+				"AgridomeAdv",
+				"AgridomeIntensive",
+				"VerticalFarm",
+				"VerticalFarmAdv",
+				"Residential",
+				"ResidentialAdv",
+				"Nursery",
+				"MedicalStructure",
+				"MedicalStructureAdv",
+				"School",
+				"Univesity",
+				"UnivesityAdv",
+				"RecreationalFacility",
+				"Park",
+				"Warehouse",
+				"Smelter",
+				"SmelterAdv",
+				"GoodsFactory",
+				"IndustrialFactory",
+				"ChemicalFactory",
+				"PharmaceuticalIndustry",
+				"HotLab",
+				"HotLabAdv",
+				"Lab",
+				"LabAdv",
+				"DeepLab"] });
+			*/
+			//state.createMaterials({ repairUnit: 10000 });
+			//state.destroyMaterials({ repairUnit: 10000 });
+			
+			state.configureMaterial("metalOre", "genericStorage");
+			state.configureMaterial("mineralOre", "genericStorage");
+			state.configureMaterial("cristalOre", "genericStorage");
+			state.configureMaterial("ironBar", "genericStorage");
+			state.configureMaterial("goodsUnit", "genericStorage");
+			state.configureMaterial("pharmaceuticalUnit", "genericStorage");
+			state.configureMaterial("fusionWaste", "genericStorage");
+			
+			state.configureMaterial("dozer", "roboticStorage");
+			state.configureMaterial("digger", "roboticStorage");
+			state.configureMaterial("miner", "roboticStorage");
+			state.configureMaterial("worker", "roboticStorage");
+			state.configureMaterial("MicrowaveSatellite", "roboticStorage");
+			
+			state.configureMaterial("radioactiveOre", "radioactiveStorage");
+			state.configureMaterial("radioactiveWaste", "radioactiveStorage");
+			state.configureMaterial("toxicWaste", "radioactiveStorage");
+			
+			//state.createMaterials({ dozer: 10 });
+			//state.createMaterials({ digger: 10 });
+					
+			//------------------------
+			
+			main.redraw();
+		}
+		
+		//initialize();
+		
+		function buildMap(map)
+		{
+			//************ TODO
+			
+			// SPAZIOPORTO			
+			//map.addBuilding(new Building("303A", TerrainLayer.Surface, new Point(4, 6), 0));
+			//map.addBuilding(new Building("303B", TerrainLayer.Surface, new Point(5, 6), 0));
+			//map.addBuilding(new Building("303C", TerrainLayer.Surface, new Point(5, 5), 0));
+			//map.addBuilding(new Building("303D", TerrainLayer.Surface, new Point(4, 5), 0));
+
+			//map.addBuilding(new Building("432A", TerrainLayer.Underground, new Point(4, 6), 0));
+			//map.addBuilding(new Building("432B", TerrainLayer.Underground, new Point(5, 6), 0));
+			//map.addBuilding(new Building("432C", TerrainLayer.Underground, new Point(5, 5), 0));
+			//map.addBuilding(new Building("432D", TerrainLayer.Underground, new Point(4, 5), 0));
+
+			map.addBuilding("Park", { x: 4, y: 3 });
+			
+			var layer = TerrainLayer.Surface;
+			for(var i = 0;i < 3; i++)
+			{
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 0, y: 1 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 1, y: 1 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 2, y: 1 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 0, y: 4 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 3 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 4, y: 4 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 4 }, true);
+				//map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 5, y: 2 }, true);
+				//map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 5, y: 3 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 5, y: 4 }, true);
+				//map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 4, y: 2 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 2 }, true);
+				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 1 }, true);
+				
+				map.addPipe(PipeType.EastWest, layer, { x: 0, y: 6 });
+				map.addPipe(PipeType.EastWest, layer, { x: 0, y: 5 });
+
+				
+				if(layer == TerrainLayer.Surface)
+				{
+					map.addPipe(PipeType.Down, layer, { x: 0, y: 2 }, true);
+					map.addPipe(PipeType.EastWest, layer, { x: 0, y: 3 }, true);
+					
+					layer = TerrainLayer.Underground;
+				}
+				else if(layer == TerrainLayer.Underground)
+				{
+					map.addPipe(PipeType.Up, layer, { x: 0, y: 2 }, true);
+					map.addPipe(PipeType.Down, layer, { x: 0, y: 3 }, true);
+					
+					layer = TerrainLayer.Deep;
+				}
+				else
+				{
+					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 0, y: 2 }, true);
+					map.addPipe(PipeType.Up, layer, { x: 0, y: 3 }, true);
+				}
+				
+				/*
+				if(layer == TerrainLayer.Surface)
+				{
+				
+					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 2, y: 4 }, true);
+					map.addPipe(PipeType.EastWest, layer, { x: 2, y: 5 }, true);
+					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 2, y: 6 }, true);
+					map.addPipe(PipeType.NorthSouth, layer, { x: 3, y: 6 }, true);
+
+					//map.addBuilding(new Building("Agridome", layer, new Point(0, 0), 0));
+					//map.addBuilding(new Building("Agridome1", layer, new Point(1, 0), 0));
+					//map.addBuilding(new Building("Agridome2", layer, new Point(2, 0), 0));
+					//map.addBuilding(new Building("Warehouse", layer, new Point(2, 2), 0));
+					//map.addBuilding(new Building("Warehouse", layer, new Point(0, 5), 0));
+					//map.addBuilding(new Building("CommandCenter", layer, new Point(1, 2), 0));
+					//map.addBuilding(new Building("HotLab", layer, new Point(1, 4), 0));
+					//map.addBuilding(new Building("HotLabAdv", layer, new Point(4, 1), 0));
+
+					//map.addBuilding(new Building("HotLab", layer, new Point(3, 0), 20));
+
+					map.addBuilding("CommandCenter", { x: 1, y: 2 }, true);
+					map.addBuilding("MaintenanceCenter", { x: 1, y: 0 });
+					
+					map.addBuilding("RoboCommander", { x: 2, y: 0 });
+					
+					
+					map.addBuilding("ElectrostaticCoil", { x: 6, y: 2 }, true);
+					map.addBuilding("ElectrostaticCoil", { x: 6, y: 3 });
+					map.addBuilding("ElectrostaticCoil", { x: 6, y: 4 }, true);
+					
+					map.addBuilding("Capacitor", { x: 5, y: 5 }, true);
+					map.addBuilding("Capacitor", { x: 4, y: 5 });
+					map.addBuilding("Capacitor", { x: 3, y: 5 });
+
+					map.addBuilding("Agridome", { x: 4, y: 3 });
+
+					map.addBuilding("ChemicalFactory", { x: 4, y: 1 }, true);
+					//map.addBuilding("Warehouse", new Point(4, 1), true);
+//map.addBuilding("Mine_surface", { x: 5, y: 1 }, true);
+
+
+//var test = new Building("HotLabAdv", layer, new Point(4, 3), 0);
+//map.addBuilding(test);
+
+					layer = TerrainLayer.Underground;
+				}
+				else if(layer == TerrainLayer.Underground)
+				{
+//					map.addBuilding(new Building("Lab", layer, new Point(3, 0), 20));
+
+//var test = new Building("LabAdv", layer, new Point(4, 3), 0);
+//map.addBuilding(test);
+
+					map.addBuilding("Lab", { x: 1, y: 4 }, true);
+
+
+					layer = TerrainLayer.Deep;
+				}
+				else
+				{
+					map.addBuilding("StorageArea", { x: 5, y: 5 }, true);
+					
+//					map.addBuilding(new Building("DeepLab", layer, new Point(3, 0), 20));
+
+//var test = new Building("DeepLab", layer, new Point(4, 3), 0);
+//map.addBuilding(test);
+
+					//map.addBuilding(new Building("GeothermalAdvA", layer, new Point(4, 1), 0));
+					//map.addBuilding(new Building("GeothermalAdvB", layer, new Point(5, 1), 0));
+					
+					//map.addBuilding(new Building("Geothermal", layer, new Point(6, 3), 0));
+					
+					//map.addBuilding(new Building("BlueLigth", layer, new Point(1, 4), 0));
+
+				}
+				
+				*/
+			}
+			
+			showState();
+		}
+
+		//---------------------------------------------------
+		
+		function showState()
+		{
+			var state = main.getState();
+			//<table><tr><td>Table cell 1</td><td>Table cell 2</td></tr></table>
+			var text = "<div style=\"color:white;\"><table>";
+			text += "<tr><td><b>Name </b></td><td><b>Produced </b></td><td><b>Consumed </b></td><td><b>Stored</b></td><td><b>/</b></td><td><b>Capacity</b></td></tr>";
+			var name;
+			var materials = state.getMaterials();
+			for(var i = 0; i < materials.length; i++)
+			{
+				name = materials[i];
+				var capacity = state.getCapacity(name);
+				if(state.isMetaMaterial(name))
+				{
+					capacity = "(" + capacity + ")";
+				}
+				text += "<tr><td>" + name + "</td><td>" + (state.getProduced(name) || "--") + "</td><td>" + (state.getConsumed(name) || "--") + "</td><td>" + (state.getStored(name) || state.getFullCapacity(name)) + "</td><td>/</td><td>" + capacity + "</td></tr>";
+			}
+			text += "</table></div>"
+			
+			var stateDiv = document.getElementById("showStateDiv");
+			stateDiv.innerHTML = text;
+			
+			//----
+			text = "<div style=\"color:white;\"><b>Technology:</b><br/>";
+			var technology = state.getTechnology();
+			for(var i = 0; i < technology.length; i++)
+			{
+				text += technology[i] + "<br/>";
+			}
+			//----
+			
+			stateDiv = document.getElementById("showResearchStateDiv");
+			stateDiv.innerHTML = text + "</div>";
+			
+			text = "<div style=\"color:white;\"><b>Theory:</b><br/>";
+			var theory = state.getTheory();
+			for(var i = 0; i < theory.length; i++)
+			{
+				text += theory[i] + "<br/>";
+			}
+			
+			text += "<br/>Discovery:<br/>";
+			var discovery = state.getDiscovery();
+			for(var i = 0; i < discovery.length; i++)
+			{
+				text += discovery[i] + "<br/>";
+			}
+			
+			stateDiv = document.getElementById("showResearchState2Div");
+			stateDiv.innerHTML = text + "</div>";
+		}
+		
+		//---------------------------------------------------
+	</script>
+</body>
+</html>
