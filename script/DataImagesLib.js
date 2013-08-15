@@ -246,6 +246,7 @@ imagesList.push({ id: "controlUnit", fileName: "illustrations/controlUnit.png" }
 imagesList.push({ id: "ElectrostaticEnergy", fileName: "illustrations/ElectrostaticEnergy.png" });
 imagesList.push({ id: "Embryology", fileName: "illustrations/Embryology.png" });
 imagesList.push({ id: "GeothermalEnergy", fileName: "illustrations/GeothermalEnergy.png" });
+imagesList.push({ id: "Humans", fileName: "illustrations/Humans.png" });
 imagesList.push({ id: "Hydroponics", fileName: "illustrations/Hydroponics.png" });
 imagesList.push({ id: "Medicine", fileName: "illustrations/Medicine.png" });
 imagesList.push({ id: "Metallurgy", fileName: "illustrations/Metallurgy.png" });

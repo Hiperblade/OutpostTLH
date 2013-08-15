@@ -1,7 +1,7 @@
 @echo off
 IF "%1" equ "execute" (GOTO EXECUTE)
 
-GenerateImageFile.cmd execute > script\ImagesLibData.js
+GenerateImageFile.cmd execute > script\DataImagesLib.js
 
 GOTO EXIT
 
