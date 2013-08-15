@@ -1,35 +1,53 @@
 	function ImagesLib()
 	{
+		var images = [];
 		var loadingMax = 0;
 		var loading = 0;
-		var images = [];
-
+		var onUpdateLoadingCallback = undefined;
+		
+		var onLoadCallback = function()
+		{
+			loading--;
+			if(onUpdateLoadingCallback != undefined)
+			{
+				onUpdateLoadingCallback();
+			}
+		}
+		
 		var _addImage = function(code, fileName)
 		{
 			loading++;
 			loadingMax++;
-			var img = new Image();
-			img.onload = function ()
-				{
-					loading--;
-					if(onUpdateLoading != undefined)
-					{
-						onUpdateLoading();
-					}
-				}
-			img.crossOrigin='anonymous';
+			var ret = {code: code, image: new Image()};
+			ret.image.onload = onLoadCallback;
+			ret.image.crossOrigin='anonymous';
 			if(fileName == undefined)
 			{
-				img.src = "images/" + code + ".gif";
+				ret.image.src = "images/" + code + ".gif";
 			}
 			else
 			{
-				img.src = "images/" + fileName;
+				ret.image.src = "images/" + fileName;
 			}
-			
-			var ret = {code: code, image: img};
 			images[code] = ret;
 			return ret;
+		}
+		
+		var _initialize = function(canvasId, imagesList, onUpdateLoading)
+		{
+			onUpdateLoadingCallback = onUpdateLoading;
+			if(imagesList != undefined);
+			{
+				for(var i = 0; i < imagesList.length; i++)
+				{
+					_addImage(imagesList[i].id, imagesList[i].fileName);
+				}
+			}
+		}
+		
+		var _getLoadingPercentage = function()
+		{
+			return (loadingMax - loading) / loadingMax;
 		}
 		
 		var _waitLoading = function()
@@ -73,22 +91,6 @@
 				ret.pattern = ctx.createPattern(ret.image, "repeat");
 			}
 			return ret.pattern;
-		}
-		
-		var _initialize = function(canvasId, imagesList, onUpdateLoading)
-		{
-			if(imagesList != undefined);
-			{
-				for(var i = 0; i < imagesList.length; i++)
-				{
-					_addImage(imagesList[i].id, imagesList[i].fileName);
-				}
-			}
-		}
-		
-		var _getLoadingPercentage = function()
-		{
-			return (loadingMax - loading) / loadingMax;
 		}
 		
 		this.getImage = _getImage;

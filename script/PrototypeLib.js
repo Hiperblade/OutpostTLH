@@ -106,12 +106,7 @@
 		var production = parameters.production || {};
 		var productionWaste = parameters.productionWaste || {};
 		var capacity = parameters.capacity || {};
-		
 		var requiredResource = parameters.requiredResource;
-		
-		this.eventBeginBuilding = parameters.eventBeginBuilding;
-		this.eventEndBuilding = parameters.eventEndBuilding;
-		this.eventDestroy = parameters.eventDestroy;
 		
 		var _create = function(position)
 		{
@@ -124,6 +119,10 @@
 		}
 		
 		//-----------------------------------------
+		
+		this.eventBeginBuilding = parameters.eventBeginBuilding;
+		this.eventEndBuilding = parameters.eventEndBuilding;
+		this.eventDestroy = parameters.eventDestroy;
 		
 		this.getBuildingType = function() { return buildingType; }
 		this.getTerrainLayer = function() { return terrainLayer; }

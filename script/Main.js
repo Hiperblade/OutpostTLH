@@ -534,5 +534,3 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		
 		//-----------------------------------------
 	}
-	
-	

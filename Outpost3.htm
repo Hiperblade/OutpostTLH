@@ -36,11 +36,11 @@
 	</style> 
 	
 	<script type="text/javascript">
-		function onUpdateLoading()
-		{
-			var loadingScreen = document.getElementById("loadingScreenBar");
+		var onUpdateLoading = function ()
+		{		
 			var loadingPercentage = ImagesLib.getLoadingPercentage();
-			loadingScreen.style.width = Math.floor(loadingPercentage * 300) + "px";
+			var loadingScreenBar = document.getElementById("loadingScreenBar");
+			loadingScreenBar.style.width = Math.floor(loadingPercentage * 300) + "px";
 			if(loadingPercentage == 1)
 			{
 				var loadingScreen = document.getElementById("loadingScreen");

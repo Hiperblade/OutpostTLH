@@ -7,32 +7,32 @@
 	
 	function Log()
 	{
-	}
-	
-	Log.error = function(msg)
-	{
-		alert(msg);
-	}
-		
-	Log.dialog = function(msg)
-	{
-		alert(msg);
-	}
-	
-	var Colors =
+		var _error = function(msg)
 		{
-			Standard: "rgb(119,207,60)",
-			Dark: "rgb(47,106,8)",
-			Error: "rgb(200,100,100)"
+			alert(msg);
 		}
+		
+		var _dialog = function(msg)
+		{
+			alert(msg);
+		}
+		
+		this.error = _error;
+		this.dialog = _dialog;
+	}
+	
+	// singleton
+	var Log = new Log();
+	
+	var Colors = {
+		Standard: "rgb(119,207,60)",
+		Dark: "rgb(47,106,8)",
+		Error: "rgb(200,100,100)"
+	};
 	
 	function CanvasGrid(ctx, position, color, fontSize, columnsList)
 	{
-		var columns = new Array();
-		if(columnsList != undefined)
-		{
-			columns = columnsList;
-		}
+		var columns = columnsList || new Array();
 		
 		var _addColumn = function(width)
 		{
