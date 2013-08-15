@@ -24,7 +24,7 @@
 			for(var i = 0; i < queue.length; i++)
 			{
 				var item = queue[i];
-				var baseItem = ResearchLib.get(item.getName());
+				var baseItem = RecipeLib.get(item.getName());
 				var cost = baseItem.getCost();
 				
 				var value = 0;
@@ -47,10 +47,10 @@
 				var item = progressList[i].item;
 				for(var ii = 0; ii < progressList[i].value; ii++)
 				{
-					var remainTime = item.study();
+					var remainTime = item.progress();
 					if(remainTime == 0)
 					{
-						var baseItem = ResearchLib.get(item.getName());
+						var baseItem = RecipeLib.get(item.getName());
 						colonyState.addKnowledge(baseItem.getResult());
 						colonyState.addCompletedResearch(item.getName());
 						
@@ -70,7 +70,7 @@ Log.dialog("NEW_DISCOVERY");
 			for(var i = 0; i < queue.length; i++)
 			{
 				var item = queue[i];
-				var baseItem = ProductionLib.get(item.getName());
+				var baseItem = RecipeLib.get(item.getName());
 				var cost = baseItem.getCost(); 
 				
 				var value = 0;
@@ -98,7 +98,7 @@ Log.dialog("NEW_DISCOVERY");
 					var remainTime = item.progress();
 					if(remainTime == 0)
 					{
-						var baseItem = ProductionLib.get(item.getName());
+						var baseItem = RecipeLib.get(item.getName());
 						colonyState.addMaterials(baseItem.getResult());
 						
 						queue.splice(queue.indexOf(item), 1); // remove
@@ -271,7 +271,7 @@ Log.dialog("NEW_DISCOVERY");
 		// produzione di base
 		var _baseProductionSimulation = function(colonyState, graph)
 		{
-			PrototypeLib.priorityList.forEach(function(buildingType)
+			PrototypeLib.getPriorityList().forEach(function(buildingType)
 			{
 				var buildingProtype = PrototypeLib.get(buildingType);
 				if(graph[buildingType] != undefined)

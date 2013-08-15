@@ -1,21 +1,17 @@
 	function ImagesLib()
 	{
-	}
-	
-	ImagesLib.initialize = function(canvasId, imagesList, onUpdateLoading)
-	{
-		ImagesLib.loadingMax = 0;
-		ImagesLib.loading = 0;
-		ImagesLib.images = [];
+		var loadingMax = 0;
+		var loading = 0;
+		var images = [];
 
 		var _addImage = function(code, fileName)
 		{
-			ImagesLib.loading++;
-			ImagesLib.loadingMax++;
+			loading++;
+			loadingMax++;
 			var img = new Image();
 			img.onload = function ()
 				{
-					ImagesLib.loading--;
+					loading--;
 					if(onUpdateLoading != undefined)
 					{
 						onUpdateLoading();
@@ -32,67 +28,74 @@
 			}
 			
 			var ret = {code: code, image: img};
-			ImagesLib.images[code] = ret;
+			images[code] = ret;
 			return ret;
 		}
-
-		//**************************
-
-		if(imagesList != undefined);
-		{
-			for(var i = 0; i < imagesList.length; i++)
-			{
-				_addImage(imagesList[i].id, imagesList[i].fileName);
-			}
-		}
 		
-		//**************************
-
-		ImagesLib.addImage = function(code, fileName)
-		{
-			_addImage(code, fileName);
-		}
-
-		ImagesLib.waitLoading = function()
+		var _waitLoading = function()
 		{
 			if(ImagesLib.loading > 0)
 			{
 				Log.dialog("Caricamento in corso!");
 			}
 		}
-	}
-	
-	ImagesLib.getImage = function(id)
-	{
-		ImagesLib.waitLoading();
-	
-		var ret = ImagesLib.images[id];
-		if(ret == undefined)
+		
+		var _getImage = function(id)
 		{
-			Log.error("Immagine non trovata: \"" + id + "\"");
-			return null;
-		}
-		return ret.image;
-	}
-	
-	ImagesLib.getPattern = function(id, ctx)
-	{
-		if(id == null)
-		{
-			return null;
+			_waitLoading();
+		
+			var ret = images[id];
+			if(ret == undefined)
+			{
+				Log.error("Immagine non trovata: \"" + id + "\"");
+				return null;
+			}
+			return ret.image;
 		}
 		
-		ImagesLib.waitLoading();
+		var _getPattern = function(id, ctx)
+		{
+			if(id == null)
+			{
+				return null;
+			}
+			
+			_waitLoading();
+			
+			var ret = images[id];
+			if(ret == undefined)
+			{
+				Log.error("Immagine non trovata: \"" + id + "\"");
+				return null;
+			}
+			if(ret.pattern == undefined)
+			{
+				ret.pattern = ctx.createPattern(ret.image, "repeat");
+			}
+			return ret.pattern;
+		}
 		
-		var ret = ImagesLib.images[id];
-		if(ret == undefined)
+		var _initialize = function(canvasId, imagesList, onUpdateLoading)
 		{
-			Log.error("Immagine non trovata: \"" + id + "\"");
-			return null;
+			if(imagesList != undefined);
+			{
+				for(var i = 0; i < imagesList.length; i++)
+				{
+					_addImage(imagesList[i].id, imagesList[i].fileName);
+				}
+			}
 		}
-		if(ret.pattern == undefined)
+		
+		var _getLoadingPercentage = function()
 		{
-			ret.pattern = ctx.createPattern(ret.image, "repeat");
+			return (loadingMax - loading) / loadingMax;
 		}
-		return ret.pattern;
+		
+		this.getImage = _getImage;
+		this.getPattern = _getPattern;
+		this.initialize = _initialize;
+		this.getLoadingPercentage = _getLoadingPercentage;
 	}
+	
+	// singleton
+	var ImagesLib = new ImagesLib();

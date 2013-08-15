@@ -473,7 +473,7 @@
 	function ResearchQueueData(colonyState)
 	{
 		var queue = colonyState.getResearchQueue();
-		var newItems = ResearchLib.getAvailableResearch(colonyState);
+		var newItems = RecipeLib.getAvailableResearch(colonyState);
 		var available = new Array();
 
 		var _contains = function(queue, name)
@@ -514,7 +514,7 @@
 	function ProductionQueueData(colonyState)
 	{
 		var queue = colonyState.getProductionQueue()
-		var available = ProductionLib.getAvailableRecipe(colonyState);
+		var available = RecipeLib.getAvailableProduction(colonyState);
 
 		BaseQueueData.call(this, colonyState, queue, available);
 

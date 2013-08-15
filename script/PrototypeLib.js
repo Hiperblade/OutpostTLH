@@ -1,87 +1,98 @@
-	function PrototypeLib() {	}
-	
-	PrototypeLib.list = {};
-	
-	PrototypeLib.priorityList = new Array();
-	
-	PrototypeLib.addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
-	{
-		var buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
-		var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
-		item.create = function(position)
-		{
-			return new Pipe(pipeType, terrainLayer, position, buildingTime);
-		}
-		PrototypeLib.list[buildingType] = item;
-		PrototypeLib.priorityList.push(buildingType);
-		return item;
-	}
-
-	PrototypeLib.add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
-	{
-		var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
-		PrototypeLib.list[buildingType] = item;
-		PrototypeLib.priorityList.push(buildingType);
-		return item;
-	}
-	
-	PrototypeLib.addResource = function(resourceType, terrainLayer)
-	{
-		var buildingType = "Resource_" + resourceType;
-		var item = new BasePrototype(buildingType, terrainLayer, 0, {}, {});
-		item.create = function(position)
-		{
-			return new Resource(resourceType, terrainLayer, position);
-		}
-		PrototypeLib.list[buildingType] = item;
-		//PrototypeLib.priorityList.push(buildingType);
-		return item;
-	}
-	
-	PrototypeLib.addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
-	{
-		var buildingType = "Mine" + resourceType;
-		var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
-		item.create = function(position)
-		{
-			return new Building(buildingType, terrainLayer, position, buildingTime, "RoboMiner");
-		}
-		PrototypeLib.list[buildingType] = item;
-		PrototypeLib.priorityList.push(buildingType);
-		return item;
-	}
-
-	PrototypeLib.get = function(buildingType)
-	{
-		return PrototypeLib.list[buildingType];
-	}
-
-	PrototypeLib.create = function(buildingType, position, alreadyBuilt)
-	{
-		var ret = PrototypeLib.list[buildingType].create(position);
-		if(alreadyBuilt)
-		{
-			ret.setBuilded();
-		}
-		return ret;
-	}
-	
-	PrototypeLib.createPipe = function(pipeType, layer, position, alreadyBuilt)
-	{
-		return PrototypeLib.create("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
-	}
-	
-	PrototypeLib.createResource = function(resourceType, position)
-	{
-		return PrototypeLib.list["Resource_" + resourceType].create(position);
-	}
-	
 	var AreaTypes = {
 		One: "1",
 		TwoEast: "2e",
 		TwoWest: "2w",
 		Four: "4"
 	};
+	
+	function PrototypeLib()
+	{	
+		var list = {};
+		
+		var priorityList = new Array();
+		
+		var _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
+		{
+			var buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
+			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			item.create = function(position)
+			{
+				return new Pipe(pipeType, terrainLayer, position, buildingTime);
+			}
+			list[buildingType] = item;
+			priorityList.push(buildingType);
+			return item;
+		}
+
+		var _add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
+		{
+			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			list[buildingType] = item;
+			priorityList.push(buildingType);
+			return item;
+		}
+		
+		var _addResource = function(resourceType, terrainLayer)
+		{
+			var buildingType = "Resource_" + resourceType;
+			var item = new BasePrototype(buildingType, terrainLayer, 0, {}, {});
+			item.create = function(position)
+			{
+				return new Resource(resourceType, terrainLayer, position);
+			}
+			list[buildingType] = item;
+			//priorityList.push(buildingType);
+			return item;
+		}
+		
+		var _addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
+		{
+			var buildingType = "Mine" + resourceType;
+			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			item.create = function(position)
+			{
+				return new Building(buildingType, terrainLayer, position, buildingTime, "RoboMiner");
+			}
+			list[buildingType] = item;
+			priorityList.push(buildingType);
+			return item;
+		}
+
+		var _get = function(buildingType)
+		{
+			return list[buildingType];
+		}
+
+		var _create = function(buildingType, position, alreadyBuilt)
+		{
+			var ret = list[buildingType].create(position);
+			if(alreadyBuilt)
+			{
+				ret.setBuilded();
+			}
+			return ret;
+		}
+		
+		var _createPipe = function(pipeType, layer, position, alreadyBuilt)
+		{
+			return _create("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
+		}
+		
+		var _createResource = function(resourceType, position)
+		{
+			return list["Resource_" + resourceType].create(position);
+		}
+		
+		this.addPipe = _addPipe;
+		this.add = _add;
+		this.addResource = _addResource;
+		this.addMine = _addMine;
+		this.get = _get;
+		this.create = _create;
+		this.createPipe = _createPipe;
+		this.createResource = _createResource;
+		this.getPriorityList = function() { return priorityList; }
+	}
 	
 	function BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
 	{
@@ -130,3 +141,6 @@
 		
 		//-----------------------------------------
 	}
+	
+	// singleton
+	var PrototypeLib = new PrototypeLib();

@@ -1,7 +1,7 @@
 	function ReportProductionMaterial(colonyState, material, image)
 	{
 		var productionBuildingList = new Array();
-		PrototypeLib.priorityList.forEach(function(buildingType)
+		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
 			var product = buildingProtype.getProduction();
@@ -14,7 +14,7 @@
 			}
 		});
 		var consumptionBuildingList = new Array();
-		PrototypeLib.priorityList.forEach(function(buildingType)
+		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
 			var product = buildingProtype.getConsumption();
@@ -234,7 +234,7 @@
 		var material = "repairUnit";
 		
 		var productionBuildingList = new Array();
-		PrototypeLib.priorityList.forEach(function(buildingType)
+		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
 			var product = buildingProtype.getProduction();
@@ -247,7 +247,7 @@
 			}
 		});
 		var consumptionBuildingList = new Array();
-		PrototypeLib.priorityList.forEach(function(buildingType)
+		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
 			var product = buildingProtype.getConsumption();
