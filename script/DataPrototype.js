@@ -8,6 +8,8 @@
 	PrototypeLib.add("LandingModule", TerrainLayer.Surface, 1, {}, { production: { controlUnit: 4 },
 		eventBeginBuilding: function(item, map)
 			{
+				item.isHeadquarter = true;
+				
 				item.isPipe    = function() { return true; }
 				item.haveNorth = function() { return true; }
 				item.haveSouth = function() { return true; }
@@ -328,6 +330,8 @@
 	PrototypeLib.add("CommandCenter", TerrainLayer.Surface, 3, {}, { consumption: { power: 10 }, production: { repairUnit: 500, researchElaborationUnit: 1 },
 		eventBeginBuilding: function(item, map)
 			{
+				item.isHeadquarter = true;
+				
 				item.isPipe    = function() { return true; }
 				item.haveNorth = function() { return true; }
 				item.haveSouth = function() { return true; }

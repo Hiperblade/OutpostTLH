@@ -116,6 +116,8 @@ Log.dialog("NEW_DISCOVERY");
 			var repairCost = 10;
 				
 			var neglectPercentage = 100;
+			
+			//graph.hasHeadquarter
 			if((graph["CommandCenter"] != undefined) ||
 				(graph["LandingModule"] != undefined))
 			{

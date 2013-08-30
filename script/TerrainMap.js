@@ -451,32 +451,135 @@
 			data[TerrainLayer.Deep] = new Array();	
 			for (var elIndex = 0; elIndex < structure.length; elIndex++)
 			{
-				if(structure[elIndex].getType() == StructureTypes.Building)
+				var el = structure[elIndex];
+				if((el.getType() == StructureTypes.Building) && (el.isPipe()))
 				{
-					var el = structure[elIndex];
 					data[el.getLayer()].push(el);
 				}
 			}
     	
-			var upper = _getGraphInternal(_getLayerGraph(data[TerrainLayer.Underground]), _getLayerGraph(data[TerrainLayer.Deep]));    	
-			var tmp = _getGraphInternal(_getLayerGraph(data[TerrainLayer.Surface]), upper);
+			var upper = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Underground]), _getGraphLayer(data[TerrainLayer.Deep]));    	
+			var graphList = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Surface]), upper);
 			
+			var tmpRet = _getGraphBoundBildings(graphList, structure);
+						
+			// conversione da array a object
 			var ret = new Array();
-			for (var i = 0; i < tmp.length; i++)
+			for (var i = 0; i < tmpRet.length; i++)
 			{
 				var retItem = {};
-				for (var ii = 0; ii < tmp[i].length; ii++)
+				for (var ii = 0; ii < tmpRet[i].length; ii++)
 				{
-					var buildingType = tmp[i][ii].getBuildingType();
+					var buildingType = tmpRet[i][ii].getBuildingType();
 					if(retItem[buildingType] == null)
 					{
 						retItem[buildingType] = new Array();
 					}
-					retItem[buildingType].push(tmp[i][ii]);
+					retItem[buildingType].push(tmpRet[i][ii]);
 				}
 				ret.push(retItem);
 			}
 			return ret;
+		}
+		
+		var _getGraphBoundBildings = function (graphList, structure)
+		{
+			var ret = new Array();
+			var orphans = new Array();
+			var added;
+			for(var i = 0; i < graphList.length; i++)
+			{
+				added = false;
+				for(var ii = 0; ii < graphList[i].length; ii++)
+				{
+					if(graphList[i][ii].isHeadquarter)
+					{
+						ret.push(graphList[i]);
+						added = true;
+						break;
+					}
+				}
+				if(added == false)
+				{
+					orphans.push(graphList[i]);
+				}
+			}
+			var orphan = null;
+			if(orphans.length > 0)
+			{
+				orphan = orphans[0];
+				for(var i = 1; i < orphans.length; i++)
+				{
+					for(var ii = 0; ii < orphans[i].length; ii++)
+					{
+						orphan.push(orphans[i][ii]);
+					}
+				}
+			}
+			else
+			{
+				orphan = new Array();
+			}
+
+			// assegno gli edifici ai grafi
+			for (var elIndex = 0; elIndex < structure.length; elIndex++)
+			{
+				var el = structure[elIndex];
+				if((el.getType() == StructureTypes.Building) && (!el.isPipe()))
+				{
+					for(var i = 0; i < ret.length; i++)
+					{
+						if(_getGraphIsBound(ret[i], el.getPosition()))
+						{
+							ret[i].push(el);
+							el = null;
+							break;
+						}
+					}
+					if(el != null)
+					{
+						orphan.push(el);
+					}
+				}
+			}
+			if(orphan.length > 0)
+			{
+				ret.push(orphan);
+			}
+			return ret;
+		}
+
+		// restituisce true se il grafo permette il collegamento verso le coordinate point
+		var _getGraphIsBound = function(graph, point)
+		{
+			for(var i = 0; i < graph.length; i++)
+			{
+				if(!graph[i].isPipe())
+				{
+					break;
+				}
+				else
+				{
+					var pos = graph[i].getPosition();
+					if(pos.x == point.x)
+					{
+						if(((pos.y == point.y -1) && (graph[i].haveEast())) ||
+							((pos.y == point.y +1) && (graph[i].haveWest())))
+						{
+							return true;
+						}
+					}
+					else if (pos.y == point.y)
+					{
+						if(((pos.x == point.x -1) && (graph[i].haveSouth())) ||
+							((pos.x == point.x +1) && (graph[i].haveNorth())))
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
     
 		var _getGraphInternal = function(upper, lower)
@@ -491,7 +594,7 @@
 						var elevator = lower[i].elevators[ii];
 						if(elevator.haveUp())
 						{
-							var upperGraph = _findGraphInternal(upper, elevator.getPosition());
+							var upperGraph = _getGraphFind(upper, elevator.getPosition());
 							if(rootGraph != null)
 							{
 								if(rootGraph != upperGraph)
@@ -524,7 +627,7 @@
 			return upper;
 		}
     
-		var _findGraphInternal = function(upper, position)
+		var _getGraphFind = function(upper, position)
 		{
 			for(var i = 0; i < upper.length; i++)
 			{
@@ -546,7 +649,7 @@
 			}
 		}
 		
-		var _getLayerGraph = function(buildings)
+		var _getGraphLayer = function(pipes)
 		{
 			var a = null;
 			var ay = -1;
@@ -555,132 +658,98 @@
 			var b1 = new Array();
 		 
 			// lista di grafi
-			var c = new Array();
+			var ret = new Array();
 
 			var d = null;
 			var e = new Array();
 			var e1 = new Array();
 
-			// orfani
-			var f = new Array();
-
 			var x = 0;
 			var l = null;
 		  
-			for (var elIndex = 0; elIndex < buildings.length; elIndex++)
+			for (var elementIndex = 0; elementIndex < pipes.length; elementIndex++)
 			{
-				var el = buildings[elIndex];
-				elPosition = el.getPosition();
+				var element = pipes[elementIndex];
 				
-				if (x > elPosition.x)
+				elementPosition = element.getPosition();
+				if (x > elementPosition.x)
 				{
 					a = null;
 					ay = -1;
 					d = null;
-					if (x == elPosition.x + 1)
+					if (x == elementPosition.x + 1)
 					{
 						b = b1;
 						e = e1;
 					}
 					else
 					{
-						// Gestione orfani di E
-						for(var tmp in e)
-						{
-							//_addToGraph(f, tmp);
-							f.push(tmp);
-						}
 						b = new Array();
 						e = new Array();
 					}
 					b1 = new Array();
 					e1 = new Array();
 				}
-				x = elPosition.x;
-
-				if (el.isPipe())
+				x = elementPosition.x;
+			
+				// Gestione tubi
+				l = null;
+				if (element.haveWest() && a != null && ay == elementPosition.y - 1)
 				{
-					l = null;
-					if (el.haveWest() && a != null && ay == elPosition.y - 1)
+					l = a;
+				}
+				if (element.haveNorth() && b[elementPosition.y] != null)
+				{
+					if ((l != null) && (b[elementPosition.y] != a))
 					{
-						l = a;
-					}
-					if (el.haveNorth() && b[elPosition.y] != null)
-					{
-						if ((l != null) && (b[elPosition.y] != a))
+						var tmp = b[elementPosition.y];
+						for(var i = 0; i < a.length; i++)
 						{
-							var tmp = b[elPosition.y];
-							for(var i = 0; i < a.length; i++)
+							_addToGraph(tmp, a[i]);
+						}
+						ret.splice(ret.indexOf(a), 1); // remove
+						for(var i = 0; i < b1.length; i++)
+						{
+							if(b1[i] == a)
 							{
-								_addToGraph(tmp, a[i]);
-							}
-							c.splice(c.indexOf(a), 1); // remove
-							for(var i = 0; i < b1.length; i++)
-							{
-								if(b1[i] == a)
-								{
-									b1[i] = tmp;
-								}
+								b1[i] = tmp;
 							}
 						}
-						l = b[elPosition.y];
 					}
-					else if(l == null)
-					{
-						l = new Array();
-						c.push(l);
-					}
-					_addToGraph(l, el);
-
-					a = null;
-					ay = -1;
-					if (el.haveEast())
-					{
-						a = l;
-						ay = elPosition.y;
-					}
-					if (el.haveSouth())
-					{
-						b1[elPosition.y] = l;
-					}
-
-					if (el.haveWest() && d != null && d.getPosition().y == elPosition.y - 1)
-					{
-//alert("d => " + l.length);
-						_addToGraph(l, d);
-						e1[d.getPosition().y] = null;
-					}
-					d = null;
-					if (el.haveNorth() && e[elPosition.y] != null)
-					{
-//alert("e => " + l.length);
-						_addToGraph(l, e[elPosition.y]);
-					}
-					e[elPosition.y] = null;
+					l = b[elementPosition.y];
 				}
-				else
+				else if(l == null)
 				{
-					if (a != null && ay == elPosition.y - 1)
-					{
-//alert("a => " + a.length);
-					_addToGraph(a, el);
-					a = null;
-					ay = -1;
-					}
-					else if (b[elPosition.y] != null)
-					{
-//alert("b => " + b[elPosition.y].length);
-						_addToGraph(b[elPosition.y], el);
-					}
-					else
-					{
-//alert("c => ");
-					d = el;
-					e1[elPosition.y] = el;
-					}
+					l = new Array();
+					ret.push(l);
 				}
+				_addToGraph(l, element);
+
+				a = null;
+				ay = -1;
+				if (element.haveEast())
+				{
+					a = l;
+					ay = elementPosition.y;
+				}
+				if (element.haveSouth())
+				{
+					b1[elementPosition.y] = l;
+				}
+
+				if (element.haveWest() && d != null && d.getPosition().y == elementPosition.y - 1)
+				{
+					_addToGraph(l, d);
+					e1[d.getPosition().y] = null;
+				}
+				d = null;
+				if (element.haveNorth() && e[elementPosition.y] != null)
+				{
+					_addToGraph(l, e[elementPosition.y]);
+				}
+				e[elementPosition.y] = null;
 			}
-			return c;
+			return ret;
 		}
 		
 		var _computation = function()
