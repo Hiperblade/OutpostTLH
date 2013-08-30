@@ -26,6 +26,8 @@
 			digger: 0
 			};
 		state.date = 0;
+		state.simulationData = {};
+		state.globalEventList = new Array();
 		
 		var _checkMaterial = function(name)
 		{
@@ -167,6 +169,7 @@
 			state.destroyedList = new Array();
 			state.activeList = {};
 			state.inactiveList = {};
+			state.simulationData = {};
 		}
 		
 		var _updateAll = function()
@@ -473,6 +476,10 @@
 		this.getActiveList = function() { return state.activeList; }
 		this.addToInactiveList = _addToInactiveList;
 		this.getInactiveList = function() { return state.inactiveList; }
+		
+		this.getSimulationData = function() { return state.simulationData; }
+		this.getGlobalEventList = function() { return state.globalEventList; }
+		this.resetGlobalEvent = function() { return state.globalEventList = new Array(); }
 		
 		this.isCompletedKnowledge = _isCompletedKnowledge;
 		this.addCompletedResearch = _addCompletedResearch;

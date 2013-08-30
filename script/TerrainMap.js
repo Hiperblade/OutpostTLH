@@ -755,11 +755,9 @@
 		var _computation = function()
 		{
 			var en = new Engine();
+			var hyperGraph = {};
 			var tmp = _getGraph();
-			for(var i = 0; i < tmp.length; i++)
-			{
-				en.computation(state, tmp[i], this);
-			}
+			en.computation(state, tmp, this);
 			state.setDate(state.getDate() + 1);
 			
 			_simulation();
@@ -769,10 +767,7 @@
 		{
 			var en = new Engine();
 			var tmp = _getGraph();
-			for(var i = 0; i < tmp.length; i++)
-			{
-				en.simulation(state, tmp[i]);
-			}
+			en.simulation(state, tmp);
 		}
 		
 		//-----------------------------------------

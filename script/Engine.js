@@ -1,8 +1,57 @@
 	function Engine()
 	{
-		// calcolo manodopera umana e robotica)
-		var _workforceSimulation = function(colonyState, date)
+		var engines = new Array();
+		engines.push(new WorkforceEngine());
+		engines.push(new BaseProductionEngine());
+		engines.push(new ProductionEngine());
+		engines.push(new ResearchEngine());
+		engines.push(new MaintenanceEngine());
+		engines.push(new RobotEngine());
+		engines.push(new EventEngine());
+		engines.push(new AdvanceSystemEngine());
+		engines.push(new PopulationEngine());
+
+		//-------------------------------------
+		
+		// simulazione
+		var _simulation = function(colonyState, graphs)
 		{
+			colonyState.resetAll();
+			
+			for(var i = 0; i < engines.length; i++)
+			{
+				engines[i].simulation(colonyState, graphs);
+			}
+		}
+		
+		var _computation = function(colonyState, graphs, map)
+		{
+			colonyState.resetGlobalEvent();
+			_simulation(colonyState, graphs);
+			
+			for(var i = 0; i < engines.length; i++)
+			{
+				engines[i].computation(colonyState, graphs, map);
+			}
+			
+			colonyState.updateAll();
+		}
+		
+		//-------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-------------------------------------
+	}
+	
+	// calcolo manodopera umana e robotica)
+	function WorkforceEngine()
+	{
+		// add to colonyState the simulation result
+		var _simulation = function(colonyState, graphs)
+		{
+			var date = colonyState.getDate();
 			var humanWorkUnit = 0;
 			var generations = colonyState.getPopulation().registry;
 			for(var i  = 0; i < generations.length; i++)
@@ -15,9 +64,155 @@
 			var roboticsWorkUnit = colonyState.getStored("roboticsWorker");
 			colonyState.setMaterials( { humanWorkUnit: humanWorkUnit, roboticsWorkUnit: roboticsWorkUnit } );
 		}
+		
+		// return global events
+		var _computation = function(colonyState, graph, map)
+		{
+		}
+		
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// produzione di base
+	function BaseProductionEngine()
+	{
+		// add to colonyState the simulation result
+		var _simulation = function(colonyState, graphs)
+		{
+			for(var i = 0; i < graphs.length; i++)
+			{
+				_internalSimulation(colonyState, graphs[i]);
+			}
+		}
+		
+		var _internalSimulation = function(colonyState, graph)
+		{
+			PrototypeLib.getPriorityList().forEach(function(buildingType)
+			{
+				var buildingProtype = PrototypeLib.get(buildingType);
+				if(graph[buildingType] != undefined)
+				{
+					graph[buildingType].forEach(function(tmp)
+					{
+						if(tmp.isOperative())
+						{
+							if((colonyState.haveMaterials(buildingProtype.getConsumption())) &&
+								(colonyState.haveSpace(buildingProtype.getProductionWaste())))
+							{
+								colonyState.delMaterials(buildingProtype.getConsumption());
+								colonyState.addMaterials(buildingProtype.getProduction());
+								colonyState.addMaterials(buildingProtype.getProductionWaste());
+								colonyState.addCapacity(buildingProtype.getCapacity());
+								
+								colonyState.addToActiveList(tmp);
+							}
+							else
+							{
+								// edificio inattivo per la mancanza di materie prime
+								colonyState.addToInactiveList(tmp);
+							}
+						}
+						else if(tmp.underConstruction())
+						{
+							// edificio in costruzione
+							if(colonyState.haveMaterials(buildingProtype.getBuildingCost()))
+							{
+								colonyState.delMaterials(buildingProtype.getBuildingCost());
+								colonyState.addToBuildList(tmp);
+							}
+						}
+						else if(tmp.getIntegrity() == 0)
+						{
+							// edificio distrutto
+							colonyState.addToDestroyedList(tmp);
+						}
+					});
+				}
+			});
+		}
+		
+		// return global events
+		var _computation = function(colonyState, graphs, map)
+		{
+		}
+		
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	function ProductionEngine()
+	{
+		// add to colonyState the simulation result
+		var _simulation = function(colonyState, graphs)
+		{
+			var queue = colonyState.getProductionQueue();
+			var ret = new Array();
+			for(var i = 0; i < queue.length; i++)
+			{
+				var item = queue[i];
+				var baseItem = RecipeLib.get(item.getName());
+				var cost = baseItem.getCost(); 
+				
+				var value = 0;
+				
+				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
+				{
+					colonyState.delMaterials(cost)
+					value++;
+				}
+				
+				ret.push({ item: item, value: value });
+			}
 			
-		// ricerca
-		var _researchSimulation = function(colonyState)
+			colonyState.getSimulationData().productionProgress = ret;
+		}
+		
+		var _computation = function(colonyState, graphs, map)
+		{
+			var progressList = colonyState.getSimulationData().productionProgress;
+			var queue = colonyState.getProductionQueue();
+
+			for(var i = 0; i < progressList.length; i++)
+			{
+				var item = progressList[i].item;
+				for(var ii = 0; ii < progressList[i].value; ii++)
+				{
+					var remainTime = item.progress();
+					if(remainTime == 0)
+					{
+						var baseItem = RecipeLib.get(item.getName());
+						colonyState.addMaterials(baseItem.getResult());
+						
+						queue.splice(queue.indexOf(item), 1); // remove
+//Log.dialog("NEW_CREATION");
+						break;
+					}
+				}
+			}
+		}
+		
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+			
+	// ricerca
+	function ResearchEngine()
+	{
+		// add to colonyState the simulation result
+		var _simulation = function(colonyState, graphs)
 		{
 			var queue = colonyState.getResearchQueue();
 			var ret = new Array();
@@ -35,11 +230,12 @@
 				}
 				ret.push({ item: item, value: value });
 			}
-			return ret;
-		}
+			colonyState.getSimulationData().researchProgress = ret;
+		}	
 		
-		var _researchComputation = function(colonyState, progressList)
+		var _computation = function(colonyState, graphs, map)
 		{
+			var progressList = colonyState.getSimulationData().researchProgress;
 			var queue = colonyState.getResearchQueue();
 
 			for(var i = 0; i < progressList.length; i++)
@@ -62,89 +258,66 @@ Log.dialog("NEW_DISCOVERY");
 			}
 		}
 		
-		// produzione
-		var _productionSimulation = function(colonyState)
-		{
-			var queue = colonyState.getProductionQueue();
-			var ret = new Array();
-			for(var i = 0; i < queue.length; i++)
-			{
-				var item = queue[i];
-				var baseItem = RecipeLib.get(item.getName());
-				var cost = baseItem.getCost(); 
-				
-				var value = 0;
-				
-				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
-				{
-					colonyState.delMaterials(cost)
-					value++;
-				}
-				
-				ret.push({ item: item, value: value });
-			}
-			return ret;
-		}
+		//-----------------------------------------
 		
-		var _productionComputation = function(colonyState, progressList)
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// calcolo manutenzione
+	function MaintenanceEngine()
+	{
+		var _hasHeadquarter = function(graph)
 		{
-			var queue = colonyState.getProductionQueue();
-
-			for(var i = 0; i < progressList.length; i++)
+			for(var buildingType in graph)
 			{
-				var item = progressList[i].item;
-				for(var ii = 0; ii < progressList[i].value; ii++)
+				if(graph[buildingType][0].isHeadquarter)
 				{
-					var remainTime = item.progress();
-					if(remainTime == 0)
-					{
-						var baseItem = RecipeLib.get(item.getName());
-						colonyState.addMaterials(baseItem.getResult());
-						
-						queue.splice(queue.indexOf(item), 1); // remove
-//Log.dialog("NEW_CREATION");
-						break;
-					}
+					return true;
 				}
 			}
+			return false;
 		}
-		
-		// calcolo manutenzione
-		var _maintenanceSimulation = function(colonyState, graph)
+	
+		var _simulation = function(colonyState, graphs)
 		{
 			// costo manutenzione
 			var repairCost = 10;
-				
-			var neglectPercentage = 100;
 			
-			//graph.hasHeadquarter
-			if((graph["CommandCenter"] != undefined) ||
-				(graph["LandingModule"] != undefined))
+			var buildingAmount = 0;
+			for(var i = 0; i < graphs.length; i++)
 			{
-				var buildingAmount = 0;
-				for(var buildingType in graph)
+				if(_hasHeadquarter(graphs[i]))
 				{
-					buildingAmount += graph[buildingType].length;
-				}
-				
-				var costAmount = buildingAmount * repairCost;
-				if(colonyState.haveMaterials({ repairUnit: costAmount }))
-				{
-					colonyState.delMaterials({ repairUnit: costAmount });
-					neglectPercentage = 0;
-				}
-				else
-				{
-					var tmp = colonyState.getRemainder("repairUnit");
-					colonyState.delMaterials({ repairUnit: tmp });
-					neglectPercentage = ((costAmount - tmp) * 100) / costAmount;
+					for(var buildingType in graphs[i])
+					{
+						buildingAmount += graphs[i][buildingType].length;
+					}	
 				}
 			}
-			return neglectPercentage;
+			
+			var neglectPercentage;
+			var costAmount = buildingAmount * repairCost;
+			if(colonyState.haveMaterials({ repairUnit: costAmount }))
+			{
+				colonyState.delMaterials({ repairUnit: costAmount });
+				neglectPercentage = 0;
+			}
+			else
+			{
+				var tmp = colonyState.getRemainder("repairUnit");
+				colonyState.delMaterials({ repairUnit: tmp });
+				neglectPercentage = ((costAmount - tmp) * 100) / costAmount;
+			}
+			
+			colonyState.getSimulationData().neglectPercentage = neglectPercentage;
 		}
 		
-		var _maintenanceComputation = function(colonyState, graph, map, neglectPercentage)
+		var _computation = function(colonyState, graphs, map)
 		{
+			var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
 			var reapairAmount = 20;
 			var damageVariance = 6;
 			var damageAmount = 0;
@@ -153,69 +326,118 @@ Log.dialog("NEW_DISCOVERY");
 			else if(neglectPercentage < 80) { damageAmount = 50;  }
 			else							{ damageAmount = 100; }
 
-			if(damageAmount > 0)
+			for(var i = 0; i < graphs.length; i++)
 			{
-				var integrity;
-				// danneggiamento
-				for(var buildingType in graph)
+				if(_hasHeadquarter(graphs[i]))
 				{
-					graph[buildingType].forEach(function(tmp)
+					if(damageAmount > 0)
 					{
-						if(!tmp.isDestroyed())
+						var integrity;
+						// danneggiamento
+						for(var buildingType in graphs[i])
 						{
-							integrity = tmp.damage(damageAmount + Math.floor(Math.random() * damageVariance));
-							if(integrity == 0)
+							graphs[i][buildingType].forEach(function(tmp)
 							{
-								colonyState.addToDestroyedList(tmp);
-								
-								var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
-								if(eventDestroy != undefined)
+								if(!tmp.isDestroyed())
 								{
-									eventDestroy(tmp, map);
+									integrity = tmp.damage(damageAmount + Math.floor(Math.random() * damageVariance));
+									if(integrity == 0)
+									{
+										colonyState.addToDestroyedList(tmp);
+										
+										var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+										if(eventDestroy != undefined)
+										{
+											eventDestroy(tmp, map);
+										}
+									}
 								}
+								else
+								{
+									colonyState.addToDestroyedList(tmp);
+								}
+							});
+						}
+					}
+					else
+					{
+						// riparazione
+						for(var buildingType in graphs[i])
+						{
+							graphs[i][buildingType].forEach(function(tmp)
+							{
+								tmp.reapair(reapairAmount);
+							});
+						}
+					}
+					
+					for(var i = 0; i < graphs[i].length; i++)
+					{
+						graphs[i][i].progress();
+					}
+					
+					//costruzione edifici
+					var buildList = colonyState.getBuildList();
+					for(var i = 0; i < buildList.length; i++)
+					{
+						if(buildList[i].progressBuild())
+						{
+							var eventEndBuilding = PrototypeLib.get(buildList[i].getBuildingType()).eventEndBuilding;
+							if(eventEndBuilding != undefined)
+							{
+								eventEndBuilding(buildList[i], map);
 							}
 						}
-						else
+					}
+				}
+				else // edifici scollegati
+				{
+					var integrity;
+					// danneggiamento
+					for(var buildingType in graphs[i])
+					{
+						graphs[i][buildingType].forEach(function(tmp)
 						{
-							colonyState.addToDestroyedList(tmp);
-						}
-					});
-				}
-			}
-			else
-			{
-				// riparazione
-				for(var buildingType in graph)
-				{
-					graph[buildingType].forEach(function(tmp)
-					{
-						tmp.reapair(reapairAmount);
-					});
-				}
-			}
-			
-			for(var i = 0; i < graph.length; i++)
-			{
-				graph[i].progress();
-			}
-			
-			//costruzione edifici
-			var buildList = colonyState.getBuildList();
-			for(var i = 0; i < buildList.length; i++)
-			{
-				if(buildList[i].progressBuild())
-				{
-					var eventEndBuilding = PrototypeLib.get(buildList[i].getBuildingType()).eventEndBuilding;
-					if(eventEndBuilding != undefined)
-					{
-						eventEndBuilding(buildList[i], map);
+							if(!tmp.isDestroyed())
+							{
+								integrity = tmp.damage(100 + Math.floor(Math.random() * damageVariance));
+								if(integrity == 0)
+								{
+									colonyState.addToDestroyedList(tmp);
+									
+									var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+									if(eventDestroy != undefined)
+									{
+										eventDestroy(tmp, map);
+									}
+								}
+							}
+							else
+							{
+								colonyState.addToDestroyedList(tmp);
+							}
+						});
 					}
 				}
 			}
 		}
 		
-		// gestione RoboDozer, RoboDigger -- avanzamento e disponibilità per il turno successivo
-		var _robotComputation = function(colonyState, graph, map)
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// gestione RoboDozer, RoboDigger -- avanzamento e disponibilità per il turno successivo
+	function RobotEngine()
+	{
+		var _simulation = function(colonyState, graphs)
+		{
+		}
+		
+		var _computation = function(colonyState, graphs, map)
 		{
 			var structure = map.getStructure();
 			var dozerCount = 0;
@@ -270,67 +492,68 @@ Log.dialog("NEW_DISCOVERY");
 				});
 		}
 		
-		// produzione di base
-		var _baseProductionSimulation = function(colonyState, graph)
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// generatore di eventi
+	function EventEngine()
+	{
+		var _simulation = function(colonyState, graphs)
 		{
-			PrototypeLib.getPriorityList().forEach(function(buildingType)
-			{
-				var buildingProtype = PrototypeLib.get(buildingType);
-				if(graph[buildingType] != undefined)
-				{
-					graph[buildingType].forEach(function(tmp)
-					{
-						if(tmp.isOperative())
-						{
-							if((colonyState.haveMaterials(buildingProtype.getConsumption())) &&
-								(colonyState.haveSpace(buildingProtype.getProductionWaste())))
-							{
-								colonyState.delMaterials(buildingProtype.getConsumption());
-								colonyState.addMaterials(buildingProtype.getProduction());
-								colonyState.addMaterials(buildingProtype.getProductionWaste());
-								colonyState.addCapacity(buildingProtype.getCapacity());
-								
-								colonyState.addToActiveList(tmp);
-							}
-							else
-							{
-								// edificio inattivo per la mancanza di materie prime
-								colonyState.addToInactiveList(tmp);
-							}
-						}
-						else if(tmp.underConstruction())
-						{
-							// edificio in costruzione
-							if(colonyState.haveMaterials(buildingProtype.getBuildingCost()))
-							{
-								colonyState.delMaterials(buildingProtype.getBuildingCost());
-								colonyState.addToBuildList(tmp);
-							}
-						}
-						else if(tmp.getIntegrity() == 0)
-						{
-							// edificio distrutto
-							colonyState.addToDestroyedList(tmp);
-						}
-					});
-				}
-			});
 		}
 		
-		// generatore di eventi (neglectPercentage)
-		var _globalEventGeneration = function(colonyState, neglectPercentage, date)
+		var _computation = function(colonyState, graphs, map)
 		{
 //TODO
-			var ret = {};
-			ret.date = date;
+			var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
+			var date = colonyState.getDate();
 			// incidenti, catastrofi (distruzione o danneggiamento edifici, morti o feriti)
 			// scoperte (nuove risorse, rovine ecc.)
-			return ret;
+		}
+				
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// gestione sistemi avanzati (terraforming ecc.)
+	function AdvanceSystemEngine()
+	{
+		var _simulation = function(colonyState, graphs)
+		{
 		}
 		
-		// calcolo popolazione (nascite, ecc)
-		var _populationComputation = function(colonyState, globalEventList, date)
-		{	
+		var _computation = function(colonyState, graphs, map)
+		{
+//TODO
+		}
+		
+		//-----------------------------------------
+		
+		this.simulation = _simulation;
+		this.computation = _computation;
+		
+		//-----------------------------------------
+	}
+	
+	// calcolo popolazione (nascite, ecc)
+	function PopulationEngine()
+	{
+		var _simulation = function(colonyState, graphs)
+		{
+		}
+		
+		var _computation = function(colonyState, graphs, map)
+		{
+			var date = colonyState.getDate();
 //TODO: habitatUnit
 			// totale popolazione
 			var people = 0;
@@ -511,7 +734,7 @@ Log.dialog("NEW_DISCOVERY");
 				var nurseryUnit = colonyState.getRemainder("nurseryUnit");
 				if(nurseryUnit > 0)
 				{
-					generations.push(new Generation(globalEventList.date, nurseryUnit));
+					generations.push(new Generation(date, nurseryUnit));
 				}
 			}
 			else if(wellnessAverage < 0)
@@ -526,92 +749,12 @@ Log.dialog("NEW_DISCOVERY");
 			
 			population.wellness = wellness;
 			population.happiness = happiness;
-			return globalEventList;
-		}
-
-		// gestione sistemi avanzati (terraforming ecc.)
-		var _advanceSystemComputation = function(colonyState, globalEventList)
-		{
-//TODO
-			return globalEventList;
-		}
-
-		// generazione log
-		var _logEventGeneration = function(colonyState, globalEventList)
-		{
-			var log = {};
-//TODO
-			return log;
 		}
 		
-		// simulazione
-		var _simulation = function(colonyState, graph)
-		{
-			var date = colonyState.getDate();
-			
-			var result = {};
-		
-			colonyState.resetAll();
-			_workforceSimulation(colonyState, date);
-			_baseProductionSimulation(colonyState, graph);
-			result["productionProgress"] = _productionSimulation(colonyState);
-			result["researchProgress"] = _researchSimulation(colonyState);
-			result["neglectPercentage"] = _maintenanceSimulation(colonyState, graph);
-			
-			return result;
-		}
-		
-		var _computation = function(colonyState, graph, map)
-		{
-			var date = colonyState.getDate();
-			
-			var result = _simulation(colonyState, graph, date);
-			var productionProgress = result["productionProgress"];
-			var researchProgress = result["researchProgress"];
-			var neglectPercentage = result["neglectPercentage"];
-			//---
-			_productionComputation(colonyState, productionProgress);
-			_researchComputation(colonyState, researchProgress);
-			_maintenanceComputation(colonyState, graph, map, neglectPercentage);
-			_robotComputation(colonyState, graph, map);
-
-			var globalEventList = _globalEventGeneration(colonyState, neglectPercentage, date);
-			globalEventList = _advanceSystemComputation(colonyState, globalEventList);
-			globalEventList = _populationComputation(colonyState, globalEventList, date);
-			
-			colonyState.updateAll();
-			return _logEventGeneration(colonyState, globalEventList);
-		}
-		
-		//-------------------------------------
+		//-----------------------------------------
 		
 		this.simulation = _simulation;
 		this.computation = _computation;
+		
+		//-----------------------------------------
 	}
-			
-			// macro sistemi:
-			//0) manutenzione
-			//1) energia
-			//		la potenza massima generabile (edifici generatori)
-			//		la potenza richiesta (dagli edifici)
-			//		la potenza da generare (utente)
-			//2) supporto vitale
-			//*		Aria, Acqua
-			//		Edifici residenziali
-			//3) produzione cibo
-			//		Agridome
-			//		Magazzini
-			//4) produzione industriale
-			//		Miniere
-			//		Fonderie
-			//		Sistemi di reciclo
-			//*		Fabbriche
-			//5) sociale
-			//		scuole
-			//		università
-			//		centri commerciali
-			//		strutture ricreative
-			//6) edifici avanzati
-			//*		laboratori
-			//		terraforming
-			//		missilistica
