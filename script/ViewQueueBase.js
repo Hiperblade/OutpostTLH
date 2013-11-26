@@ -9,12 +9,14 @@
 		var divViewSliderCursor = document.getElementById(divId + "_sliderCursor");
 		var canvasView = document.getElementById(canvasId);
 		var ctx = canvasView.getContext("2d");
-		var size = size;
+		//var size = size;
 		var buttonBase = null;
 		var currentItem = null;
 		var tagLastId = 0;
 		var tags = {};
 		var tagsNew = {};
+        var queueData;
+        var hidden;
 		
 		var _initialize = function()
 		{
@@ -65,7 +67,7 @@
 					}
 				}
 			});
-		}
+		};
 		
 		var _doMouseDown = function(e)
 		{
@@ -74,7 +76,7 @@
 			{
 				_hide();
 			}
-		}
+		};
 			
 		var _setAbsolutePosition = function(point)
 		{
@@ -89,13 +91,13 @@
 			
 			divViewSliderCursor.style.left = (point.x + COLUMN_WIDTH - COLUMN_SLIDER_WIDTH + 4) + "px";
 			divViewSliderCursor.style.top = point.y + 3 + "px";
-		}
+		};
 		
 		var _hide = function()
 		{
 			hidden = true;
 			_redraw();
-		}
+		};
 		
 		var _show = function(queueDataNew)
 		{
@@ -112,7 +114,7 @@
 				currentItem = null;
 			}
 			_redraw();
-		}
+		};
 		
 		var _inizializeQueue = function()
 		{
@@ -168,8 +170,6 @@
 			var newItems = queueData.getAvailable();
 			if(newItems.length > 0)
 			{
-				needSeparator = false;
-			
 				// Separatore
 				li = document.createElement('li');
 				li.style.margin = "0px";
@@ -181,9 +181,9 @@
 				ul.appendChild(li);
 			}
 			var canAppends = queueData.canAppends();
-			for(var i = 0; i < newItems.length; i++)
+			for(var ii = 0; ii < newItems.length; ii++)
 			{		
-				var newItem = newItems[i];
+				var newItem = newItems[ii];
 				li = document.createElement('li');
 				li.style.margin = "0px";
 				li.style.padding = "0px";
@@ -193,7 +193,7 @@
 				ul.appendChild(li);
 				
 				tags[li.id] = newItem;
-				tagsNew[li.id] = newItems[i];
+				tagsNew[li.id] = newItems[ii];
 			}
 			divDown.appendChild(ul);
 
@@ -229,7 +229,7 @@
 			// Azzeramento barra di scorrimento
 			divViewSliderCursor.style.top = (parseInt(canvasView.style.top) + 3) + "px";
 			scrollContent.css("margin-top", 0);
-		}
+		};
 		
 		var _redraw = function()
 		{
@@ -258,7 +258,7 @@
 				ctx.drawImage(buttonBase, canvasView.width - 40, canvasView.height - 10 - buttonBase.height);
 				ctx.drawImage(ImagesLib.getImage("button_back"), canvasView.width - 40, canvasView.height - 10 - buttonBase.height);
 			}
-		}
+		};
 		
 		var _createCanvas = function(item, canAppends, haveBar)
 		{
@@ -317,7 +317,7 @@
 					ctx.fillRect(imgWidth + 5, 23, maxBar - Math.floor(maxBar * item.getRemainTime() / item.getTime()), 5);
 				}
 				
-				ret.addEventListener("mousedown", function(e)
+				ret.addEventListener("mousedown", function()
 					{
 						currentItem = item;
 						_redraw();
@@ -332,7 +332,7 @@
 			ctx.fill();
 			
 			return ret;
-		}
+		};
 		
 		var _createSeparatorCanvas = function(textId)
 		{
@@ -360,7 +360,7 @@
 			ctx.fill();
 			
 			return ret;
-		}
+		};
 		
 		_initialize();
 		
@@ -396,8 +396,8 @@
 	function BaseQueueData(colonyState, queue, available)
 	{
 		QueueData.call(this, queue, available);
-		
-		var _printInfo = function(ctx, position, size, item)
+
+        this.printInfo = function(ctx, position, size, item)
 		{
 			if(item != null)
 			{
@@ -406,6 +406,9 @@
 				var topInfo = position.y + 10;
 				var leftInfo = position.x + 10;
 				var img = ImagesLib.getImage(item.getName());
+                var barThickness = 10;
+                var maxBar = size.x - img.width - 30;
+
 				ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
 				ctx.lineWidth = "1px";
 				ctx.strokeStyle = Colors.Standard;
@@ -416,10 +419,9 @@
 				
 				ctx.font = 16 + "px Arial";
 				ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + img.width + 10, topInfo + 24, size.x - img.width - 30, img.height - 24 - barThickness - 2, 'top', 'left', 16);
-			
-				var barThickness = 10;
-				var maxBar = size.x - img.width - 30;
+
 				ctx.fillStyle = Colors.Dark;
+
 				ctx.fillRect(leftInfo + img.width + 10, topInfo + img.height - barThickness, maxBar, barThickness);
 				ctx.fillStyle = Colors.Standard;
 				
@@ -446,9 +448,7 @@
 				grid.setValue(row, 4, time - remainTime);
 				grid.setValue(row, 5, "/");
 				grid.setValue(row, 6, time);
-							
-				var resource;
-				
+
 				for (var resource in cost)
 				{
 					row++;
@@ -463,9 +463,8 @@
 				ctx.closePath();
 				ctx.fill();
 			}
-		}
-		
-		this.printInfo = _printInfo;
+		};
+
 		this.haveBar = function() { return true; };
 	}
 	BaseQueueData.inherits(QueueData);
@@ -474,7 +473,7 @@
 	{
 		var queue = colonyState.getResearchQueue();
 		var newItems = RecipeLib.getAvailableResearch(colonyState);
-		var available = new Array();
+		var available = [];
 
 		var _contains = function(queue, name)
 		{
@@ -486,7 +485,7 @@
 				}
 			}
 			return false;
-		}
+		};
 		
 		// solo quelli non presenti nella coda
 		for(var i = 0; i < newItems.length; i++)
@@ -498,14 +497,13 @@
 		}
 		
 		BaseQueueData.call(this, colonyState, queue, available);
-		
-		var _appends = function(item)
+
+        this.appends = function(item)
 		{
 			queue.push(item.create());
 			available.splice(available.indexOf(item), 1);
-		}
-		
-		this.appends = _appends;
+		};
+
 		this.getTitle = function() { return "ResearchTitle"; };
 		this.getQueueTitle = function() { return "Researching"; };
 	}
@@ -513,7 +511,7 @@
 
 	function ProductionQueueData(colonyState)
 	{
-		var queue = colonyState.getProductionQueue()
+		var queue = colonyState.getProductionQueue();
 		var available = RecipeLib.getAvailableProduction(colonyState);
 
 		BaseQueueData.call(this, colonyState, queue, available);
@@ -521,7 +519,7 @@
 		var _appends = function(item)
 		{
 			queue.push(item.create());
-		}
+		};
 		
 		this.getTitle = function() { return "ProductionTitle"; };
 		this.appends = _appends;

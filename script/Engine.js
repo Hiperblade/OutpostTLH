@@ -1,6 +1,6 @@
 	function Engine()
 	{
-		var engines = new Array();
+		var engines = [];
 		engines.push(new WorkforceEngine());
 		engines.push(new BaseProductionEngine());
 		engines.push(new ProductionEngine());
@@ -22,7 +22,7 @@
 			{
 				engines[i].simulation(colonyState, graphs);
 			}
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
@@ -35,7 +35,7 @@
 			}
 			
 			colonyState.updateAll();
-		}
+		};
 		
 		//-------------------------------------
 		
@@ -63,12 +63,12 @@
 			}
 			var roboticsWorkUnit = colonyState.getStored("roboticsWorker");
 			colonyState.setMaterials( { humanWorkUnit: humanWorkUnit, roboticsWorkUnit: roboticsWorkUnit } );
-		}
+		};
 		
 		// return global events
 		var _computation = function(colonyState, graph, map)
 		{
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -88,7 +88,7 @@
 			{
 				_internalSimulation(colonyState, graphs[i]);
 			}
-		}
+		};
 		
 		var _internalSimulation = function(colonyState, graph)
 		{
@@ -134,12 +134,12 @@
 					});
 				}
 			});
-		}
+		};
 		
 		// return global events
 		var _computation = function(colonyState, graphs, map)
 		{
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -155,7 +155,7 @@
 		var _simulation = function(colonyState, graphs)
 		{
 			var queue = colonyState.getProductionQueue();
-			var ret = new Array();
+			var ret = [];
 			for(var i = 0; i < queue.length; i++)
 			{
 				var item = queue[i];
@@ -166,7 +166,7 @@
 				
 				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
 				{
-					colonyState.delMaterials(cost)
+					colonyState.delMaterials(cost);
 					value++;
 				}
 				
@@ -174,7 +174,7 @@
 			}
 			
 			colonyState.getSimulationData().productionProgress = ret;
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
@@ -198,7 +198,7 @@
 					}
 				}
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -215,7 +215,7 @@
 		var _simulation = function(colonyState, graphs)
 		{
 			var queue = colonyState.getResearchQueue();
-			var ret = new Array();
+			var ret = [];
 			for(var i = 0; i < queue.length; i++)
 			{
 				var item = queue[i];
@@ -225,13 +225,13 @@
 				var value = 0;
 				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
 				{
-					colonyState.delMaterials(cost)
+					colonyState.delMaterials(cost);
 					value++;
 				}
 				ret.push({ item: item, value: value });
 			}
 			colonyState.getSimulationData().researchProgress = ret;
-		}	
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
@@ -256,7 +256,7 @@ Log.dialog("NEW_DISCOVERY");
 					}
 				}
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -279,7 +279,7 @@ Log.dialog("NEW_DISCOVERY");
 				}
 			}
 			return false;
-		}
+		};
 	
 		var _simulation = function(colonyState, graphs)
 		{
@@ -313,7 +313,7 @@ Log.dialog("NEW_DISCOVERY");
 			}
 			
 			colonyState.getSimulationData().neglectPercentage = neglectPercentage;
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
@@ -326,15 +326,16 @@ Log.dialog("NEW_DISCOVERY");
 			else if(neglectPercentage < 80) { damageAmount = 50;  }
 			else							{ damageAmount = 100; }
 
+            var integrity;
+            var buildingType;
 			for(var i = 0; i < graphs.length; i++)
 			{
 				if(_hasHeadquarter(graphs[i]))
 				{
 					if(damageAmount > 0)
 					{
-						var integrity;
 						// danneggiamento
-						for(var buildingType in graphs[i])
+						for(buildingType in graphs[i])
 						{
 							graphs[i][buildingType].forEach(function(tmp)
 							{
@@ -362,7 +363,7 @@ Log.dialog("NEW_DISCOVERY");
 					else
 					{
 						// riparazione
-						for(var buildingType in graphs[i])
+						for(buildingType in graphs[i])
 						{
 							graphs[i][buildingType].forEach(function(tmp)
 							{
@@ -371,30 +372,29 @@ Log.dialog("NEW_DISCOVERY");
 						}
 					}
 					
-					for(var i = 0; i < graphs[i].length; i++)
+					for(var ii = 0; ii < graphs[i].length; ii++)
 					{
-						graphs[i][i].progress();
+						graphs[i][ii].progress();
 					}
 					
 					//costruzione edifici
 					var buildList = colonyState.getBuildList();
-					for(var i = 0; i < buildList.length; i++)
+					for(var iii = 0; iii < buildList.length; iii++)
 					{
-						if(buildList[i].progressBuild())
+						if(buildList[iii].progressBuild())
 						{
-							var eventEndBuilding = PrototypeLib.get(buildList[i].getBuildingType()).eventEndBuilding;
+							var eventEndBuilding = PrototypeLib.get(buildList[iii].getBuildingType()).eventEndBuilding;
 							if(eventEndBuilding != undefined)
 							{
-								eventEndBuilding(buildList[i], map);
+								eventEndBuilding(buildList[iii], map);
 							}
 						}
 					}
 				}
 				else // edifici scollegati
 				{
-					var integrity;
 					// danneggiamento
-					for(var buildingType in graphs[i])
+					for(buildingType in graphs[i])
 					{
 						graphs[i][buildingType].forEach(function(tmp)
 						{
@@ -420,7 +420,7 @@ Log.dialog("NEW_DISCOVERY");
 					}
 				}
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -430,19 +430,20 @@ Log.dialog("NEW_DISCOVERY");
 		//-----------------------------------------
 	}
 	
-	// gestione RoboDozer, RoboDigger -- avanzamento e disponibilità per il turno successivo
+	// gestione RoboDozer, RoboDigger -- avanzamento e disponibilitÃ  per il turno successivo
 	function RobotEngine()
 	{
 		var _simulation = function(colonyState, graphs)
 		{
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
 			var structure = map.getStructure();
 			var dozerCount = 0;
 			var diggerCount = 0;
-			var removedRobot = new Array();
+			var removedRobot = [];
+
 			for(var i = 0; i < structure.length; i++)
 			{
 				if(structure[i].getType() == StructureTypes.Robot)
@@ -479,9 +480,9 @@ Log.dialog("NEW_DISCOVERY");
 				}
 			}
 			
-			for(var i = removedRobot.length - 1; i >= 0; i--)
+			for(var ii = removedRobot.length - 1; ii >= 0; ii--)
 			{
-				structure.splice(removedRobot[i], 1); // remove
+				structure.splice(removedRobot[ii], 1); // remove
 			}
 			
 			colonyState.setRobotsAvailable(
@@ -490,7 +491,7 @@ Log.dialog("NEW_DISCOVERY");
 				dozer: colonyState.getRemainder("dozer") - dozerCount,
 				digger: colonyState.getRemainder("digger") - diggerCount
 				});
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -505,16 +506,16 @@ Log.dialog("NEW_DISCOVERY");
 	{
 		var _simulation = function(colonyState, graphs)
 		{
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
 //TODO
-			var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
-			var date = colonyState.getDate();
+			//var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
+			//var date = colonyState.getDate();
 			// incidenti, catastrofi (distruzione o danneggiamento edifici, morti o feriti)
 			// scoperte (nuove risorse, rovine ecc.)
-		}
+		};
 				
 		//-----------------------------------------
 		
@@ -529,12 +530,12 @@ Log.dialog("NEW_DISCOVERY");
 	{
 		var _simulation = function(colonyState, graphs)
 		{
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
 //TODO
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -549,7 +550,7 @@ Log.dialog("NEW_DISCOVERY");
 	{
 		var _simulation = function(colonyState, graphs)
 		{
-		}
+		};
 		
 		var _computation = function(colonyState, graphs, map)
 		{
@@ -559,11 +560,11 @@ Log.dialog("NEW_DISCOVERY");
 			var people = 0;
 			var population = colonyState.getPopulation();
 			var generations = population.registry;
-			for(var i  = 0; i < generations.length; i++)
+			for(var g  = 0; g < generations.length; g++)
 			{
-				if(generations[i].getState(date) != GenerationState.Deads)
+				if(generations[g].getState(date) != GenerationState.Deads)
 				{
-					people += generations[i].getPopulation();
+					people += generations[g].getPopulation();
 				}
 			}
 			
@@ -690,7 +691,7 @@ Log.dialog("NEW_DISCOVERY");
 				missingHigthEducation = missingHigthEducation / researchers;
 			}
 			
-			// felicità (tristezza)
+			// felicitÃ  (tristezza)
 			var sadness = 0;
 			var recreationalUnit = colonyState.getRemainder("recreationalUnit");
 			if(people > recreationalUnit)
@@ -726,7 +727,7 @@ Log.dialog("NEW_DISCOVERY");
 				happiness = 0;
 			}
 			
-			wellnessAverage = (population.wellness + wellness) / 2;
+			var wellnessAverage = (population.wellness + wellness) / 2;
 			
 			if(wellnessAverage == 1)
 			{
@@ -741,15 +742,15 @@ Log.dialog("NEW_DISCOVERY");
 			{
 				// morti
 				var dead = Math.floor(people * (1 - wellnessAverage));
-				for(var i = 0; i < dead; i++)
+				for(var d = 0; d < dead; d++)
 				{
-					registry[i % registry.length].kill();
+                    generations[d % generations.length].kill();
 				}
 			}
 			
 			population.wellness = wellness;
 			population.happiness = happiness;
-		}
+		};
 		
 		//-----------------------------------------
 		

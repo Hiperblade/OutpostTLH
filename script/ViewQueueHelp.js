@@ -3,23 +3,23 @@
 		var _getText = function()
 		{
 			return "HelpTutorial_Base";
-		}
+		};
 	
-		this.getName = function(){ return "HelpTutorial_Base"; }
-		this.getImageId = function(){ return "button_help"; }
+		this.getName = function(){ return "HelpTutorial_Base"; };
+		this.getImageId = function(){ return "button_help"; };
 		this.getText = _getText;
 	}
 	
 	function HelpTutorialBuilding(name, image)
 	{
-		this.getName = function(){ return name; }
-		this.getImageId = function(){ return image; }
+		this.getName = function(){ return name; };
+		this.getImageId = function(){ return image; };
 	}
 	
 	function HelpQueueData(colonyState)
 	{
 		var queue = [new HelpTutorial()];
-		var available = new Array();
+		var available = [];
 	
 		var technology = colonyState.getTechnology();
 		for(var i = 0; i < technology.length; i++)
@@ -30,7 +30,7 @@
 	
 		QueueData.call(this, queue, available);
 		
-		var _printInfo = function(ctx, position, size, item)
+		this.printInfo = function(ctx, position, size, item)
 		{
 			if(item != null)
 			{
@@ -38,10 +38,11 @@
 
 				var topInfo = position.y + 10;
 				var leftInfo = position.x + 10;
-			
+
+                var img;
 				if(item.getText != undefined)
 				{
-					var img = ImagesLib.getImage(item.getImageId());
+					img = ImagesLib.getImage(item.getImageId());
 					ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
 					ctx.lineWidth = "1px";
 					ctx.strokeStyle = Colors.Standard;
@@ -57,7 +58,7 @@
 				else
 				{
 					var baseTile = ImagesLib.getImage("baseTile");
-					var img = ImagesLib.getImage(item.getImageId());
+					img = ImagesLib.getImage(item.getImageId());
 					ctx.drawImage(baseTile, leftInfo, topInfo - baseTile.height + img.height, baseTile.width, baseTile.height);
 					ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
 					
@@ -76,7 +77,8 @@
 					var row = 0;
 					grid.setText(row, 0, TextRepository.get("TerrainLayer") + ":");
 					grid.setText(row, 4, TextRepository.get(proto.getTerrainLayer()));
-					
+
+                    var listItem;
 					if(proto.getBuildingTime() > 0 || Object.keys(proto.getBuildingCost()).length > 0)
 					{
 						row++;
@@ -86,13 +88,12 @@
 						grid.setText(row, 1, TextRepository.get("BuildingTime") + ":");
 						grid.setValue(row, 4, proto.getBuildingTime());
 					
-						var listItem;
 						var list = proto.getBuildingCost();
 						if(Object.keys(list).length > 0)
 						{
 							row++;
 							grid.setText(row, 1, TextRepository.get("BuildingCost") + ":");
-							for (var listItem in list)
+							for (listItem in list)
 							{
 								row++;
 								grid.setText(row, 2, TextRepository.get(listItem));
@@ -106,7 +107,7 @@
 					{
 						row++;
 						grid.setText(row, 0, TextRepository.get("BuildingCapacity"));
-						for (var listItem in list)
+						for (listItem in list)
 						{
 							row++;
 							grid.setText(row, 1, TextRepository.get(listItem));
@@ -126,7 +127,7 @@
 						{
 							row++;
 							grid.setText(row, 1, TextRepository.get("BuildingConsumption") + ":");
-							for (var listItem in list)
+							for (listItem in list)
 							{
 								row++;
 								grid.setText(row, 2, TextRepository.get(listItem));
@@ -139,7 +140,7 @@
 						{
 							row++;
 							grid.setText(row, 1, TextRepository.get("BuildingProduction") + ":");
-							for (var listItem in list)
+							for (listItem in list)
 							{
 								row++;
 								grid.setText(row, 2, TextRepository.get(listItem));
@@ -152,7 +153,7 @@
 						{
 							row++;
 							grid.setText(row, 1, TextRepository.get("BuildingWaste") + ":");
-							for (var listItem in list)
+							for (listItem in list)
 							{
 								row++;
 								grid.setText(row, 2, TextRepository.get(listItem));
@@ -174,9 +175,8 @@
 				ctx.closePath();
 				ctx.fill();
 			}
-		}
-	
-		this.printInfo = _printInfo;
+		};
+
 		this.isSortable = function() { return false; };
 		this.getTitle = function() { return "HelpTitle"; };
 		this.getQueueTitle = function() { return "HelpBase"; };

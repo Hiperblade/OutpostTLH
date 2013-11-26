@@ -6,7 +6,7 @@ GenerateImageFile.cmd execute > script\DataImagesLib.js
 GOTO EXIT
 
 :EXECUTE
-echo var imagesList = new Array();
+echo var imagesList =[];
 for /r %%i in (images\interface\*.*) do echo imagesList.push({ id: "%%~ni", fileName: "interface/%%~nxi" });
 
 for /r %%i in (images\planets\*.*) do echo imagesList.push({ id: "%%~ni", fileName: "planets/%%~nxi" });

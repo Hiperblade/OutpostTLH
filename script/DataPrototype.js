@@ -10,13 +10,13 @@
 			{
 				item.isHeadquarter = true;
 				
-				item.isPipe    = function() { return true; }
-				item.haveNorth = function() { return true; }
-				item.haveSouth = function() { return true; }
-				item.haveEast  = function() { return true; }
-				item.haveWest  = function() { return true; }
-				item.haveUp    = function() { return false; }
-				item.haveDown  = function() { return false; }
+				item.isPipe    = function() { return true; };
+				item.haveNorth = function() { return true; };
+				item.haveSouth = function() { return true; };
+				item.haveEast  = function() { return true; };
+				item.haveWest  = function() { return true; };
+				item.haveUp    = function() { return false; };
+				item.haveDown  = function() { return false; };
 				
 				var position = item.getPosition();
 				if((position.x > 1) && (position.y > 1) &&
@@ -103,18 +103,18 @@
 		}).create = function(position)
 		{
 			return new Building("LandingModule", TerrainLayer.Surface, position, 1, "LandingPoint");
-		}
+		};
 	
 	PrototypeLib.add("SupportModule", TerrainLayer.Surface, 2, {}, { production: { power: 200 },
 		eventBeginBuilding: function(item, map)
 			{
-				item.isPipe    = function() { return true; }
-				item.haveNorth = function() { return false; }
-				item.haveSouth = function() { return true; }
-				item.haveEast  = function() { return true; }
-				item.haveWest  = function() { return false; }
-				item.haveUp    = function() { return false; }
-				item.haveDown  = function() { return false; }
+				item.isPipe    = function() { return true; };
+				item.haveNorth = function() { return false; };
+				item.haveSouth = function() { return true; };
+				item.haveEast  = function() { return true; };
+				item.haveWest  = function() { return false; };
+				item.haveUp    = function() { return false; };
+				item.haveDown  = function() { return false; };
 				return true;
 			}
 		});
@@ -122,36 +122,36 @@
 	PrototypeLib.add("LaunchModule", TerrainLayer.Surface, 2, {}, {
 		eventBeginBuilding: function(item, map)
 			{
-				item.isPipe    = function() { return true; }
-				item.haveNorth = function() { return false; }
-				item.haveSouth = function() { return true; }
-				item.haveEast  = function() { return false; }
-				item.haveWest  = function() { return true; }
-				item.haveUp    = function() { return false; }
-				item.haveDown  = function() { return false; }
+				item.isPipe    = function() { return true; };
+				item.haveNorth = function() { return false; };
+				item.haveSouth = function() { return true; };
+				item.haveEast  = function() { return false; };
+				item.haveWest  = function() { return true; };
+				item.haveUp    = function() { return false; };
+				item.haveDown  = function() { return false; };
 				return true;
 			}
 		}).create = function(position)
 		{
 			return new Building("LaunchModule", TerrainLayer.Surface, position, 2, "LandingPoint");
-		}
+		};
 		
 	PrototypeLib.add("CargoModule", TerrainLayer.Surface, 2, {}, { capacity: { genericStorage: 200 },
 		eventBeginBuilding: function(item, map)
 			{
-				item.isPipe    = function() { return true; }
-				item.haveNorth = function() { return true; }
-				item.haveSouth = function() { return false; }
-				item.haveEast  = function() { return false; }
-				item.haveWest  = function() { return true; }
-				item.haveUp    = function() { return false; }
-				item.haveDown  = function() { return false; }
+				item.isPipe    = function() { return true; };
+				item.haveNorth = function() { return true; };
+				item.haveSouth = function() { return false; };
+				item.haveEast  = function() { return false; };
+				item.haveWest  = function() { return true; };
+				item.haveUp    = function() { return false; };
+				item.haveDown  = function() { return false; };
 				return true;
 			}
 		}).create = function(position)
 		{
 			return new Building("CargoModule", TerrainLayer.Surface, position, 2, "LandingPoint");
-		}
+		};
 	
 	//-------------------------------------------------------------
 	// produzione elettrica
@@ -332,13 +332,13 @@
 			{
 				item.isHeadquarter = true;
 				
-				item.isPipe    = function() { return true; }
-				item.haveNorth = function() { return true; }
-				item.haveSouth = function() { return true; }
-				item.haveEast  = function() { return true; }
-				item.haveWest  = function() { return true; }
-				item.haveUp    = function() { return false; }
-				item.haveDown  = function() { return false; }
+				item.isPipe    = function() { return true; };
+				item.haveNorth = function() { return true; };
+				item.haveSouth = function() { return true; };
+				item.haveEast  = function() { return true; };
+				item.haveWest  = function() { return true; };
+				item.haveUp    = function() { return false; };
+				item.haveDown  = function() { return false; };
 				
 				return true;
 			}
@@ -372,14 +372,14 @@
 			return true;
 		}
 		return false;
-	}
+	};
 	
 	var mine_eventEndBuilding = function(item, map)
 	{
 		var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 		while(!building.progressBuild()){}
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Underground);
-	}
+	};
 
 	var mine_eventDestroy = function(item, map)
 	{
@@ -388,7 +388,7 @@
 		{
 			building.destroy();
 		}
-	}
+	};
 	
 	var mineDeep_eventBeginBuilding = function(item, map)
 	{
@@ -400,14 +400,14 @@
 			return true;
 		}
 		return false;
-	}
+	};
 	
 	var mineDeep_eventEndBuilding = function(item, map)
 	{
 		var building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
 		while(!building.progressBuild()){}
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Deep);
-	}
+	};
 
 	var mineDeep_eventDestroy = function(item, map)
 	{
@@ -416,7 +416,7 @@
 		{
 			building.destroy();
 		}
-	}
+	};
 		
 	PrototypeLib.addMine("Metal", TerrainLayer.Surface, 2, {}, { requiredResource: "Metal", consumption: { power: 5 }, production: { metalOre: 10 },
 		eventBeginBuilding: mine_eventBeginBuilding,
@@ -546,11 +546,11 @@
 	park.getBuildingImageId = function()
 	{
 		return "Park_mini";
-	}
+	};
 	park.getAreaType = function()
 	{
 		return AreaTypes.Four;
-	}
+	};
 		
 	PrototypeLib.add("Park_w", TerrainLayer.Deep, 40, {}, {
 			eventDestroy: function(item, map)

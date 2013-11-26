@@ -6,20 +6,21 @@
 		Retirees: "retirees",
 		Deads: "deads"
 		};
-	
-	function Generation(birthDate, nurseryUnit)
+
+    const GenerationConst = {
+        AGE_INFANTS: 6,
+        AGE_RETIREES: 80,
+        EDUCATIONAL_PRIMARY: 13,
+        EDUCATIONAL_SECONDARY: 5
+    };
+
+	function Generation(date, nurseryUnit)
 	{
-		const AGE_INFANTS = 6;
-		const AGE_RETIREES = 80;
-		const EDUCATIONAL_PRIMARY = 13;
-		const EDUCATIONAL_SECONDARY = 5;
-		
-		var birthDate = birthDate;
-		var lots = new Array();
-		
+		var birthDate = date;
+		var lots = [];
 		for(var i = 0; i < nurseryUnit; i++)
 		{
-			lots[i] = new GenerationalLot();
+			lots[i] = new GenerationalLot(birthDate);
 		}
 		
 		var _getPopulation = function()
@@ -30,7 +31,7 @@
 				ret += lots[i].getPopulation();
 			}
 			return ret;
-		}
+		};
 		
 		var _kill = function()
 		{
@@ -52,7 +53,7 @@
 				while(true);
 			}
 			return 0;
-		}
+		};
 		
 		var _getState = function(date)
 		{
@@ -62,22 +63,22 @@
 			}
 			
 			var age = date - birthDate;
-			if(age < AGE_INFANTS)
+			if(age < GenerationConst.AGE_INFANTS)
 			{
 				return GenerationState.Infants;
 			}
-			else if(age > AGE_RETIREES)
+			else if(age > GenerationConst.AGE_RETIREES)
 			{
 				return GenerationState.Retirees;
 			}
 			else
 			{
 				var minEducationLevel = lots[lots.length - 1].getEducationLevel();
-				if(minEducationLevel < EDUCATIONAL_PRIMARY)
+				if(minEducationLevel < GenerationConst.EDUCATIONAL_PRIMARY)
 				{
 					return GenerationState.Students;
 				}
-				else if(minEducationLevel < EDUCATIONAL_PRIMARY + EDUCATIONAL_SECONDARY)
+				else if(minEducationLevel < GenerationConst.EDUCATIONAL_PRIMARY + GenerationConst.EDUCATIONAL_SECONDARY)
 				{
 					return GenerationState.Researchers;
 				}
@@ -86,7 +87,7 @@
 					return GenerationState.Scientists;
 				}
 			}
-		}
+		};
 		
 		var _getNextLot = function()
 		{
@@ -102,7 +103,7 @@
 				}
 			}
 			return null;
-		}
+		};
 		
 		var _teach = function()
 		{
@@ -111,12 +112,12 @@
 			{
 				lot.teach();
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getBirthDate = function() { return birthDate; }
-		this.getLots = function() { return lots; }
+		this.getBirthDate = function() { return birthDate; };
+		this.getLots = function() { return lots; };
 		
 		this.getPopulation = _getPopulation;
 		this.kill = _kill;
@@ -127,17 +128,18 @@
 		//-----------------------------------------
 	}
 	
-	function GenerationalLot()
+	function GenerationalLot(date)
 	{
 		const INITIAL_POPULATION = 5;
-		
+
+        var birthDate = date;
 		var deadCount = 0;
 		var educationLevel = 0;
 		
 		var _getPopulation = function()
 		{
 			return INITIAL_POPULATION - deadCount;
-		}
+		};
 		
 		var _kill = function()
 		{
@@ -146,7 +148,7 @@
 				deadCount++;
 			}
 			return _getPopulation();
-		}
+		};
 		
 		var _teach = function()
 		{
@@ -154,7 +156,7 @@
 			{
 				educationLevel++;
 			}
-		}
+		};
 		
 		var _getState = function(date)
 		{
@@ -164,21 +166,21 @@
 			}
 			
 			var age = date - birthDate;
-			if(age < AGE_INFANTS)
+			if(age < GenerationConst.AGE_INFANTS)
 			{
 				return GenerationState.Infants;
 			}
-			else if(age > AGE_RETIREES)
+			else if(age > GenerationConst.AGE_RETIREES)
 			{
 				return GenerationState.Retirees;
 			}
 			else
 			{
-				if(educationLevel < EDUCATIONAL_PRIMARY)
+				if(educationLevel < GenerationConst.EDUCATIONAL_PRIMARY)
 				{
 					return GenerationState.Students;
 				}
-				else if(educationLevel < EDUCATIONAL_PRIMARY + EDUCATIONAL_SECONDARY)
+				else if(educationLevel < GenerationConst.EDUCATIONAL_PRIMARY + GenerationConst.EDUCATIONAL_SECONDARY)
 				{
 					return GenerationState.Researchers;
 				}
@@ -187,11 +189,11 @@
 					return GenerationState.Scientists;
 				}
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getEducationLevel = function() { return educationLevel; }
+		this.getEducationLevel = function() { return educationLevel; };
 		
 		this.getPopulation = _getPopulation;
 		this.kill = _kill;

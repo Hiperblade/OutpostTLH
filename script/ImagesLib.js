@@ -1,4 +1,4 @@
-	function ImagesLib()
+	function ImagesLibConstructor()
 	{
 		var images = [];
 		var loadingMax = 0;
@@ -12,7 +12,7 @@
 			{
 				onUpdateLoadingCallback();
 			}
-		}
+		};
 		
 		var _addImage = function(code, fileName)
 		{
@@ -31,32 +31,32 @@
 			}
 			images[code] = ret;
 			return ret;
-		}
+		};
 		
 		var _initialize = function(canvasId, imagesList, onUpdateLoading)
 		{
 			onUpdateLoadingCallback = onUpdateLoading;
-			if(imagesList != undefined);
+			if(imagesList != undefined)
 			{
 				for(var i = 0; i < imagesList.length; i++)
 				{
 					_addImage(imagesList[i].id, imagesList[i].fileName);
 				}
 			}
-		}
+		};
 		
 		var _getLoadingPercentage = function()
 		{
 			return (loadingMax - loading) / loadingMax;
-		}
+		};
 		
 		var _waitLoading = function()
 		{
-			if(ImagesLib.loading > 0)
+			if(loading > 0)
 			{
 				Log.dialog("Caricamento in corso!");
 			}
-		}
+		};
 		
 		var _getImage = function(id)
 		{
@@ -69,7 +69,7 @@
 				return null;
 			}
 			return ret.image;
-		}
+		};
 		
 		var _getPattern = function(id, ctx)
 		{
@@ -91,7 +91,7 @@
 				ret.pattern = ctx.createPattern(ret.image, "repeat");
 			}
 			return ret.pattern;
-		}
+		};
 		
 		this.getImage = _getImage;
 		this.getPattern = _getPattern;
@@ -100,4 +100,4 @@
 	}
 	
 	// singleton
-	var ImagesLib = new ImagesLib();
+	var ImagesLib = new ImagesLibConstructor();

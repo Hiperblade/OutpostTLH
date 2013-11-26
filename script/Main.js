@@ -37,7 +37,7 @@
 				{
 					_goWest();
 				}
-			}
+			};
 			
 			var _onChangePosition = function(newPosition)
 			{
@@ -47,7 +47,7 @@
 				if(newPosition.y < 0) newPosition.y = 0;
 				
 				_setPosition(newPosition);
-			}
+			};
 			
 			var _onSelected = function(item)
 			{
@@ -59,7 +59,7 @@
 				{
 					_setCurrentTile(null);
 				}
-			}
+			};
 			
 			terrainMap = new TerrainMap(site.getTypology(), MAP_SIZE);
 			state = terrainMap.getState();
@@ -76,16 +76,17 @@
 			view.addButtonGrid(13, { x: -1, y: Math.floor(areaSize.y / 2) }, "button_south", function() { _goSouth(); });
 
 			// bordo
-			for(var index = 0; index < areaSize.y; index++)
+            var index;
+			for(index = 0; index < areaSize.y; index++)
 			{
 				view.addImageGrid(300 + index, { x: -1, y: index }, "tileBorder_left")
 			}
-			for(var index = 0; index < areaSize.x; index++)
+			for(index = 0; index < areaSize.x; index++)
 			{
 				// alto sinistra
 			//	view.addImageGrid(200 + index, { x: index, y: -1 }, "tileBorder_right")
 			}
-			for(var index = areaSize.x -1; index >= 0; index--)
+			for(index = areaSize.x -1; index >= 0; index--)
 			{
 				view.addImageGrid(200 + index, { x: index, y: areaSize.y }, "tileBorder_right")
 			}
@@ -127,6 +128,8 @@
 					
 					if(currentTile != null)
 					{
+                        var resource;
+
 						if(currentTile.isRobot)
 						{
 							if(currentTile.robotType == RobotTypes.Dozer)
@@ -153,7 +156,7 @@
 										}
 										else
 										{
-Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
+Log.dialog("Non ï¿½ disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
 										}
 									}
 									else if(terrainMap.isRazable(point))
@@ -165,7 +168,7 @@ Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) +
 										}
 										else
 										{
-Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
+Log.dialog("Non ï¿½ disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
 										}
 									}
 								}
@@ -185,7 +188,7 @@ Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) +
 											}
 											else
 											{
-Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Digger) + "!");
+Log.dialog("Non ï¿½ disponibile nessuna " + TextRepository.get(RobotTypes.Digger) + "!");
 											}
 										}
 									}
@@ -193,7 +196,7 @@ Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Digger) 
 							}
 							else if(currentTile.robotType == RobotTypes.Miner)
 							{
-								var resource = terrainMap.findResource(point);
+								resource = terrainMap.findResource(point);
 								if(resource != null)
 								{
 									var material = resource.getResourceType();
@@ -209,7 +212,7 @@ Log.dialog("Non è disponibile nessuna " + TextRepository.get(RobotTypes.Digger) 
 										}
 										else
 										{
-Log.dialog("Il terreno non è spianato!");
+Log.dialog("Il terreno non ï¿½ spianato!");
 										}
 									}
 									else
@@ -225,7 +228,7 @@ Log.dialog("Non hai la tecnologia per estrarre questa risorsa!");
 							{
 								if(!terrainMap.isRazable(point))
 								{
-									var resource = terrainMap.findResource(point);
+									resource = terrainMap.findResource(point);
 									var p = PrototypeLib.get(currentTile.buildingType);
 									if(p.getRequiredResource() == undefined && resource == null)
 									{
@@ -296,41 +299,41 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			terrainMap.simulation();		
 			_setAbsolutePosition({x: 5, y: 5});
 			_setLayer(TerrainLayer.Surface);
-		}
+		};
 		
 		var _addBuilding = function(buildingType, point)
 		{
 			var newBuilding = terrainMap.addBuilding(buildingType, point);
 			return (newBuilding != null);
-		}
+		};
 		
 		var _createCurrentTilePipe = function(pipeType, layer)
 		{
 			return { buildingType: "Pipe_" + pipeType + "_" + layer, image: "Pipe_" + pipeType + "_" + layer};
-		}
+		};
 		
 		var _setPosition = function(point)
 		{
 			position = point;
 			view.setPosition(position);
 			mapView.setPosition(position);
-		}
+		};
 		
 		var _redraw = function()
 		{
 			view.redraw();
 			mapView.redraw();
-		}
+		};
 		
 		var _fromScreenPosition = function(point)
 		{
 			return view.fromScreenPosition(point);
-		}
+		};
 		
 		var _findBuilding = function(point)
 		{
 			return terrainMap.findBuilding(point);
-		}
+		};
 		
 		var _setLayer = function(layer)
 		{
@@ -360,7 +363,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
 			selectorView.setLayer(layer);
 			_redraw(); 
-		}
+		};
 		
 		var _goUp = function()
 		{
@@ -374,7 +377,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 			_setCurrentTile(null);
 			_redraw();
-		}
+		};
 		
 		var _goDown = function()
 		{
@@ -388,7 +391,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 			_setCurrentTile(null);
 			_redraw();
-		}
+		};
 
 		var _goNorth = function()
 		{
@@ -397,7 +400,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				position = { x: position.x + 1, y: position.y };
 				_setPosition(position);
 			}
-		}
+		};
 		
 		var _goSouth = function()
 		{
@@ -406,7 +409,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				position = { x: position.x - 1, y: position.y };
 				_setPosition(position);
 			}
-		}
+		};
 		
 		var _goEast = function()
 		{
@@ -415,7 +418,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				position = { x: position.x, y: position.y + 1 };
 				_setPosition(position);
 			}
-		}
+		};
 		
 		var _goWest = function()
 		{
@@ -424,14 +427,14 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				position = { x: position.x, y: position.y - 1 };
 				_setPosition(position);
 			}
-		}
+		};
 		
 		var _doNext = function()
 		{
 			terrainMap.computation();
 			terrainMap.simulation();
 			_redraw();
-		}
+		};
 		
 		var _setAbsolutePosition = function(point)
 		{
@@ -440,7 +443,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			mapView.setAbsolutePosition({x: canvasSize.x - MAP_SIZE.y + point.x, y: point.y});
 			selectorView.setAbsolutePosition({x: point.x, y: point.y + canvasSize.y});
 			queueView.setAbsolutePosition(point);
-		}
+		};
 		
 		var _setCurrentTile = function(item)
 		{
@@ -474,36 +477,36 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				view.setImage(101, "microTile_" + protoType.getAreaType());
 			}
 			_redraw();
-		}
+		};
 		
 		var _showReport = function()
 		{
 			queueView.show(new ReportQueueData(state));
-		}
+		};
 		
 		var _showProduction = function()
 		{
 			queueView.show(new ProductionQueueData(state));
-		}
+		};
 		
 		var _showResearch = function()
 		{
 			queueView.show(new ResearchQueueData(state));
-		}
+		};
 
 		var _showHelp = function()
 		{
 			queueView.show(new HelpQueueData(state));
-		}
+		};
 		
 		_initialize();
 
 		//-----------------------------------------
 		
-		this.getTerrainMap = function() { return terrainMap; }
-		this.getState = function() { return state; }
+		this.getTerrainMap = function() { return terrainMap; };
+		this.getState = function() { return state; };
 
-		this.getLayer = function() { return terrainMap.getLayer(); }
+		this.getLayer = function() { return terrainMap.getLayer(); };
 		this.setLayer = _setLayer;
 		
 		this.setPosition = _setPosition;
@@ -524,13 +527,10 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
 	function Site(typology, imageName)
 	{
-		var typology = typology;
-		var imageName = imageName;
-		
 		//-----------------------------------------
 		
-		this.getTypology = function() { return typology; }
-		this.getImageName = function() { return imageName; }
+		this.getTypology = function() { return typology; };
+		this.getImageName = function() { return imageName; };
 		
 		//-----------------------------------------
 	}

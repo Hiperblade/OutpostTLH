@@ -1,6 +1,6 @@
 	function ReportProductionMaterial(colonyState, material, image)
 	{
-		var productionBuildingList = new Array();
+		var productionBuildingList = [];
 		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
@@ -13,7 +13,7 @@
 				}
 			}
 		});
-		var consumptionBuildingList = new Array();
+		var consumptionBuildingList = [];
 		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
@@ -27,8 +27,9 @@
 			}
 		});
 		
-		var _printInfo = function(ctx, position, size)
+		this.printInfo = function(ctx, position, size)
 		{
+            var list;
 			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			grid.setText(row, 0, TextRepository.get("Buildings"));
@@ -36,12 +37,13 @@
 			grid.setText(row, 5, TextRepository.get("Idle"));
 			grid.setText(row, 6, TextRepository.get("Production"));
 			
-			var list = productionBuildingList;
+			list = productionBuildingList;
 			var totalProduction = 0;
-			for(var i = 0; i < list.length; i++)
+            var i, active, idle;
+			for(i = 0; i < list.length; i++)
 			{
-				var active = (colonyState.getActiveList()[list[i]] || []).length;
-				var idle = (colonyState.getInactiveList()[list[i]] || []).length;
+				active = (colonyState.getActiveList()[list[i]] || []).length;
+				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var production = PrototypeLib.get(list[i]).getProduction()[material] * active;
 				totalProduction += production;
 				if(active + idle > 0)
@@ -61,16 +63,16 @@
 				}
 			}
 			
-			var list = consumptionBuildingList;
+			list = consumptionBuildingList;
 			var totalConsumption = 0;
 			var activePipe = 0;
 			var idlePipe = 0;
 			var consumptionPipe = 0;
 			var haveConsumption = false;
-			for(var i = 0; i < list.length; i++)
+			for(i = 0; i < list.length; i++)
 			{
-				var active = (colonyState.getActiveList()[list[i]] || []).length;
-				var idle = (colonyState.getInactiveList()[list[i]] || []).length;
+				active = (colonyState.getActiveList()[list[i]] || []).length;
+				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var consumption = PrototypeLib.get(list[i]).getConsumption()[material] * active;
 				totalConsumption += consumption;
 				if(PrototypeLib.get(list[i]).create({ x: 0, y: 0 }).isPipe())
@@ -128,7 +130,7 @@
 				}
 				grid.setValue(row, 7, "-" + consumptionPipe, Colors.Error);	// consumption
 				
-				haveConsumption = true;
+				//haveConsumption = true;
 			}
 
 			row++;
@@ -163,16 +165,15 @@
 			}
 			grid.setValue(row, 6, "/");
 			grid.setValue(row, 7, capacity);
-		}
+		};
 	
-		this.printInfo = _printInfo;
-		this.getName = function(){ return material; }
-		this.getImageId = function(){ return image || material; }
+		this.getName = function(){ return material; };
+		this.getImageId = function(){ return image || material; };
 	}
 	
 	function ReportMetaMaterial(colonyState, metaMaterial, image)
 	{
-		var _printInfo = function(ctx, position, size)
+		this.printInfo = function(ctx, position, size)
 		{
 			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
@@ -182,7 +183,7 @@
 			grid.setText(row, 7, TextRepository.get("Stored"));
 			
 			var surplus = 0;
-			var list = colonyState.getMaterialFromMetaMatrial(metaMaterial);
+			var list = colonyState.getMaterialFromMetaMaterial(metaMaterial);
 			for(var i = 0; i < list.length; i++)
 			{
 				row++;
@@ -194,10 +195,10 @@
 				surplus += (colonyState.getProduced(list[i]) - colonyState.getConsumed(list[i]));
 			}
 			
-			row++
+			row++;
 			ctx.fillRect(grid.getStartColumn(1), grid.getStartRow(row) + 8, grid.getStartColumn(8) - grid.getStartColumn(1), 1);
 			
-			row++
+			row++;
 			grid.setText(row, 0, TextRepository.get("Surplus"));
 			if(surplus < 0)
 			{
@@ -222,18 +223,17 @@
 			}
 			grid.setValue(row, 6, "/");
 			grid.setValue(row, 7, capacity);
-		}
+		};
 		
-		this.printInfo = _printInfo;
-		this.getName = function(){ return metaMaterial; }
-		this.getImageId = function(){ return image || metaMaterial; }
+		this.getName = function(){ return metaMaterial; };
+		this.getImageId = function(){ return image || metaMaterial; };
 	}
 	
 	function ReportMaintenance(colonyState, image)
 	{
 		var material = "repairUnit";
 		
-		var productionBuildingList = new Array();
+		var productionBuildingList = [];
 		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
@@ -246,7 +246,7 @@
 				}
 			}
 		});
-		var consumptionBuildingList = new Array();
+		var consumptionBuildingList = [];
 		PrototypeLib.getPriorityList().forEach(function(buildingType)
 		{
 			var buildingProtype = PrototypeLib.get(buildingType);
@@ -260,8 +260,9 @@
 			}
 		});
 		
-		var _printInfo = function(ctx, position, size)
+		this.printInfo = function(ctx, position, size)
 		{
+            var list;
 			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			grid.setText(row, 0, TextRepository.get("Buildings"));
@@ -269,12 +270,13 @@
 			grid.setText(row, 5, TextRepository.get("Idle"));
 			grid.setText(row, 6, TextRepository.get("Production"));
 			
-			var list = productionBuildingList;
+			list = productionBuildingList;
+            var i, active, idle;
 			var totalProduction = 0;
-			for(var i = 0; i < list.length; i++)
+			for(i = 0; i < list.length; i++)
 			{
-				var active = (colonyState.getActiveList()[list[i]] || []).length;
-				var idle = (colonyState.getInactiveList()[list[i]] || []).length;
+				active = (colonyState.getActiveList()[list[i]] || []).length;
+				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var production = PrototypeLib.get(list[i]).getProduction()[material] * active;
 				totalProduction += production;
 				if(active + idle > 0)
@@ -294,17 +296,17 @@
 				}
 			}
 			
-			var list = consumptionBuildingList;
+			list = consumptionBuildingList;
 			var totalConsumption = 0;
 			var activePipe = 0;
 			var idlePipe = 0;
 			var consumptionPipe = 0;
 			row++;
 			ctx.fillRect(grid.getStartColumn(4), grid.getStartRow(row) + 8, grid.getStartColumn(8) - grid.getStartColumn(4), 1);
-			for(var i = 0; i < list.length; i++)
+			for(i = 0; i < list.length; i++)
 			{
-				var active = (colonyState.getActiveList()[list[i]] || []).length;
-				var idle = (colonyState.getInactiveList()[list[i]] || []).length;
+				active = (colonyState.getActiveList()[list[i]] || []).length;
+				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var consumption = PrototypeLib.get(list[i]).getConsumption()[material] * active;
 				totalConsumption += consumption;
 				if(PrototypeLib.get(list[i]).create({ x: 0, y: 0 }).isPipe())
@@ -347,7 +349,7 @@
 				}
 				grid.setValue(row, 7, "-" + consumptionPipe, Colors.Error);	// consumption
 				
-				haveConsumption = true;
+				//haveConsumption = true;
 			}
 			
 			row++;
@@ -369,16 +371,15 @@
 			{
 				grid.setValue(row, 7, totalProduction - totalConsumption);	// total
 			}
-		}
+		};
 	
-		this.printInfo = _printInfo;
-		this.getName = function(){ return material; }
-		this.getImageId = function(){ return image || material; }
+		this.getName = function(){ return material; };
+		this.getImageId = function(){ return image || material; };
 	}
 	
 	function ReportHumans(colonyState, image)
 	{
-		var _printInfo = function(ctx, position, size)
+		this.printInfo = function(ctx, position, size)
 		{
 			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
@@ -413,11 +414,11 @@
 			/*
 			getPopulation()
 			state.population = {
-				registry: new Array(),
+				registry: [],
 				wellness: 0,
 				happiness: 0
 				};
-			var list = colonyState.getMaterialFromMetaMatrial(metaMaterial);
+			var list = colonyState.getMaterialFromMetaMaterial(metaMaterial);
 			for(var i = 0; i < list.length; i++)
 			{
 				row++;
@@ -429,10 +430,10 @@
 				surplus += (colonyState.getProduced(list[i]) - colonyState.getConsumed(list[i]));
 			}*/
 			
-			row++
+			row++;
 			ctx.fillRect(grid.getStartColumn(1), grid.getStartRow(row) + 8, grid.getStartColumn(8) - grid.getStartColumn(1), 1);
 			
-			row++
+			row++;
 			grid.setText(row, 0, TextRepository.get("Surplus"));
 			if(surplus < 0)
 			{
@@ -457,17 +458,16 @@
 			}
 			grid.setValue(row, 6, "/");
 			grid.setValue(row, 7, capacity);
-		}
+		};
 		
-		this.printInfo = _printInfo;
-		this.getName = function(){ return "Humans"; }
+		this.getName = function(){ return "Humans"; };
 		this.getImageId = function(){ return image || "Humans"; }
 	}
 	
 	function ReportQueueData(colonyState)
 	{
-		var queue = new Array();
-		var available = new Array();
+		var queue = [];
+		var available = [];
 //TODO
 		queue.push(new ReportMaintenance(colonyState, "Pipes"));
 		queue.push(new ReportProductionMaterial(colonyState, "power", "Power" ));
@@ -482,7 +482,7 @@
 		
 		QueueData.call(this, queue, available);
 		
-		var _printInfo = function(ctx, position, size, item)
+		this.printInfo = function(ctx, position, size, item)
 		{
 			if(item != null)
 			{
@@ -511,9 +511,8 @@
 				ctx.closePath();
 				ctx.fill();
 			}
-		}
+		};
 	
-		this.printInfo = _printInfo;
 		this.isSortable = function() { return false; };
 		this.getTitle = function() { return "ReportTitle"; };
 		this.getQueueTitle = function() { return "ReportBase"; };

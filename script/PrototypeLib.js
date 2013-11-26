@@ -5,11 +5,11 @@
 		Four: "4"
 	};
 	
-	function PrototypeLib()
+	function PrototypeLibConstructor()
 	{	
 		var list = {};
 		
-		var priorityList = new Array();
+		var priorityList = [];
 		
 		var _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
@@ -18,11 +18,11 @@
 			item.create = function(position)
 			{
 				return new Pipe(pipeType, terrainLayer, position, buildingTime);
-			}
+			};
 			list[buildingType] = item;
 			priorityList.push(buildingType);
 			return item;
-		}
+		};
 
 		var _add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
@@ -30,7 +30,7 @@
 			list[buildingType] = item;
 			priorityList.push(buildingType);
 			return item;
-		}
+		};
 		
 		var _addResource = function(resourceType, terrainLayer)
 		{
@@ -39,11 +39,11 @@
 			item.create = function(position)
 			{
 				return new Resource(resourceType, terrainLayer, position);
-			}
+			};
 			list[buildingType] = item;
 			//priorityList.push(buildingType);
 			return item;
-		}
+		};
 		
 		var _addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
@@ -52,16 +52,16 @@
 			item.create = function(position)
 			{
 				return new Building(buildingType, terrainLayer, position, buildingTime, "RoboMiner");
-			}
+			};
 			list[buildingType] = item;
 			priorityList.push(buildingType);
 			return item;
-		}
+		};
 
 		var _get = function(buildingType)
 		{
 			return list[buildingType];
-		}
+		};
 
 		var _create = function(buildingType, position, alreadyBuilt)
 		{
@@ -71,17 +71,17 @@
 				ret.setBuilded();
 			}
 			return ret;
-		}
+		};
 		
 		var _createPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
 			return _create("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
-		}
+		};
 		
 		var _createResource = function(resourceType, position)
 		{
 			return list["Resource_" + resourceType].create(position);
-		}
+		};
 		
 		this.addPipe = _addPipe;
 		this.add = _add;
@@ -97,11 +97,11 @@
 	function BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
 	{
 		parameters = parameters || {};
-		
-		var buildingType = buildingType;
-		var terrainLayer = terrainLayer;
-		var buildingTime = buildingTime;
-		var buildingCost = buildingCost;
+
+        //var buildingType = buildingType;
+		//var terrainLayer = terrainLayer;
+		//var buildingTime = buildingTime;
+		//var buildingCost = buildingCost;
 		var consumption = parameters.consumption || {};
 		var production = parameters.production || {};
 		var productionWaste = parameters.productionWaste || {};
@@ -111,12 +111,12 @@
 		var _create = function(position)
 		{
 			return new Building(buildingType, terrainLayer, position, buildingTime);
-		}
+		};
 		
 		var _getAreaType = function()
 		{
 			return AreaTypes.One;
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -124,16 +124,16 @@
 		this.eventEndBuilding = parameters.eventEndBuilding;
 		this.eventDestroy = parameters.eventDestroy;
 		
-		this.getBuildingType = function() { return buildingType; }
-		this.getTerrainLayer = function() { return terrainLayer; }
-		this.getBuildingTime = function() { return buildingTime; }
-		this.getBuildingCost = function() { return buildingCost; }
-		this.getConsumption = function() { return consumption; }
-		this.getProduction = function() { return production; }
-		this.getProductionWaste = function() { return productionWaste; }
-		this.getCapacity = function() { return capacity; }
-		this.getRequiredResource = function() { return requiredResource; }
-		this.getBuildingImageId = function() { return buildingType; }
+		this.getBuildingType = function() { return buildingType; };
+		this.getTerrainLayer = function() { return terrainLayer; };
+		this.getBuildingTime = function() { return buildingTime; };
+		this.getBuildingCost = function() { return buildingCost; };
+		this.getConsumption = function() { return consumption; };
+		this.getProduction = function() { return production; };
+		this.getProductionWaste = function() { return productionWaste; };
+		this.getCapacity = function() { return capacity; };
+		this.getRequiredResource = function() { return requiredResource; };
+		this.getBuildingImageId = function() { return buildingType; };
 		
 		this.create = _create;
 		this.getAreaType = _getAreaType;
@@ -142,4 +142,4 @@
 	}
 	
 	// singleton
-	var PrototypeLib = new PrototypeLib();
+	var PrototypeLib = new PrototypeLibConstructor();

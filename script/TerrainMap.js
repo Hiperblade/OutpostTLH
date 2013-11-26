@@ -33,10 +33,10 @@
 	{
 		var typology = terrainTypology;
 		var layer = TerrainLayer.Surface;
-		var surface = new Array();
-		var underground = new Array();
-		var deep = new Array();
-		var structure = new Array();
+		var surface = [];
+		var underground = [];
+		var deep = [];
+		var structure = [];
 		var state = new ColonyState();
 		
 		var _initialize = function()
@@ -44,9 +44,9 @@
 			var x, y;
 			for(x = 0; x < size.x; x++)
 			{
-				surface[x] = new Array();
-				underground[x] = new Array();
-				deep[x] = new Array();
+				surface[x] = [];
+				underground[x] = [];
+				deep[x] = [];
 				for(y = 0; y < size.y; y++)
 				{
 					surface[x][y] = _randomMorphology();
@@ -56,7 +56,7 @@
 					//debug: deep[x][y] = _randomMorphology();
 				}
 			}
-		}
+		};
 		
 		var _randomMorphology = function()
 		{
@@ -65,7 +65,8 @@
 			else if(ret == 1) return 2;
 			else if(ret == 2) return 4;
 			else if(ret == 3) return 8;
-		}
+            return 0;
+		};
 		
 		var _getMorphology = function(detritus)
 		{
@@ -93,7 +94,7 @@
 			{
 				return Morphology.Undiscovery;
 			}
-		}
+		};
 
 		var _getLayer = function(selectedLayer)
 		{
@@ -106,8 +107,10 @@
 					return underground;
 				case TerrainLayer.Deep:
 					return deep;
+                default:
+                    return surface;
 			}
-		}
+		};
 		
 		var _getTerrainImageId = function(x, y)
 		{
@@ -117,7 +120,7 @@
 				return "Terrain_" + typology + "_" + layer + "_" + _getMorphology(detritus);
 			}
 			return null;
-		}	
+		};
 		
 		var _addResource = function(resourceType, position)
 		{
@@ -127,7 +130,7 @@
 			{
 				_getLayer(val.getLayer())[position.x][position.y] = 0;
 			}
-		}
+		};
 		
 		var _addBuilding = function(buildingType, position, alreadyBuilt)
 		{
@@ -146,14 +149,14 @@
 				return newBuilding;
 			}
 			return null;
-		}
+		};
 		
 		var _addPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
 			var val = PrototypeLib.createPipe(pipeType, layer, position, alreadyBuilt);
 			_addObject(structure, val);
 			_getLayer(layer)[position.x][position.y] = 0;
-		}
+		};
 
 		var _addObject = function(array, val)
 		{
@@ -177,7 +180,7 @@
 				}
 			}
 			array.push(val);
-		}
+		};
 
 		var _delBuilding = function(position, selectedLayer)
 		{
@@ -198,18 +201,18 @@
 					}
 				}
 			}
-		}
+		};
 		
 		var _isVisible = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 			
 			return (_getLayer(selectedLayer)[point.x][point.y] < 9);
-		}
+		};
 
 		var _getNearTiles = function(point)
 		{	
-			var ret = new Array();
+			var ret = [];
 			if(point.y > 0)
 			{
 				if(point.x > 0)
@@ -255,7 +258,7 @@
 			}
 			
 			return ret;
-		}
+		};
 		
 		var _isDiggable = function(point, selectedLayer)
 		{
@@ -270,7 +273,7 @@
 				}
 			}
 			return false;
-		}
+		};
 		
 		var _discoveryTile = function(point, selectedLayer)
 		{
@@ -289,13 +292,13 @@
 					_getLayer(selectedLayer)[point.x][point.y] = _randomMorphology();
 				}
 			}
-		}
+		};
 		
 		var _discoveryNearTiles = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 			
-			var nearTiles = _getNearTiles(point, selectedLayer);
+			var nearTiles = _getNearTiles(point);
 			for(var i = 0; i < nearTiles.length; i++)
 			{
 				if(!_isVisible(nearTiles[i], selectedLayer))
@@ -303,7 +306,7 @@
 					_discoveryTile(nearTiles[i], selectedLayer);
 				}
 			}
-		}
+		};
 		
 		var _dig = function(point, selectedLayer)
 		{
@@ -338,7 +341,7 @@
 				}
 			}
 			return true;
-		}
+		};
 		
 		var _isRazable = function(point, selectedLayer)
 		{
@@ -346,7 +349,7 @@
 			
 			var detritus = _getLayer(selectedLayer)[point.x][point.y];
 			return ((detritus > 0) && (detritus < 9));
-		}
+		};
 		
 		var _raze = function(point, selectedLayer)
 		{
@@ -359,7 +362,7 @@
 				_getLayer(selectedLayer)[point.x][point.y] = detritus;
 			}
 			return detritus;
-		}
+		};
 		
 		var _findBuilding = function(position, selectedLayer)
 		{
@@ -376,7 +379,7 @@
 				}
 			}
 			return null;
-		}
+		};
 		
 		var _findResource = function(position, selectedLayer)
 		{
@@ -393,7 +396,7 @@
 				}
 			}
 			return null;
-		}
+		};
 
 		var _addRoboDozer = function(point, selectedLayer)
 		{
@@ -401,7 +404,7 @@
 
 			var val = new Robot(RobotTypes.Dozer, selectedLayer, point);
 			_addObject(structure, val);
-		}
+		};
 		
 		var _addRoboDigger = function(point, selectedLayer)
 		{
@@ -409,25 +412,25 @@
 
 			var val = new Robot(RobotTypes.Digger, selectedLayer, point);
 			_addObject(structure, val);
-		}
+		};
 		
 		var _getRobot = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 			
-			for(var i = 0; i < structure.lenght; i++)
+			for(var i = 0; i < structure.length; i++)
 			{
-				if((structure[i].x == point.x) &&
-					(structure[i].y == point.y) &&
-					(structure[i].layer == selectedLayer) &&
-					(structure[i].getType == StructureTypes.Robot))
+				if((structure[i].getPosition().x == point.x) &&
+					(structure[i].getPosition().y == point.y) &&
+					(structure[i].getLayer() == selectedLayer) &&
+					(structure[i].getType() == StructureTypes.Robot))
 				{
 					return structure[i];
 				}
 			}
 			
 			return null;
-		}
+		};
 		
 		var _addToGraph = function(list, el)
 		{
@@ -437,18 +440,18 @@
 			{
 				if(list.elevators == undefined)
 				{
-					list.elevators = new Array();
+					list.elevators = [];
 				}
 				list.elevators.push(el);
 			}
-		}
+		};
 
 		var _getGraph = function()
 		{
 			var data = {};
-			data[TerrainLayer.Surface] = new Array();
-			data[TerrainLayer.Underground] = new Array();
-			data[TerrainLayer.Deep] = new Array();	
+			data[TerrainLayer.Surface] = [];
+			data[TerrainLayer.Underground] = [];
+			data[TerrainLayer.Deep] = [];
 			for (var elIndex = 0; elIndex < structure.length; elIndex++)
 			{
 				var el = structure[elIndex];
@@ -464,7 +467,7 @@
 			var tmpRet = _getGraphBoundBildings(graphList, structure);
 						
 			// conversione da array a object
-			var ret = new Array();
+			var ret = [];
 			for (var i = 0; i < tmpRet.length; i++)
 			{
 				var retItem = {};
@@ -473,24 +476,25 @@
 					var buildingType = tmpRet[i][ii].getBuildingType();
 					if(retItem[buildingType] == null)
 					{
-						retItem[buildingType] = new Array();
+						retItem[buildingType] = [];
 					}
 					retItem[buildingType].push(tmpRet[i][ii]);
 				}
 				ret.push(retItem);
 			}
 			return ret;
-		}
+		};
 		
 		var _getGraphBoundBildings = function (graphList, structure)
 		{
-			var ret = new Array();
-			var orphans = new Array();
+			var ret = [];
+			var orphans = [];
 			var added;
-			for(var i = 0; i < graphList.length; i++)
+            var i, ii;
+			for(i = 0; i < graphList.length; i++)
 			{
 				added = false;
-				for(var ii = 0; ii < graphList[i].length; ii++)
+				for(ii = 0; ii < graphList[i].length; ii++)
 				{
 					if(graphList[i][ii].isHeadquarter)
 					{
@@ -508,9 +512,9 @@
 			if(orphans.length > 0)
 			{
 				orphan = orphans[0];
-				for(var i = 1; i < orphans.length; i++)
+				for(i = 1; i < orphans.length; i++)
 				{
-					for(var ii = 0; ii < orphans[i].length; ii++)
+					for(ii = 0; ii < orphans[i].length; ii++)
 					{
 						orphan.push(orphans[i][ii]);
 					}
@@ -518,7 +522,7 @@
 			}
 			else
 			{
-				orphan = new Array();
+				orphan = [];
 			}
 
 			// assegno gli edifici ai grafi
@@ -527,7 +531,7 @@
 				var el = structure[elIndex];
 				if((el.getType() == StructureTypes.Building) && (!el.isPipe()))
 				{
-					for(var i = 0; i < ret.length; i++)
+					for(i = 0; i < ret.length; i++)
 					{
 						if(_getGraphIsBound(ret[i], el.getPosition()))
 						{
@@ -547,7 +551,7 @@
 				ret.push(orphan);
 			}
 			return ret;
-		}
+		};
 
 		// restituisce true se il grafo permette il collegamento verso le coordinate point
 		var _getGraphIsBound = function(graph, point)
@@ -580,7 +584,7 @@
 				}
 			}
 			return false;
-		}
+		};
     
 		var _getGraphInternal = function(upper, lower)
 		{
@@ -594,13 +598,14 @@
 						var elevator = lower[i].elevators[ii];
 						if(elevator.haveUp())
 						{
+                            var iii;
 							var upperGraph = _getGraphFind(upper, elevator.getPosition());
 							if(rootGraph != null)
 							{
 								if(rootGraph != upperGraph)
 								{
 									// merge nodi di upperGraph
-									for(var iii = 0; iii < upperGraph.length; iii++)
+									for(iii = 0; iii < upperGraph.length; iii++)
 									{
 										_addToGraph(rootGraph, upperGraph[iii]);
 									}
@@ -611,7 +616,7 @@
 							{
 								rootGraph = upperGraph;
 								// merge nodi di lower
-								for(var iii = 0; iii < lower[i].length; iii++)
+								for(iii = 0; iii < lower[i].length; iii++)
 								{
 									rootGraph.push(lower[i][iii]);
 								}
@@ -625,7 +630,7 @@
 				}
 			}
 			return upper;
-		}
+		};
     
 		var _getGraphFind = function(upper, position)
 		{
@@ -647,26 +652,28 @@
 					}
 				}
 			}
-		}
+            return null;
+		};
 		
 		var _getGraphLayer = function(pipes)
 		{
 			var a = null;
 			var ay = -1;
 
-			var b = new Array();
-			var b1 = new Array();
+			var b = [];
+			var b1 = [];
 		 
 			// lista di grafi
-			var ret = new Array();
+			var ret = [];
 
 			var d = null;
-			var e = new Array();
-			var e1 = new Array();
+			var e = [];
+			var e1 = [];
 
 			var x = 0;
 			var l = null;
-		  
+
+            var elementPosition;
 			for (var elementIndex = 0; elementIndex < pipes.length; elementIndex++)
 			{
 				var element = pipes[elementIndex];
@@ -684,11 +691,11 @@
 					}
 					else
 					{
-						b = new Array();
-						e = new Array();
+						b = [];
+						e = [];
 					}
-					b1 = new Array();
-					e1 = new Array();
+					b1 = [];
+					e1 = [];
 				}
 				x = elementPosition.x;
 			
@@ -703,12 +710,13 @@
 					if ((l != null) && (b[elementPosition.y] != a))
 					{
 						var tmp = b[elementPosition.y];
-						for(var i = 0; i < a.length; i++)
+                        var i;
+						for(i = 0; i < a.length; i++)
 						{
 							_addToGraph(tmp, a[i]);
 						}
 						ret.splice(ret.indexOf(a), 1); // remove
-						for(var i = 0; i < b1.length; i++)
+						for(i = 0; i < b1.length; i++)
 						{
 							if(b1[i] == a)
 							{
@@ -720,7 +728,7 @@
 				}
 				else if(l == null)
 				{
-					l = new Array();
+					l = [];
 					ret.push(l);
 				}
 				_addToGraph(l, element);
@@ -750,33 +758,32 @@
 				e[elementPosition.y] = null;
 			}
 			return ret;
-		}
+		};
 		
 		var _computation = function()
 		{
 			var en = new Engine();
-			var hyperGraph = {};
 			var tmp = _getGraph();
 			en.computation(state, tmp, this);
 			state.setDate(state.getDate() + 1);
 			
 			_simulation();
-		}
+		};
 		
 		var _simulation = function()
 		{
 			var en = new Engine();
 			var tmp = _getGraph();
 			en.simulation(state, tmp);
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getSize = function() { return size; }
-		this.getLayer = function() { return layer; }
-		this.setLayer = function(newLayer) { layer = newLayer; }
-		this.getStructure = function() { return structure; }
-		this.getState = function() { return state; }
+		this.getSize = function() { return size; };
+		this.getLayer = function() { return layer; };
+		this.setLayer = function(newLayer) { layer = newLayer; };
+		this.getStructure = function() { return structure; };
+		this.getState = function() { return state; };
 		
 		this.getTerrainImageId = _getTerrainImageId;
 		this.addResource = _addResource;
@@ -810,15 +817,15 @@
 	{
 		const MAX_INTEGRITY = 1000;
 		
-		var buildingType = buildingType;
-		var position = position;
+		//var buildingType = buildingType;
+		//var position = position;
 		var layer = terrainLayer;
 		var integrity = MAX_INTEGRITY;
 		var progressState = - (buildingTime || 0);
 		var frozen = false;
-		var owner = null;
+		//var owner = null;
 		
-		var	builder = builder;	
+		//var	builder = builder;
 		if(builder == undefined)
 		{
 			builder = "Building_" + layer;
@@ -830,7 +837,7 @@
 			{
 				progressState++;
 			}
-		}
+		};
 		
 		var _progressBuild = function()
 		{
@@ -839,7 +846,7 @@
 				progressState++;
 			}
 			return (progressState == 0);
-		}
+		};
 
 		var _damage = function(value)
 		{
@@ -855,17 +862,17 @@
 				}
 			}
 			return integrity;
-		}
+		};
 		
 		var _destroy = function()
 		{
 			integrity = 0;
-		}
+		};
 		
 		var _isDestroyed = function()
 		{
 			return (integrity == 0);
-		}
+		};
 
 		var _reapair = function(value)
 		{
@@ -879,22 +886,22 @@
 				integrity = MAX_INTEGRITY;
 			}
 			return integrity;
-		}
+		};
 
 		var _underConstruction = function()
 		{
 			return (progressState < 0);
-		}
+		};
 		
 		var _setBuilded = function()
 		{
 			progressState = 0;
-		}
+		};
 		
 		var _isOperative = function()
 		{
 			return (progressState >= 0) && (integrity > 0);
-		}
+		};
 		
 		var _getImageId = function()
 		{
@@ -910,18 +917,18 @@
 			{
 				return buildingType.toString();
 			}
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getBuildingType = function() { return buildingType; }
-		this.getPosition = function() { return position; }
-		this.getLayer = function() { return layer; }
-		this.getIntegrity = function() { return integrity; }
-		//this.getProgressState = function() { return progressState; }
-		this.getFrozen = function() { return frozen; }
-		this.setFrozen = function(value) { return frozen = value; }
-		//this.getOwner = function() { return owner; }
+		this.getBuildingType = function() { return buildingType; };
+		this.getPosition = function() { return position; };
+		this.getLayer = function() { return layer; };
+		this.getIntegrity = function() { return integrity; };
+		//this.getProgressState = function() { return progressState; };
+		this.getFrozen = function() { return frozen; };
+		this.setFrozen = function(value) { return frozen = value; };
+		//this.getOwner = function() { return owner; };
 		
 		this.progress = _progress;
 		this.progressBuild = _progressBuild;
@@ -934,8 +941,8 @@
 		this.isOperative = _isOperative;
 		this.getImageId = _getImageId;
 		
-		this.isPipe = function() { return false; }
-		this.getType = function() { return StructureTypes.Building; }
+		this.isPipe = function() { return false; };
+		this.getType = function() { return StructureTypes.Building; };
 		
 		//-----------------------------------------
 	}
@@ -952,16 +959,16 @@
 	{
 		Building.call(this, "Pipe_" + pipeType + "_" + layer, layer, position, buildingTime);
 		
-		var pipeType = pipeType;
+		//var pipeType = pipeType;
 		
-		this.isPipe = function() { return true; }
+		this.isPipe = function() { return true; };
 		
-		this.haveNorth = function() { return (pipeType != PipeType.EastWest); }
-		this.haveSouth = function() { return (pipeType != PipeType.EastWest); }
-		this.haveEast  = function() { return (pipeType != PipeType.NorthSouth); }
-		this.haveWest  = function() { return (pipeType != PipeType.NorthSouth); }
-		this.haveUp    = function() { return (pipeType == PipeType.Up); }
-		this.haveDown  = function() { return (pipeType == PipeType.Down); }
+		this.haveNorth = function() { return (pipeType != PipeType.EastWest); };
+		this.haveSouth = function() { return (pipeType != PipeType.EastWest); };
+		this.haveEast  = function() { return (pipeType != PipeType.NorthSouth); };
+		this.haveWest  = function() { return (pipeType != PipeType.NorthSouth); };
+		this.haveUp    = function() { return (pipeType == PipeType.Up); };
+		this.haveDown  = function() { return (pipeType == PipeType.Down); };
 	}
 	Pipe.inherits(Building);
 	
@@ -975,7 +982,7 @@
 	{
 		Building.call(this, "Resource_" + resourceType, layer, position, 0);
 		
-		this.getType = function() { return StructureTypes.Resource; }
+		this.getType = function() { return StructureTypes.Resource; };
 		
 		this.getResourceType = function() { return resourceType; }
 	}
@@ -985,9 +992,9 @@
 	{
 		Building.call(this, robotType, layer, position, 0);
 		
-		this.getRobotType = function() { return robotType; }
+		this.getRobotType = function() { return robotType; };
 		
-		this.getType = function() { return StructureTypes.Robot; }
+		this.getType = function() { return StructureTypes.Robot; };
 		
 		this.getImageId = function() { return this.getBuildingType().toString(); }
 	}

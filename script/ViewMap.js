@@ -1,10 +1,10 @@
 	function MapView(map, canvasId, backgroundImage, areaSize, onChangePosition)
 	{
-		var map = map;
+		//var map = map;
 		var canvasMap = document.getElementById(canvasId);
 		var ctx = canvasMap.getContext("2d");
-		var backgroundImage = backgroundImage;
-		var areaSize = areaSize;
+		//var backgroundImage = backgroundImage;
+		//var areaSize = areaSize;
 		var position = { x: 0, y: 0 };
 
 		var _initialize = function()
@@ -12,7 +12,7 @@
 			canvasMap.width = 300;
 			canvasMap.height = 150;
 			canvasMap.addEventListener("mousedown", _doMouseDown, false);
-		}
+		};
 		
 		var _doMouseDown = function(e)
 		{
@@ -21,7 +21,7 @@
 				var newPosition = _fromScreenPosition({ x: e.pageX, y: e.pageY });
 				onChangePosition(newPosition);
 			}
-		}
+		};
 		
 		var _redraw = function()
 		{
@@ -46,13 +46,13 @@
 			}
 			
 			_drawActiveArea();
-		}
+		};
 		
 		var _setPosition = function(point)
 		{
 			position = point;
 			_redraw();
-		}
+		};
 		
 		var _drawActiveArea = function()
 		{
@@ -60,7 +60,7 @@
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = "lime";
 			ctx.strokeRect(point.x - 1, point.y - areaSize.x - 1, areaSize.y + 2, areaSize.x + 2);
-	 	}
+	 	};
 
 		var _drawResource = function(position, resource)
 		{
@@ -71,7 +71,7 @@
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = _getResourceColor(resource);
 			ctx.stroke();
-	 	}
+	 	};
 		
 		var _getResourceColor = function(resource)
 		{
@@ -92,7 +92,7 @@
 			}
 			
 			return "#FFFFFF";
-		}
+		};
 		
 		var _drawBuilding = function(position)
 		{
@@ -100,7 +100,7 @@
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = "#00FFFF";
 			ctx.strokeRect(point.x, point.y, 1, 1);
-		}
+		};
 		
 		var _fromScreenPosition = function(point)
 		{
@@ -114,28 +114,25 @@
 					curtop += obj.offsetTop;
 				} while (obj = obj.offsetParent);
 			}
-			var x = point.x - curleft;
-			var y = point.y - curtop;
-			
-			return { x: 150 - y, y: x };
-		}
+			return { x: 150 - (point.y - curtop), y: point.x - curleft };
+		};
 
 		var _toScreenPosition = function(point)
 		{
-			return { x: point.y, y: 150 - point.x };
-		}
+			return { x: 0 + point.y, y: 150 - point.x };
+		};
 		
 		var _setAbsolutePosition = function(point)
 		{
 			canvasMap.style.top = point.y + "px";
 			canvasMap.style.left = point.x + "px";
-		}
+		};
 		
 		_initialize();
 		
 		//-----------------------------------------
 		
-		this.getPosition = function(){ return position; }
+		this.getPosition = function(){ return position; };
 		
 		this.setPosition = _setPosition;
 		this.redraw = _redraw;

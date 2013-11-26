@@ -3,26 +3,26 @@
 		var temp = function() { };
 		temp.prototype = superclass.prototype;
 		this.prototype = new temp();
-	}
+	};
 	
-	function Log()
+	function LogConstructor()
 	{
 		var _error = function(msg)
 		{
 			alert(msg);
-		}
+		};
 		
 		var _dialog = function(msg)
 		{
 			alert(msg);
-		}
+		};
 		
 		this.error = _error;
 		this.dialog = _dialog;
 	}
 	
 	// singleton
-	var Log = new Log();
+	var Log = new LogConstructor();
 	
 	var Colors = {
 		Standard: "rgb(119,207,60)",
@@ -32,12 +32,12 @@
 	
 	function CanvasGrid(ctx, position, color, fontSize, columnsList)
 	{
-		var columns = columnsList || new Array();
+		var columns = columnsList || [];
 		
 		var _addColumn = function(width)
 		{
 			columns.push(width);
-		}
+		};
 		
 		var _getStartColumn = function(col)
 		{
@@ -47,17 +47,17 @@
 				ret += columns[i];
 			}
 			return ret + position.x;
-		}
+		};
 		
 		var _getRowHeight = function()
 		{
 			return fontSize + 4;
-		}
+		};
 		
 		var _getStartRow = function(row)
 		{
 			return ((fontSize + 4) * row) + position.y;
-		}
+		};
 
 		var _internalSetText = function(row, col, text, textAlign, newColor)
 		{
@@ -67,17 +67,17 @@
 			ctx.textAlign = textAlign;
 			ctx.fillText(text, _getStartColumn(col), _getStartRow(row) + fontSize);
 			ctx.fillStyle = oldColor;
-		}
+		};
 		
 		var _setText = function(row, col, text, color)
 		{
 			_internalSetText(row, col, text, "left", color);
-		}
+		};
 		
 		var _setValue = function(row, col, value, color)
 		{
 			_internalSetText(row, col + 1, value, "right", color);
-		}
+		};
 		
 		//-----------------------------------------
 		
@@ -118,7 +118,7 @@ function mlFunction(text, x, y, w, h, hAlign, vAlign, lineheight, fn) {
     var wo;
     lines[actualline] = {};
     lines[actualline].Words = [];
-    i = 0;
+    var i = 0;
     while (i < words.length) {
         var word = words[i];
         if (word == "\n") {
@@ -141,7 +141,7 @@ function mlFunction(text, x, y, w, h, hAlign, vAlign, lineheight, fn) {
                 lines[actualline].Words.push(wo);
                 actualsize = wo.l;
                 if (word != words[i]) {
-                    Words[i] = Words[i].splice(word.length, Words[i].length - 1);
+                    words[i] = words[i].splice(word.length, words[i].length - 1);
                 } else {
                     i++;
                 }

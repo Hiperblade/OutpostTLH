@@ -4,7 +4,7 @@
 		var yBottomOffset = 50;
 		var yCorner = yTopOffset + Math.floor(viewTileDimension.y * (viewSize.y) / 2);
 		var yOffset = yCorner + Math.floor(viewTileDimension.y / 2);
-		var map = map;
+		//var map = map;
 		var canvasMap = document.getElementById(canvasId);
 		canvasMap.width = viewTileDimension.x * viewSize.x;
 		canvasMap.height = yTopOffset + (viewTileDimension.y * viewSize.y) + yBottomOffset;
@@ -16,12 +16,12 @@
 		var ctxMask = canvasMask.getContext("2d");
 		//DEBUG: document.body.appendChild(canvasMask);
 		//--------
-		var buttons = new Array();
+		var buttons = [];
 		var buttonsCallback = null;
 		var gridCallback = null;
 		
-		var images = new Array();
-		var texts = new Array();
+		var images = [];
+		var texts = [];
 		//--------
 		
 		var size = viewSize;
@@ -72,6 +72,7 @@
 									{
 										buttonsCallback(res);
 									}
+
 									window.setTimeout(function()
 										{
 											buttons[i].pressed = false;
@@ -91,14 +92,15 @@
 					}
 				}
 			}
-		}
+		};
 		
 		var _redraw = function()
 		{
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+            var i;
 			// immagini
-			for(var i = 0; i < images.length; i++)
+			for(i = 0; i < images.length; i++)
 			{
 				if(images[i].image != null)
 				{
@@ -111,13 +113,13 @@
 			}
 			
 			// bottoni
-			for(var i = 0; i < buttons.length; i++)
+			for(i = 0; i < buttons.length; i++)
 			{
 				_drawButton(buttons[i]);
 			}
 			
 			// testi
-			for(var i = 0; i < texts.length; i++)
+			for(i = 0; i < texts.length; i++)
 			{
 				if(texts[i].textId != null)
 				{
@@ -154,7 +156,7 @@
 			var structure = map.getStructure();
 			var currentLayer = map.getLayer();
 			var lastStructure = null;
-			for(var i = 0; i < structure.length; i++)
+			for(i = 0; i < structure.length; i++)
 			{
 				var structurePosition = structure[i].getPosition();
 				if((structure[i].getLayer() == currentLayer) && (_isVisible(structurePosition)) && (map.isVisible(structurePosition)))
@@ -168,7 +170,7 @@
 					}
 				}
 			}
-		}
+		};
 		
 		var _drawImage = function(ctx, point, image)
 		{
@@ -177,7 +179,7 @@
 			ctx.drawImage(image, p.x, p.y - image.height);
 			ctx.closePath();
 			ctx.fill();
-		}
+		};
 		
 		var _drawTile = function(ctx, tileDimension, point, pattern, strokeStyle)
 		{
@@ -197,7 +199,7 @@
 			ctx.strokeStyle = strokeStyle;
 			ctx.fill();
 			ctx.stroke();
-	 	}
+	 	};
 
 		var _drawButton = function(button)
 		{
@@ -226,7 +228,7 @@
 				ctx.closePath();
 				ctx.fill();
 			}
-		}
+		};
 		
 		var _setButtonMask = function(button, erase)
 		{
@@ -255,7 +257,7 @@
 				_drawTile(ctxMask, tileDimension, { x: button.pointGrid.x, y: button.pointGrid.y }, "rgb(0,0," + id + ")", "#000000");
 			}
 			
-			/* Gestione inibita per compatibilità
+			/* Gestione inibita per compatibilitï¿½
 			var img = ImagesLib.getImage(imageButton);
 			// mask
 			var canvasTmpMask = document.createElement('canvas');
@@ -281,28 +283,24 @@
 			}
 			ctxMask.putImageData(imageData, point.x, point.y - img.height);
 			*/
-		}
+		};
 		
 		var _setPosition = function(point)
 		{
 			position = point;
 			_redraw();
-		}
+		};
 	 	
 	 	var _isVisible = function(point)
 	 	{
 	 		var relPos = _toRelativePosition(point);
-	 		if(relPos.x < 0 || relPos.y < 0 || relPos.x >= size.x || relPos.y >= size.y)
-	 		{
-	 			return false;
-	 		}
-	 		return true;
-		}
+            return !(relPos.x < 0 || relPos.y < 0 || relPos.x >= size.x || relPos.y >= size.y);
+		};
 	 	
 	 	var _toRelativePosition = function(point)
 	 	{
 	 		return { x: point.x - position.x, y: point.y - position.y };
-	 	}
+	 	};
 	 	
 	 	var _toScreenPosition = function(point)
 		{
@@ -315,7 +313,7 @@
 			retY += point.y * 23;
 			
 			return { x: retX, y: retY };
-		}
+		};
 		
 		var _fromScreenPosition = function(point)
 		{
@@ -343,29 +341,29 @@
 				return { x: data[0] - 1 + position.x, y: data[1] - 1 + position.y };	
 			}
 			return 0;
-		}
+		};
 		
 		var _internalAddImageButton = function(id, point, imageButton, callback, image, pointGrid)
 		{
 			var newButton = { id: id, position: point, imageButton: imageButton, callback: callback, image: image, pointGrid: pointGrid };
 			buttons.push(newButton);
 			_setButtonMask(newButton);
-		}
+		};
 		
 		var _addImageButton = function(id, point, imageButton, callback, image)
 		{
 			_internalAddImageButton(id, point, imageButton, callback, image);
-		}
+		};
 		
 		var _addButtonGrid = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, _toScreenPosition(point), imageButton, callback, null, point);
-		}
+		};
 		
 		var _addButton = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, point, imageButton, callback);
-		}
+		};
 		
 		var _setButton = function(id, enabled)
 		{
@@ -377,7 +375,7 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _delButton = function(id)
 		{
@@ -390,17 +388,17 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _addImageGrid = function(id, point, image)
 		{
 			_addImage(id, _toScreenPosition(point), image);
-		}
+		};
 		
 		var _addImage = function(id, point, image)
 		{
 			images.push({ id: id, position: point, image: image });
-		}
+		};
 
 		var _setImage = function(id, image)
 		{
@@ -412,7 +410,7 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _delImage = function(id)
 		{
@@ -424,12 +422,12 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _addText = function(id, point, size, textId)
 		{
 			texts.push({ id: id, position: point, size: size, textId: textId });
-		}
+		};
 		
 		var _setText = function(id, textId)
 		{
@@ -441,7 +439,7 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _delText = function(id)
 		{
@@ -453,20 +451,20 @@
 					return;
 				}
 			}
-		}
+		};
 		
 		var _setAbsolutePosition = function(point)
 		{
 			canvasMap.style.top = point.y + "px";
 			canvasMap.style.left = point.x + "px";
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getPosition = function() { return position; }
-		this.getSize = function() { return size; }
-		this.getCanvasSize = function() { return { x: canvasMap.width, y: canvasMap.height }; }
-		this.getVerticalMiddle = function() { return yCorner; }
+		this.getPosition = function() { return position; };
+		this.getSize = function() { return size; };
+		this.getCanvasSize = function() { return { x: canvasMap.width, y: canvasMap.height }; };
+		this.getVerticalMiddle = function() { return yCorner; };
 		
 		this.redraw = _redraw;
 		this.fromScreenPosition = _fromScreenPosition;
@@ -476,8 +474,8 @@
 		this.addButton = _addButton;
 		this.delButton = _delButton;
 		this.setButton = _setButton;
-		this.setButtonsCallback = function(callback) { buttonsCallback = callback; }
-		this.setGridCallback = function(callback) { gridCallback = callback; }
+		this.setButtonsCallback = function(callback) { buttonsCallback = callback; };
+		this.setGridCallback = function(callback) { gridCallback = callback; };
 		this.addImageGrid = _addImageGrid;
 		this.addImage = _addImage;
 		this.delImage = _delImage;

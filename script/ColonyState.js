@@ -1,22 +1,22 @@
 	function ColonyState()
 	{
-		var state = {};
-		state.materials = new Array();
-		state.metaMaterials = new Array();
-		state.buildList = new Array();
-		state.destroyedList = new Array();
+        var state = {};
+		state.materials = [];
+		state.metaMaterials = [];
+		state.buildList = [];
+		state.destroyedList = [];
 		state.activeList = {};
 		state.inactiveList = {};
 		state.knowledge = {
-			discovery: new Array(),
-			theory: new Array(),
-			technology: new Array(),
-			completed: new Array(),
-			researchQueue: new Array(),
-			productionQueue: new Array()
+			discovery: [],
+			theory: [],
+			technology: [],
+			completed: [],
+			researchQueue: [],
+			productionQueue: []
 			};
 		state.population = {
-			registry: new Array(),
+			registry: [],
 			wellness: 0,
 			happiness: 0
 			};
@@ -27,7 +27,7 @@
 			};
 		state.date = 0;
 		state.simulationData = {};
-		state.globalEventList = new Array();
+		state.globalEventList = [];
 		
 		var _checkMaterial = function(name)
 		{
@@ -39,7 +39,7 @@
 				state[name + "Capacity"] = 0;
 				state.materials.push(name);
 			}
-		}
+		};
 		
 		var _resetMaterial = function(name)
 		{
@@ -55,7 +55,7 @@
 			{
 				state[name + "Capacity"] = 0;
 			}
-		}
+		};
 		
 		var _updateMaterial = function(name)
 		{
@@ -85,12 +85,12 @@
 				}
 			}
 			state[name + "Stored"] = stored;
-		}
+		};
 
 		var _isMetaMaterial = function(name)
 		{
 			return (state[name + "MetaMaterial"] != undefined)
-		}
+		};
 		
 		var _getCapacity = function(name)
 		{
@@ -103,7 +103,7 @@
 			{
 				return state[name + "Capacity"];
 			}
-		}
+		};
 		
 		var _getFreeCapacity = function(name)
 		{
@@ -116,7 +116,7 @@
 			{
 				return _getCapacity(name) - state[name + "Stored"];
 			}
-		}
+		};
 		
 		var _getFullCapacity = function(metaName)
 		{
@@ -131,7 +131,7 @@
 				}
 			}
 			return ret;
-		}
+		};
 		
 		var _configureMaterial = function(name, metaName)
 		{		
@@ -145,18 +145,18 @@
 					state[metaName + "Capacity"] = 0;
 					state.materials.push(metaName);
 					state.metaMaterials.push(metaName);
-					state[metaName + "List"] = new Array();
+					state[metaName + "List"] = [];
 				}
 				state[metaName + "List"].push(name);
 				state[metaName + "Capacity"] += state[name + "Capacity"];
 				state[name + "Capacity"] = undefined;
 			}
-		}
+		};
 		
-		var _getMaterialFromMetaMatrial = function(metaName)
+		var _getMaterialFromMetaMaterial = function(metaName)
 		{
 			return state[metaName + "List"];
-		}
+		};
 		
 		var _resetAll = function()
 		{
@@ -165,12 +165,12 @@
 				_resetMaterial(state.materials[i]);
 			}
 			
-			state.buildList = new Array();
-			state.destroyedList = new Array();
+			state.buildList = [];
+			state.destroyedList = [];
 			state.activeList = {};
 			state.inactiveList = {};
 			state.simulationData = {};
-		}
+		};
 		
 		var _updateAll = function()
 		{
@@ -178,7 +178,7 @@
 			{
 				_updateMaterial(state.materials[i]);
 			}
-		}
+		};
 		
 		var _addCapacity = function(materials)
 		{
@@ -188,7 +188,7 @@
 				
 				state[mat + "Capacity"] += materials[mat];
 			}
-		}
+		};
 		
 		var _haveMaterials = function(materials)
 		{
@@ -202,7 +202,7 @@
 				}
 			}
 			return true;
-		}
+		};
 		
 		var _haveSpace = function(materials)
 		{
@@ -216,7 +216,7 @@
 				}
 			}
 			return true;
-		}
+		};
 		
 		var _delMaterials = function(materials)
 		{
@@ -226,7 +226,7 @@
 				
 				state[mat + "Consumed"] += materials[mat];
 			}
-		}
+		};
 		
 		var _addMaterials = function(materials)
 		{
@@ -236,14 +236,14 @@
 				
 				state[mat + "Produced"] += materials[mat];
 			}
-		}
+		};
 		
 		var _getRemainder = function(name)
 		{
 			_checkMaterial(name);
 			
 			return state[name + "Stored"] + state[name + "Produced"] - state[name + "Consumed"];
-		}
+		};
 		
 		var _destroyMaterials = function(materials)
 		{
@@ -257,7 +257,7 @@
 					state[mat + "Stored"] = 0;
 				}
 			}
-		}
+		};
 		
 		var _createMaterials = function(materials)
 		{
@@ -267,7 +267,7 @@
 				
 				state[mat + "Stored"] += materials[mat];
 			}
-		}
+		};
 		
 		var _setMaterials = function(materials)
 		{
@@ -277,46 +277,46 @@
 				
 				state[mat + "Stored"] = materials[mat];
 			}
-		}
+		};
 			
 		var _addToBuildList = function(building)
 		{
 			state.buildList.push(building);
-		}
+		};
 	
 		var _addToDestroyedList = function(building)
 		{
 			state.destroyedList.push(building);
-		}
+		};
 		
 		var _addToActiveList = function(building)
 		{
 			if(state.activeList[building.getBuildingType()] == undefined)
 			{
-				state.activeList[building.getBuildingType()] = new Array();
+				state.activeList[building.getBuildingType()] = [];
 			}
 			state.activeList[building.getBuildingType()].push(building);
-		}
+		};
 		
 		var _addToInactiveList = function(building)
 		{
 			if(state.inactiveList[building.getBuildingType()] == undefined)
 			{
-				state.inactiveList[building.getBuildingType()] = new Array();
+				state.inactiveList[building.getBuildingType()] = [];
 			}
 			state.inactiveList[building.getBuildingType()].push(building);
-		}
+		};
 		
 		// Knowledge
 		var _isCompletedKnowledge = function(name)
 		{
 			return _contains(state.knowledge.completed, name);
-		}
+		};
 
 		var _addCompletedResearch = function(research)
 		{
 			state.knowledge.completed.push(research);
-		}
+		};
 		
 		var _checkKnowledge = function(knowledge)
 		{
@@ -332,7 +332,7 @@
 				}
 			}
 			return ret;
-		}
+		};
 			
 		var _addKnowledge = function(knowledge)
 		{
@@ -348,7 +348,7 @@
 				}
 			}
 			return ret;
-		}
+		};
 		
 		var _delKnowledge = function(knowledge)
 		{
@@ -364,7 +364,7 @@
 				}
 			}
 			return ret;
-		}
+		};
 			
 		var _addResearchQueue = function(name)
 		{
@@ -372,7 +372,7 @@
 			{
 				state.knowledge.researchQueue.push(name);
 			}
-		}
+		};
 		
 		var _contains = function(array, obj)
 		{
@@ -384,12 +384,12 @@
 				}
 			}
 			return false;
-		}
+		};
 		
 		var _getRoboDozerAvailable = function()
 		{
 			return Math.min(state.robotsAvailable.dozer, state.robotsAvailable.controllers);
-		}
+		};
 		
 		var _useRoboDozer = function()
 		{
@@ -400,12 +400,12 @@
 				return true;
 			}
 			return false;
-		}
+		};
 		
 		var _getRoboDiggerAvailable = function()
 		{
 			return Math.min(state.robotsAvailable.digger, state.robotsAvailable.controllers);
-		}
+		};
 
 		var _useRoboDigger = function()
 		{
@@ -416,33 +416,33 @@
 				return true;
 			}
 			return false;
-		}
+		};
 		
 		var _setRobotsAvailable = function(data)
 		{
 			state.robotsAvailable.controllers = data.controllers;
 			state.robotsAvailable.dozer = data.dozer;
 			state.robotsAvailable.digger = data.digger;
-		}
+		};
 		
 		//-----------------------------------------
 		
-		this.getDate = function() { return state.date; }
-		this.setDate = function(date) { state.date = date; }
+		this.getDate = function() { return state.date; };
+		this.setDate = function(date) { state.date = date; };
 		
-		this.getConsumed = function(name) { _checkMaterial(name); return state[name + "Consumed"]; }
-		this.getProduced = function(name) { _checkMaterial(name); return state[name + "Produced"]; }
-		this.getStored = function(name) { _checkMaterial(name); return state[name + "Stored"]; }
-		this.getMaterials = function() { return state.materials; }
-		this.getMetaMaterials = function() { return state.metaMaterials; }
-		this.getKnowledge = function() { return state.knowledge; }
-		this.getTechnology = function() { return state.knowledge.technology; }
-		this.getTheory = function() { return state.knowledge.theory; }
-		this.getDiscovery = function() { return state.knowledge.discovery; }
-		this.getResearchQueue = function() { return state.knowledge.researchQueue; }
-		this.getProductionQueue = function() { return state.knowledge.productionQueue; }
-		this.getRoboticsWorkforce = function() { return state.roboticsWorkforce; }
-		this.getPopulation = function() { return state.population; }
+		this.getConsumed = function(name) { _checkMaterial(name); return state[name + "Consumed"]; };
+		this.getProduced = function(name) { _checkMaterial(name); return state[name + "Produced"]; };
+		this.getStored = function(name) { _checkMaterial(name); return state[name + "Stored"]; };
+		this.getMaterials = function() { return state.materials; };
+		this.getMetaMaterials = function() { return state.metaMaterials; };
+		this.getKnowledge = function() { return state.knowledge; };
+		this.getTechnology = function() { return state.knowledge.technology; };
+		this.getTheory = function() { return state.knowledge.theory; };
+		this.getDiscovery = function() { return state.knowledge.discovery; };
+		this.getResearchQueue = function() { return state.knowledge.researchQueue; };
+		this.getProductionQueue = function() { return state.knowledge.productionQueue; };
+		this.getRoboticsWorkforce = function() { return state.roboticsWorkforce; };
+		this.getPopulation = function() { return state.population; };
 		
 		this.getRoboDozerAvailable = _getRoboDozerAvailable;
 		this.useRoboDozer = _useRoboDozer;
@@ -451,7 +451,7 @@
 		this.setRobotsAvailable = _setRobotsAvailable;
 		
 		this.isMetaMaterial = _isMetaMaterial;
-		this.getMaterialFromMetaMatrial = _getMaterialFromMetaMatrial;
+		this.getMaterialFromMetaMaterial = _getMaterialFromMetaMaterial;
 		this.getCapacity = _getCapacity;
 		this.getFreeCapacity = _getFreeCapacity;
 		this.getFullCapacity = _getFullCapacity;
@@ -469,17 +469,17 @@
 		this.setMaterials = _setMaterials;
 		
 		this.addToBuildList = _addToBuildList;
-		this.getBuildList = function() { return state.buildList; }
+		this.getBuildList = function() { return state.buildList; };
 		this.addToDestroyedList = _addToDestroyedList;
-		this.getDestroyedList = function() { return state.destroyedList; }
+		this.getDestroyedList = function() { return state.destroyedList; };
 		this.addToActiveList = _addToActiveList;
-		this.getActiveList = function() { return state.activeList; }
+		this.getActiveList = function() { return state.activeList; };
 		this.addToInactiveList = _addToInactiveList;
-		this.getInactiveList = function() { return state.inactiveList; }
+		this.getInactiveList = function() { return state.inactiveList; };
 		
-		this.getSimulationData = function() { return state.simulationData; }
-		this.getGlobalEventList = function() { return state.globalEventList; }
-		this.resetGlobalEvent = function() { return state.globalEventList = new Array(); }
+		this.getSimulationData = function() { return state.simulationData; };
+		this.getGlobalEventList = function() { return state.globalEventList; };
+		this.resetGlobalEvent = function() { return state.globalEventList = []; };
 		
 		this.isCompletedKnowledge = _isCompletedKnowledge;
 		this.addCompletedResearch = _addCompletedResearch;

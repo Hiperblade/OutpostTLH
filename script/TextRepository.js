@@ -1,4 +1,4 @@
-function TextRepository()
+function TextRepositoryConstructor()
 {
 	var data = {};
 	var defaultLanguage = "it";
@@ -17,7 +17,7 @@ function TextRepository()
 			return "<" + id + ">";
 		}
 		return data[language][id];
-	}
+	};
 		
 	var _add = function(id, text, language)
 	{
@@ -28,11 +28,11 @@ function TextRepository()
 			data[language] = {};
 		}
 		data[language][id] = text;
-	}
+	};
 	
 	this.get = _get;
 	this.add = _add;
 }
 
 // singleton
-var TextRepository = new TextRepository();
+var TextRepository = new TextRepositoryConstructor();
