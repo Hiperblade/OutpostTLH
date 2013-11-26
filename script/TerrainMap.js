@@ -135,7 +135,7 @@
 		var _addBuilding = function(buildingType, position, alreadyBuilt)
 		{
 			var placed = true;
-			var newBuilding = PrototypeLib.create(buildingType, position, alreadyBuilt);
+			var newBuilding = PrototypeLib.createBuilding(buildingType, position, alreadyBuilt);
 			var eventBeginBuilding = PrototypeLib.get(buildingType).eventBeginBuilding;
 			if(eventBeginBuilding != undefined)
 			{

@@ -4,7 +4,25 @@
 		temp.prototype = superclass.prototype;
 		this.prototype = new temp();
 	};
-	
+
+    /**
+     * @param {number} w
+     *  @param {number} h
+     */
+    function ImageSize(w, h)
+    {
+        /** @type{number} */
+        this.width = w;
+        /** @type{number} */
+        this.height = h;
+    }
+
+    /** @return{ImageSize} */
+    function GetImageSize(img)
+    {
+        return new ImageSize(img.width, img.height);
+    }
+
 	function LogConstructor()
 	{
 		var _error = function(msg)
@@ -30,7 +48,7 @@
 		Error: "rgb(200,100,100)"
 	};
 	
-	function CanvasGrid(ctx, position, color, fontSize, columnsList)
+	function CanvasGrid(ctx, position, fontSize, columnsList)
 	{
 		var columns = columnsList || [];
 		
@@ -48,11 +66,13 @@
 			}
 			return ret + position.x;
 		};
-		
+
+        /*
 		var _getRowHeight = function()
 		{
 			return fontSize + 4;
 		};
+        */
 		
 		var _getStartRow = function(row)
 		{

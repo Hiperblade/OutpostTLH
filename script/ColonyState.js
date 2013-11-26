@@ -184,9 +184,12 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
 				
-				state[mat + "Capacity"] += materials[mat];
+				    state[mat + "Capacity"] += materials[mat];
+                }
 			}
 		};
 		
@@ -194,12 +197,15 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
+                if(materials.hasOwnProperty(mat))
+                {
+				    _checkMaterial(mat);
 				
-				if(state[mat + "Produced"] - state[mat + "Consumed"] + state[mat + "Stored"] < materials[mat])
-				{
-					return false;
-				}
+                    if(state[mat + "Produced"] - state[mat + "Consumed"] + state[mat + "Stored"] < materials[mat])
+                    {
+                        return false;
+                    }
+                }
 			}
 			return true;
 		};
@@ -208,12 +214,15 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
 
-				if(state[mat + "Produced"] - state[mat + "Consumed"] + materials[mat] > _getFreeCapacity(mat))
-				{
-					return false;
-				}
+                    if(state[mat + "Produced"] - state[mat + "Consumed"] + materials[mat] > _getFreeCapacity(mat))
+                    {
+                        return false;
+                    }
+                }
 			}
 			return true;
 		};
@@ -222,9 +231,12 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
-				
-				state[mat + "Consumed"] += materials[mat];
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
+
+                    state[mat + "Consumed"] += materials[mat];
+                }
 			}
 		};
 		
@@ -232,9 +244,12 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
-				
-				state[mat + "Produced"] += materials[mat];
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
+
+                    state[mat + "Produced"] += materials[mat];
+                }
 			}
 		};
 		
@@ -249,13 +264,16 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
-				
-				state[mat + "Stored"] -= materials[mat];
-				if(state[mat + "Stored"] < 0)
-				{
-					state[mat + "Stored"] = 0;
-				}
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
+
+                    state[mat + "Stored"] -= materials[mat];
+                    if(state[mat + "Stored"] < 0)
+                    {
+                        state[mat + "Stored"] = 0;
+                    }
+                }
 			}
 		};
 		
@@ -263,9 +281,12 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
-				
-				state[mat + "Stored"] += materials[mat];
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
+
+                    state[mat + "Stored"] += materials[mat];
+                }
 			}
 		};
 		
@@ -273,9 +294,12 @@
 		{
 			for(var mat in materials)
 			{
-				_checkMaterial(mat);
-				
-				state[mat + "Stored"] = materials[mat];
+                if(materials.hasOwnProperty(mat))
+                {
+                    _checkMaterial(mat);
+
+                    state[mat + "Stored"] = materials[mat];
+                }
 			}
 		};
 			
@@ -323,13 +347,16 @@
 			var ret = true;
 			for(var type in knowledge)
 			{
-				for(var ii = 0; ii < knowledge[type].length; ii++)
-				{
-					if(!_contains(state.knowledge[type], knowledge[type][ii]))
-					{
-						ret = false;
-					}
-				}
+                if(knowledge.hasOwnProperty(type))
+                {
+                    for(var ii = 0; ii < knowledge[type].length; ii++)
+                    {
+                        if(!_contains(state.knowledge[type], knowledge[type][ii]))
+                        {
+                            ret = false;
+                        }
+                    }
+                }
 			}
 			return ret;
 		};
@@ -339,13 +366,16 @@
 			var ret = true;
 			for(var type in knowledge)
 			{
-				for(var ii = 0; ii < knowledge[type].length; ii++)
-				{
-					if(!_contains(state.knowledge[type], knowledge[type][ii]))
-					{
-						state.knowledge[type].push(knowledge[type][ii]);
-					}
-				}
+                if(knowledge.hasOwnProperty(type))
+                {
+                    for(var ii = 0; ii < knowledge[type].length; ii++)
+                    {
+                        if(!_contains(state.knowledge[type], knowledge[type][ii]))
+                        {
+                            state.knowledge[type].push(knowledge[type][ii]);
+                        }
+                    }
+                }
 			}
 			return ret;
 		};
@@ -355,17 +385,21 @@
 			var ret = true;
 			for(var type in knowledge)
 			{
-				for(var ii = 0; ii < knowledge[type].length; ii++)
-				{
-					if(_contains(state.knowledge[type], knowledge[type][ii]))
-					{
-						state.knowledge[type].splice(state.knowledge[type].indexOf(knowledge[type][ii]), 1); // remove
-					}
-				}
+                if(knowledge.hasOwnProperty(type))
+                {
+                    for(var ii = 0; ii < knowledge[type].length; ii++)
+                    {
+                        if(_contains(state.knowledge[type], knowledge[type][ii]))
+                        {
+                            state.knowledge[type].splice(state.knowledge[type].indexOf(knowledge[type][ii]), 1); // remove
+                        }
+                    }
+                }
 			}
 			return ret;
 		};
-			
+
+        /* TODO
 		var _addResearchQueue = function(name)
 		{
 			if(!_contains(state.knowledge.researchQueue, name))
@@ -373,6 +407,7 @@
 				state.knowledge.researchQueue.push(name);
 			}
 		};
+		*/
 		
 		var _contains = function(array, obj)
 		{

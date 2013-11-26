@@ -27,14 +27,17 @@
 			var ret = [];
 			for(var name in list)
 			{
-				var tmp = list[name];
-				if(tmp.getRecipeType() == RecipeType.Production)
-				{
-					if(colonyState.checkKnowledge(tmp.getRequirement()))
-					{
-						ret.push(tmp);
-					}
-				}
+                if(list.hasOwnProperty(name))
+                {
+                    var tmp = list[name];
+                    if(tmp.getRecipeType() == RecipeType.Production)
+                    {
+                        if(colonyState.checkKnowledge(tmp.getRequirement()))
+                        {
+                            ret.push(tmp);
+                        }
+                    }
+                }
 			}
 			return ret;
 		};
@@ -44,17 +47,20 @@
 			var ret = [];
 			for(var name in list)
 			{
-				var tmp = list[name];
-				if(tmp.getRecipeType() == RecipeType.Research)
-				{
-					if(!colonyState.isCompletedKnowledge(name))
-					{
-						if(colonyState.checkKnowledge(tmp.getRequirement()))
-						{
-							ret.push(tmp);
-						}
-					}
-				}
+                if(list.hasOwnProperty(name))
+                {
+                    var tmp = list[name];
+                    if(tmp.getRecipeType() == RecipeType.Research)
+                    {
+                        if(!colonyState.isCompletedKnowledge(name))
+                        {
+                            if(colonyState.checkKnowledge(tmp.getRequirement()))
+                            {
+                                ret.push(tmp);
+                            }
+                        }
+                    }
+                }
 			}
 			return ret;
 		};

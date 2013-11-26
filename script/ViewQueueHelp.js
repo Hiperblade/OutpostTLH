@@ -40,40 +40,43 @@
 				var leftInfo = position.x + 10;
 
                 var img;
+                var imgSize;
 				if(item.getText != undefined)
 				{
 					img = ImagesLib.getImage(item.getImageId());
-					ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
+                    imgSize = GetImageSize(img);
+					ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
 					ctx.lineWidth = "1px";
 					ctx.strokeStyle = Colors.Standard;
-					ctx.strokeRect(leftInfo, topInfo, img.width, img.height);
+					ctx.strokeRect(leftInfo, topInfo, imgSize.width, imgSize.height);
 				
 					ctx.font = 20 + "px Arial";
-					ctx.fillText(TextRepository.get(item.getName()), leftInfo + img.width + 10, topInfo + 28);
+					ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 28);
 				
 					ctx.font = 16 + "px Arial";
 
-					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo, topInfo + img.height + 10, size.x - 20, size.y - (img.height * 2) - 40, 'top', 'left', 16);
+					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo, topInfo + imgSize.height + 10, size.x - 20, size.y - (imgSize.height * 2) - 40, 'top', 'left', 16);
 				}
 				else
 				{
 					var baseTile = ImagesLib.getImage("baseTile");
 					img = ImagesLib.getImage(item.getImageId());
-					ctx.drawImage(baseTile, leftInfo, topInfo - baseTile.height + img.height, baseTile.width, baseTile.height);
-					ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
+                    imgSize = GetImageSize(img);
+					ctx.drawImage(baseTile, leftInfo, topInfo - baseTile.height + imgSize.height, baseTile.width, baseTile.height);
+					ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
 					
 					ctx.font = 20 + "px Arial";
-					ctx.fillText(TextRepository.get(item.getName()), leftInfo + img.width + 10, topInfo + 20);
+					ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 20);
 						
 					ctx.font = 16 + "px Arial";
 
-					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + img.width + 10, topInfo + 24, size.x - img.width - 30, img.height - 24 - 2, 'top', 'left', 16);
+					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + imgSize.width + 10, topInfo + 24, size.x - imgSize.width - 30, imgSize.height - 24 - 2, 'top', 'left', 16);
 					
 					//-------
 					
 					var proto = PrototypeLib.get(item.getName());
 					
-					var grid = new CanvasGrid(ctx, {x: leftInfo, y: topInfo + img.height + 10}, Colors.Standard, 16, [10, 10, 140, 50, 30, 20, 30]);
+					var grid = new CanvasGrid(ctx, {x: leftInfo, y: topInfo + imgSize.height + 10}, 16, [10, 10, 140, 50, 30, 20, 30]);
 					var row = 0;
 					grid.setText(row, 0, TextRepository.get("TerrainLayer") + ":");
 					grid.setText(row, 4, TextRepository.get(proto.getTerrainLayer()));
@@ -95,9 +98,12 @@
 							grid.setText(row, 1, TextRepository.get("BuildingCost") + ":");
 							for (listItem in list)
 							{
-								row++;
-								grid.setText(row, 2, TextRepository.get(listItem));
-								grid.setValue(row, 4, list[listItem]);
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    row++;
+                                    grid.setText(row, 2, TextRepository.get(listItem));
+                                    grid.setValue(row, 4, list[listItem]);
+                                }
 							}
 						}
 					}
@@ -109,9 +115,12 @@
 						grid.setText(row, 0, TextRepository.get("BuildingCapacity"));
 						for (listItem in list)
 						{
-							row++;
-							grid.setText(row, 1, TextRepository.get(listItem));
-							grid.setValue(row, 4, list[listItem]);
+                            if(list.hasOwnProperty(listItem))
+                            {
+                                row++;
+                                grid.setText(row, 1, TextRepository.get(listItem));
+                                grid.setValue(row, 4, list[listItem]);
+                            }
 						}
 					}
 					
@@ -129,9 +138,12 @@
 							grid.setText(row, 1, TextRepository.get("BuildingConsumption") + ":");
 							for (listItem in list)
 							{
-								row++;
-								grid.setText(row, 2, TextRepository.get(listItem));
-								grid.setValue(row, 4, list[listItem]);
+                                if(list.hasOwnProperty(listItem))
+                                {
+								    row++;
+								    grid.setText(row, 2, TextRepository.get(listItem));
+								    grid.setValue(row, 4, list[listItem]);
+                                }
 							}
 						}
 						
@@ -142,9 +154,12 @@
 							grid.setText(row, 1, TextRepository.get("BuildingProduction") + ":");
 							for (listItem in list)
 							{
-								row++;
-								grid.setText(row, 2, TextRepository.get(listItem));
-								grid.setValue(row, 4, list[listItem]);
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    row++;
+                                    grid.setText(row, 2, TextRepository.get(listItem));
+                                    grid.setValue(row, 4, list[listItem]);
+                                }
 							}
 						}
 						
@@ -155,9 +170,12 @@
 							grid.setText(row, 1, TextRepository.get("BuildingWaste") + ":");
 							for (listItem in list)
 							{
-								row++;
-								grid.setText(row, 2, TextRepository.get(listItem));
-								grid.setValue(row, 4, list[listItem]);
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    row++;
+                                    grid.setText(row, 2, TextRepository.get(listItem));
+                                    grid.setValue(row, 4, list[listItem]);
+                                }
 							}
 						}
 					}

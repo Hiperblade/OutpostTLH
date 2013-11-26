@@ -115,25 +115,25 @@
 			}
 			_redraw();
 		};
-		
+
 		var _inizializeQueue = function()
 		{
 			divViewContent.innerHTML = "";
-				
+
 			var divUp = document.createElement('div');
 			var divDown = document.createElement('div');
-			
+
 			var li;
 			var ul = document.createElement('ul');
 			ul.id = "sortableInternalList";
 			ul.style.listStyleType = "none";
 			ul.style.margin = "0px";
 			ul.style.padding = "0px";
-			
+
 			tagLastId = 0;
 			tags = {};
 			tagsNew = {};
-			
+
 			// Separatore
 			li = document.createElement('li');
 			li.style.margin = "0px";
@@ -143,7 +143,7 @@
 			li.appendChild(_createSeparatorCanvas(queueData.getQueueTitle()));
 			li.id = "SortedItemSeparator";
 			ul.appendChild(li);
-			
+
 			var haveBar = queueData.haveBar();
 			var queue = queueData.getQueue();
 			for(var i = 0; i < queue.length; i++)
@@ -155,7 +155,7 @@
 				li.appendChild(_createCanvas(queue[i], false, haveBar));
 				li.id = "SortedItem_" + tagLastId++;
 				ul.appendChild(li);
-				
+
 				tags[li.id] = queue[i];
 			}
 			divUp.appendChild(ul);
@@ -166,7 +166,7 @@
 			ul.style.listStyleType = "none";
 			ul.style.margin = "0px";
 			ul.style.padding = "0px";
-			
+
 			var newItems = queueData.getAvailable();
 			if(newItems.length > 0)
 			{
@@ -182,7 +182,7 @@
 			}
 			var canAppends = queueData.canAppends();
 			for(var ii = 0; ii < newItems.length; ii++)
-			{		
+			{
 				var newItem = newItems[ii];
 				li = document.createElement('li');
 				li.style.margin = "0px";
@@ -191,7 +191,7 @@
 				li.appendChild(_createCanvas(newItem, canAppends, false));
 				li.id = "SortedItem_" + newItem.getName();
 				ul.appendChild(li);
-				
+
 				tags[li.id] = newItem;
 				tagsNew[li.id] = newItems[ii];
 			}
@@ -199,10 +199,12 @@
 
 			divViewContent.appendChild(divUp);
 			divViewContent.appendChild(divDown);
-			
+
 			if(queueData.isSortable())
 			{
-				$("#sortableInternalList").sortable(
+                var list = $("#sortableInternalList");
+
+                list.sortable(
 					{
 					update : function ()
 						{
@@ -220,12 +222,12 @@
 						},
 					items: "li:not(.listSeparator)"
 					});
-				$("#sortableInternalList").disableSelection();
+                list.disableSelection();
 			}
-			
+
 			// Slider
 			var scrollContent = $('#' + divId + "_content");
-			
+
 			// Azzeramento barra di scorrimento
 			divViewSliderCursor.style.top = (parseInt(canvasView.style.top) + 3) + "px";
 			scrollContent.css("margin-top", 0);
@@ -406,23 +408,24 @@
 				var topInfo = position.y + 10;
 				var leftInfo = position.x + 10;
 				var img = ImagesLib.getImage(item.getName());
+                var imgSize = GetImageSize(img);
                 var barThickness = 10;
-                var maxBar = size.x - img.width - 30;
+                var maxBar = size.x - imgSize.width - 30;
 
-				ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
+				ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
 				ctx.lineWidth = "1px";
 				ctx.strokeStyle = Colors.Standard;
-				ctx.strokeRect(leftInfo, topInfo, img.width, img.height);
+				ctx.strokeRect(leftInfo, topInfo, imgSize.width, imgSize.height);
 				
 				ctx.font = 20 + "px Arial";
-				ctx.fillText(TextRepository.get(item.getName()), leftInfo + img.width + 10, topInfo + 20);
+				ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 20);
 				
 				ctx.font = 16 + "px Arial";
-				ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + img.width + 10, topInfo + 24, size.x - img.width - 30, img.height - 24 - barThickness - 2, 'top', 'left', 16);
+				ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + imgSize.width + 10, topInfo + 24, size.x - imgSize.width - 30, imgSize.height - 24 - barThickness - 2, 'top', 'left', 16);
 
 				ctx.fillStyle = Colors.Dark;
 
-				ctx.fillRect(leftInfo + img.width + 10, topInfo + img.height - barThickness, maxBar, barThickness);
+				ctx.fillRect(leftInfo + imgSize.width + 10, topInfo + imgSize.height - barThickness, maxBar, barThickness);
 				ctx.fillStyle = Colors.Standard;
 				
 				var cost;
@@ -441,8 +444,8 @@
 					cost = item.getCost();
 				}
 				
-				ctx.fillRect(leftInfo + img.width + 10, topInfo + img.height - barThickness, maxBar - Math.floor(maxBar * remainTime / time), barThickness);
-				var grid = new CanvasGrid(ctx, {x: leftInfo, y: topInfo + img.height + 10}, Colors.Standard, 16, [30, 30, 100, 50, 30, 20, 30]);
+				ctx.fillRect(leftInfo + imgSize.width + 10, topInfo + imgSize.height - barThickness, maxBar - Math.floor(maxBar * remainTime / time), barThickness);
+				var grid = new CanvasGrid(ctx, {x: leftInfo, y: topInfo + imgSize.height + 10}, 16, [30, 30, 100, 50, 30, 20, 30]);
 				var row = 0;
 				grid.setText(row, 0, TextRepository.get("Progress") + ":");
 				grid.setValue(row, 4, time - remainTime);
@@ -451,13 +454,16 @@
 
 				for (var resource in cost)
 				{
-					row++;
-					grid.setText(row, 0, TextRepository.get(resource));
-					grid.setValue(row, 4, cost[resource]);
-					if(cost[resource] > colonyState.getProduced(resource))
-					{
-						grid.setText(row, 6, TextRepository.get("unavailable"), Colors.Error);
-					}
+                    if(cost.hasOwnProperty(resource))
+                    {
+                        row++;
+                        grid.setText(row, 0, TextRepository.get(resource));
+                        grid.setValue(row, 4, cost[resource]);
+                        if(cost[resource] > colonyState.getProduced(resource))
+                        {
+                            grid.setText(row, 6, TextRepository.get("unavailable"), Colors.Error);
+                        }
+                    }
 				}
 				
 				ctx.closePath();

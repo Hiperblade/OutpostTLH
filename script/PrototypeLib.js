@@ -15,7 +15,7 @@
 		{
 			var buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
 			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
-			item.create = function(position)
+			item.createItem = function(position)
 			{
 				return new Pipe(pipeType, terrainLayer, position, buildingTime);
 			};
@@ -36,7 +36,7 @@
 		{
 			var buildingType = "Resource_" + resourceType;
 			var item = new BasePrototype(buildingType, terrainLayer, 0, {}, {});
-			item.create = function(position)
+			item.createItem = function(position)
 			{
 				return new Resource(resourceType, terrainLayer, position);
 			};
@@ -49,7 +49,7 @@
 		{
 			var buildingType = "Mine" + resourceType;
 			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
-			item.create = function(position)
+			item.createItem = function(position)
 			{
 				return new Building(buildingType, terrainLayer, position, buildingTime, "RoboMiner");
 			};
@@ -63,9 +63,9 @@
 			return list[buildingType];
 		};
 
-		var _create = function(buildingType, position, alreadyBuilt)
+		var _createBuilding = function(buildingType, position, alreadyBuilt)
 		{
-			var ret = list[buildingType].create(position);
+			var ret = list[buildingType].createItem(position);
 			if(alreadyBuilt)
 			{
 				ret.setBuilded();
@@ -75,12 +75,12 @@
 		
 		var _createPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
-			return _create("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
+			return _createBuilding("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
 		};
 		
 		var _createResource = function(resourceType, position)
 		{
-			return list["Resource_" + resourceType].create(position);
+			return list["Resource_" + resourceType].createItem(position);
 		};
 		
 		this.addPipe = _addPipe;
@@ -88,7 +88,7 @@
 		this.addResource = _addResource;
 		this.addMine = _addMine;
 		this.get = _get;
-		this.create = _create;
+		this.createBuilding = _createBuilding;
 		this.createPipe = _createPipe;
 		this.createResource = _createResource;
 		this.getPriorityList = function() { return priorityList; }
@@ -108,7 +108,7 @@
 		var capacity = parameters.capacity || {};
 		var requiredResource = parameters.requiredResource;
 		
-		var _create = function(position)
+		var _createItem = function(position)
 		{
 			return new Building(buildingType, terrainLayer, position, buildingTime);
 		};
@@ -135,7 +135,7 @@
 		this.getRequiredResource = function() { return requiredResource; };
 		this.getBuildingImageId = function() { return buildingType; };
 		
-		this.create = _create;
+		this.createItem = _createItem;
 		this.getAreaType = _getAreaType;
 		
 		//-----------------------------------------

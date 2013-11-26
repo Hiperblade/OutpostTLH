@@ -273,10 +273,13 @@ Log.dialog("NEW_DISCOVERY");
 		{
 			for(var buildingType in graph)
 			{
-				if(graph[buildingType][0].isHeadquarter)
-				{
-					return true;
-				}
+                if(graph.hasOwnProperty(buildingType))
+                {
+                    if(graph[buildingType][0].isHeadquarter)
+                    {
+                        return true;
+                    }
+                }
 			}
 			return false;
 		};
@@ -293,7 +296,10 @@ Log.dialog("NEW_DISCOVERY");
 				{
 					for(var buildingType in graphs[i])
 					{
-						buildingAmount += graphs[i][buildingType].length;
+                        if(graphs[i].hasOwnProperty(buildingType))
+                        {
+						    buildingAmount += graphs[i][buildingType].length;
+                        }
 					}	
 				}
 			}
@@ -337,27 +343,30 @@ Log.dialog("NEW_DISCOVERY");
 						// danneggiamento
 						for(buildingType in graphs[i])
 						{
-							graphs[i][buildingType].forEach(function(tmp)
-							{
-								if(!tmp.isDestroyed())
-								{
-									integrity = tmp.damage(damageAmount + Math.floor(Math.random() * damageVariance));
-									if(integrity == 0)
-									{
-										colonyState.addToDestroyedList(tmp);
-										
-										var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
-										if(eventDestroy != undefined)
-										{
-											eventDestroy(tmp, map);
-										}
-									}
-								}
-								else
-								{
-									colonyState.addToDestroyedList(tmp);
-								}
-							});
+                            if(graphs[i].hasOwnProperty(buildingType))
+                            {
+                                graphs[i][buildingType].forEach(function(tmp)
+                                {
+                                    if(!tmp.isDestroyed())
+                                    {
+                                        integrity = tmp.damage(damageAmount + Math.floor(Math.random() * damageVariance));
+                                        if(integrity == 0)
+                                        {
+                                            colonyState.addToDestroyedList(tmp);
+
+                                            var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+                                            if(eventDestroy != undefined)
+                                            {
+                                                eventDestroy(tmp, map);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        colonyState.addToDestroyedList(tmp);
+                                    }
+                                });
+                            }
 						}
 					}
 					else
@@ -365,10 +374,13 @@ Log.dialog("NEW_DISCOVERY");
 						// riparazione
 						for(buildingType in graphs[i])
 						{
-							graphs[i][buildingType].forEach(function(tmp)
-							{
-								tmp.reapair(reapairAmount);
-							});
+                            if(graphs[i].hasOwnProperty(buildingType))
+                            {
+                                graphs[i][buildingType].forEach(function(tmp)
+                                {
+                                    tmp.reapair(reapairAmount);
+                                });
+                            }
 						}
 					}
 					
@@ -396,27 +408,30 @@ Log.dialog("NEW_DISCOVERY");
 					// danneggiamento
 					for(buildingType in graphs[i])
 					{
-						graphs[i][buildingType].forEach(function(tmp)
-						{
-							if(!tmp.isDestroyed())
-							{
-								integrity = tmp.damage(100 + Math.floor(Math.random() * damageVariance));
-								if(integrity == 0)
-								{
-									colonyState.addToDestroyedList(tmp);
-									
-									var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
-									if(eventDestroy != undefined)
-									{
-										eventDestroy(tmp, map);
-									}
-								}
-							}
-							else
-							{
-								colonyState.addToDestroyedList(tmp);
-							}
-						});
+                        if(graphs[i].hasOwnProperty(buildingType))
+                        {
+                            graphs[i][buildingType].forEach(function(tmp)
+                            {
+                                if(!tmp.isDestroyed())
+                                {
+                                    integrity = tmp.damage(100 + Math.floor(Math.random() * damageVariance));
+                                    if(integrity == 0)
+                                    {
+                                        colonyState.addToDestroyedList(tmp);
+
+                                        var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+                                        if(eventDestroy != undefined)
+                                        {
+                                            eventDestroy(tmp, map);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    colonyState.addToDestroyedList(tmp);
+                                }
+                            });
+                        }
 					}
 				}
 			}

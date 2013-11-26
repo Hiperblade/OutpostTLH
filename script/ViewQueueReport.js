@@ -30,7 +30,7 @@
 		this.printInfo = function(ctx, position, size)
 		{
             var list;
-			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
+			var grid = new CanvasGrid(ctx, position, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			grid.setText(row, 0, TextRepository.get("Buildings"));
 			grid.setText(row, 4, TextRepository.get("Active"));
@@ -175,7 +175,7 @@
 	{
 		this.printInfo = function(ctx, position, size)
 		{
-			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
+			var grid = new CanvasGrid(ctx, position, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			grid.setText(row, 0, TextRepository.get("Materials"));
 			grid.setText(row, 4, TextRepository.get("Production"));
@@ -263,7 +263,7 @@
 		this.printInfo = function(ctx, position, size)
 		{
             var list;
-			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
+			var grid = new CanvasGrid(ctx, position, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			grid.setText(row, 0, TextRepository.get("Buildings"));
 			grid.setText(row, 4, TextRepository.get("Active"));
@@ -381,7 +381,7 @@
 	{
 		this.printInfo = function(ctx, position, size)
 		{
-			var grid = new CanvasGrid(ctx, position, Colors.Standard, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
+			var grid = new CanvasGrid(ctx, position, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
 			
 			grid.setText(row, 0, TextRepository.get("wellness"));
@@ -494,17 +494,19 @@
 				//-------
 				
 				var img = ImagesLib.getImage(item.getImageId());
-				ctx.drawImage(img, leftInfo, topInfo, img.width, img.height);
+                var imgSize = GetImageSize(img);
+
+				ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
 				ctx.lineWidth = "1px";
 				ctx.strokeStyle = Colors.Standard;
-				ctx.strokeRect(leftInfo, topInfo, img.width, img.height);
+				ctx.strokeRect(leftInfo, topInfo, imgSize.width, imgSize.height);
 				
 				ctx.font = 20 + "px Arial";
-				ctx.fillText(TextRepository.get(item.getName()), leftInfo + img.width + 10, topInfo + 20);
+				ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 20);
 				ctx.font = 16 + "px Arial";
-				ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + img.width + 10, topInfo + 24, size.x - img.width - 30, img.height - 24 - 2, 'top', 'left', 16);
+				ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + imgSize.width + 10, topInfo + 24, size.x - imgSize.width - 30, imgSize.height - 24 - 2, 'top', 'left', 16);
 
-				item.printInfo(ctx, {x: leftInfo, y: topInfo + img.height + 10}, { x: size.x - 20, y: size.y - (topInfo + img.height + 10) });
+				item.printInfo(ctx, {x: leftInfo, y: topInfo + imgSize.height + 10}, { x: size.x - 20, y: size.y - (topInfo + imgSize.height + 10) });
 				
 				//-------
 			

@@ -73,11 +73,13 @@
 										buttonsCallback(res);
 									}
 
-									window.setTimeout(function()
-										{
-											buttons[i].pressed = false;
-											_drawButton(buttons[i]);
-										}, 200);
+									window.setTimeout((function(index){
+                                            return function()
+                                            {
+                                                buttons[index].pressed = false;
+                                                _drawButton(buttons[index]);
+                                            }
+                                        }(i)), 200);
 								}
 								return;
 							}
