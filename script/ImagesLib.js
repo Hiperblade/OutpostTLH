@@ -18,7 +18,7 @@
 		{
 			loading++;
 			loadingMax++;
-			var ret = {code: code, image: new Image()};
+			var ret = { code: code, image: new Image() };
 			ret.image.onload = onLoadCallback;
 			ret.image.crossOrigin='anonymous';
 			if(fileName == undefined)

@@ -3,32 +3,32 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<!--script src="http://code.jquery.com/jquery-1.9.1.js"></script-->
-	<script src="lib\jquery-1.10.0.min.js"></script>
-	<script src="lib\jquery-ui.min.js"></script>
+	<script src="lib/jquery-1.10.0.min.js"></script>
+	<script src="lib/jquery-ui.min.js"></script>
 
-	<script src="script\SystemLib.js" type="text/javascript"></script>
-	<script src="script\ImagesLib.js" type="text/javascript"></script>
-	<script src="script\TerrainMap.js" type="text/javascript"></script>
-	<script src="script\PrototypeLib.js" type="text/javascript"></script>
-	<script src="script\RecipeLib.js" type="text/javascript"></script>
-	<script src="script\Generations.js" type="text/javascript"></script>
-	<script src="script\ColonyState.js" type="text/javascript"></script>
-	<script src="script\Engine.js" type="text/javascript"></script>
-	<script src="script\TextRepository.js" type="text/javascript"></script>
+	<script src="script/SystemLib.js" type="text/javascript"></script>
+	<script src="script/ImagesLib.js" type="text/javascript"></script>
+	<script src="script/TerrainMap.js" type="text/javascript"></script>
+	<script src="script/PrototypeLib.js" type="text/javascript"></script>
+	<script src="script/RecipeLib.js" type="text/javascript"></script>
+	<script src="script/Generations.js" type="text/javascript"></script>
+	<script src="script/ColonyState.js" type="text/javascript"></script>
+	<script src="script/Engine.js" type="text/javascript"></script>
+	<script src="script/TextRepository.js" type="text/javascript"></script>
 	
-	<script src="script\ViewIsometric.js" type="text/javascript"></script>
-	<script src="script\ViewMap.js" type="text/javascript"></script>
-	<script src="script\ViewBuildingSelector.js" type="text/javascript"></script>
-	<script src="script\ViewQueueBase.js" type="text/javascript"></script>
-	<script src="script\ViewQueueHelp.js" type="text/javascript"></script>
-	<script src="script\ViewQueueReport.js" type="text/javascript"></script>
+	<script src="script/ViewIsometric.js" type="text/javascript"></script>
+	<script src="script/ViewMap.js" type="text/javascript"></script>
+	<script src="script/ViewBuildingSelector.js" type="text/javascript"></script>
+	<script src="script/ViewQueueBase.js" type="text/javascript"></script>
+	<script src="script/ViewQueueHelp.js" type="text/javascript"></script>
+	<script src="script/ViewQueueReport.js" type="text/javascript"></script>
 	
-	<script src="script\DataImagesLib.js" type="text/javascript"></script>
-	<script src="script\DataPrototype.js" type="text/javascript"></script>
-	<script src="script\DataRecipe.js" type="text/javascript"></script>
-	<script src="script\DataText_it.js" type="text/javascript"></script>
+	<script src="script/DataImagesLib.js" type="text/javascript"></script>
+	<script src="script/DataPrototype.js" type="text/javascript"></script>
+	<script src="script/DataRecipe.js" type="text/javascript"></script>
+	<script src="script/DataText_it.js" type="text/javascript"></script>
 	
-	<script src="script\Main.js" type="text/javascript"></script>
+	<script src="script/Main.js" type="text/javascript"></script>
 	
 	<style type="text/css"> 
 		.slider_container { overflow: hidden; float:left; }
@@ -49,27 +49,27 @@
 				var mainScreen = document.getElementById("mainScreen");
 				mainScreen.style.display = 'block';
 			}
-		}
+		};
 		
 		ImagesLib.initialize("tileArea", imagesList, onUpdateLoading);
 	</script>
 </head>
-<body bgcolor="black">
+<body style="background-color:black;">
 	<div id="loadingScreen">
 		<div style="border:1px solid #77cf3c; background-color: #1c4103; position: absolute; top: 150px; left: 150px; height: 20px; width: 300px;"></div>
-		<div id="loadingScreenBar" style="border:1px solid #a0d77b; border-right:0px; background-color: #478f16; position: absolute; top: 150px; left: 150px; height: 20px; width: 0px;"></div>
+		<div id="loadingScreenBar" style="border:1px solid #a0d77b; border-right: 0; background-color: #478f16; position: absolute; top: 150px; left: 150px; height: 20px; width: 0;"></div>
 	</div>
 	<div id="mainScreen" style="display: none">
 		<canvas id="tileArea" style="border:1px solid #77cf3c; position: absolute;">Your browser does not support the HTML5 canvas tag.</canvas>
 		<canvas id="mapArea" style="border:1px solid #77cf3c; position: absolute;"></canvas>
-		<canvas id="buildingArea" style="border:1px solid #77cf3c; border-top:0px; border-bottom:0px; position: absolute;"></canvas>
+		<canvas id="buildingArea" style="border:1px solid #77cf3c; border-top: 0; border-bottom: 0; position: absolute;"></canvas>
 		<div id="queueDiv_wrapper">
 			<canvas id="queueCanvas" style="border:1px solid #77cf3c; position: absolute;"></canvas>
 			<div id="queueDiv" class="slider_container" style="border:1px solid #77cf3c; position: absolute;">
 				<div id="queueDiv_content" class="scroll-content"></div>
 			</div>
 			<div id="queueDiv_sliderCursor" style="border:1px solid #77cf3c; position: absolute;"></div>
-			<div id="queueDiv_slider" style="border:1px solid #77cf3c; border-left:0px; position: absolute;"></div>
+			<div id="queueDiv_slider" style="border:1px solid #77cf3c; border-left: 0; position: absolute;"></div>
 		</div>
 	</div>
 
@@ -90,7 +90,7 @@
 						<div id="showResearchState2Div" style="border:1px solid #77cf3c;"></div>
 					</td>
 				</tr>
-			<table>
+			</table>
 		</div>
 	</div>
 
@@ -116,19 +116,20 @@
 			//------------------------
 			
 			var map = main.getTerrainMap();
-			for(var i = 0; i < 60; i++)
+            var i;
+			for(i = 0; i < 60; i++)
 			{
 				map.addResource("Metal", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
 			}
-			for(var i = 0; i < 40; i++)
+			for(i = 0; i < 40; i++)
 			{
 				map.addResource("Mineral", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
 			}
-			for(var i = 0; i < 10; i++)
+			for(i = 0; i < 10; i++)
 			{
 				map.addResource("Radioactive", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
 			}
-			for(var i = 0; i < 10; i++)
+			for(i = 0; i < 10; i++)
 			{
 				map.addResource("Fumarole", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
 			}
@@ -367,7 +368,8 @@
 			text += "<tr><td><b>Name </b></td><td><b>Produced </b></td><td><b>Consumed </b></td><td><b>Stored</b></td><td><b>/</b></td><td><b>Capacity</b></td></tr>";
 			var name;
 			var materials = state.getMaterials();
-			for(var i = 0; i < materials.length; i++)
+            var i;
+			for(i = 0; i < materials.length; i++)
 			{
 				name = materials[i];
 				var capacity = state.getCapacity(name);
@@ -377,7 +379,7 @@
 				}
 				text += "<tr><td>" + name + "</td><td>" + (state.getProduced(name) || "--") + "</td><td>" + (state.getConsumed(name) || "--") + "</td><td>" + (state.getStored(name) || state.getFullCapacity(name)) + "</td><td>/</td><td>" + capacity + "</td></tr>";
 			}
-			text += "</table></div>"
+			text += "</table></div>";
 			
 			var stateDiv = document.getElementById("showStateDiv");
 			stateDiv.innerHTML = text;
@@ -385,7 +387,7 @@
 			//----
 			text = "<div style=\"color:white;\"><b>Technology:</b><br/>";
 			var technology = state.getTechnology();
-			for(var i = 0; i < technology.length; i++)
+			for(i = 0; i < technology.length; i++)
 			{
 				text += technology[i] + "<br/>";
 			}
@@ -396,14 +398,14 @@
 			
 			text = "<div style=\"color:white;\"><b>Theory:</b><br/>";
 			var theory = state.getTheory();
-			for(var i = 0; i < theory.length; i++)
+			for(i = 0; i < theory.length; i++)
 			{
 				text += theory[i] + "<br/>";
 			}
 			
 			text += "<br/>Discovery:<br/>";
 			var discovery = state.getDiscovery();
-			for(var i = 0; i < discovery.length; i++)
+			for(i = 0; i < discovery.length; i++)
 			{
 				text += discovery[i] + "<br/>";
 			}
