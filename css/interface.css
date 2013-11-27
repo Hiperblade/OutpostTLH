@@ -1,0 +1,44 @@
+.slider_container {
+    overflow: hidden;
+    float:left;
+}
+.scroll-content {
+    height: auto;
+    float: left;
+}
+
+body {
+    background-color: black;
+}
+
+.hide {
+    display: none;
+}
+
+.base, .loadingScreenBar, .loadingScreenBarProgress {
+    border:1px solid #77cf3c;
+    position: absolute;
+}
+
+.loadingScreenBar, .loadingScreenBarProgress {
+    background-color: #1c4103;
+    top: 150px;
+    left: 150px;
+    height: 20px;
+    width: 300px;
+}
+
+.loadingScreenBarProgress {
+    background-color: #478f16;
+    width: 0;
+    border-right: 0;
+}
+
+.buildingArea {
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.slider {
+    border-left: 0;
+}
