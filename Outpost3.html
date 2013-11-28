@@ -2,7 +2,6 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
-	<!--script src="http://code.jquery.com/jquery-1.9.1.js"></script-->
 	<script src="lib/jquery-1.10.0.min.js"></script>
 	<script src="lib/jquery-ui.min.js"></script>
 
@@ -70,21 +69,23 @@
 		</div>
 	</div>
 
+    <!-- ------------------------------------------------------------------------------------------- -->
+
 	<div id="debug">
 		<div style="position: absolute; left: 1000px; top: 5px;">
-			<div style="border:1px solid #77cf3c;">
+			<div>
 				<input type="button" id="nextTurnButton" value="Update State" onclick="showState();" />
 			</div>
-			<div id="showStateDiv" style="border:1px solid #77cf3c;"></div>
+			<div id="showStateDiv"></div>
 		</div>
 		<div style="position: absolute; top: 600px; left: 5px;">
 			<table>
 				<tr>
 					<td>
-						<div id="showResearchStateDiv" style="border:1px solid #77cf3c;"></div>
+						<div id="showResearchStateDiv"></div>
 					</td>
 					<td style="vertical-align:top;">
-						<div id="showResearchState2Div" style="border:1px solid #77cf3c;"></div>
+						<div id="showResearchState2Div"></div>
 					</td>
 				</tr>
 			</table>
