@@ -418,19 +418,19 @@
 		}
 	};
 		
-	PrototypeLib.addMine("Metal", TerrainLayer.Surface, 2, {}, { requiredResource: "Metal", consumption: { power: 5 }, production: { metalOre: 10 },
+	PrototypeLib.addMine("Metal", TerrainLayer.Surface, 2, {}, { requiredResource: "Metal", consumption: { power: 5 }, production: { metalOre: 10 }, capacity: { metalOre: 50 },
 		eventBeginBuilding: mine_eventBeginBuilding,
 		eventEndBuilding: mine_eventEndBuilding,
 		eventDestroy: mine_eventDestroy
 		});
 	
-	PrototypeLib.addMine("Mineral", TerrainLayer.Underground, 2, {}, { requiredResource: "Mineral", consumption: { power: 5 }, production: { cristalOre: 2, mineralOre: 10 },
+	PrototypeLib.addMine("Mineral", TerrainLayer.Underground, 2, {}, { requiredResource: "Mineral", consumption: { power: 5 }, production: { cristalOre: 2, mineralOre: 10 }, capacity: { cristalOre: 10, mineralOre: 40 },
 		eventBeginBuilding: mineDeep_eventBeginBuilding,
 		eventEndBuilding: mineDeep_eventEndBuilding,
 		eventDestroy: mineDeep_eventDestroy
 		});
 	
-	PrototypeLib.addMine("Radioactive", TerrainLayer.Deep, 2, {}, { requiredResource: "Radioactive", consumption: { power: 5 }, production: { radioactiveOre: 2 } });
+	PrototypeLib.addMine("Radioactive", TerrainLayer.Deep, 2, {}, { requiredResource: "Radioactive", consumption: { power: 5 }, production: { radioactiveOre: 2 }, capacity: { radioactiveOre: 4 } });
 
 	PrototypeLib.add("Mine", TerrainLayer.Underground, 1000, {}, {
 			eventDestroy: function(item, map)
