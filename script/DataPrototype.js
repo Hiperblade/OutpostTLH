@@ -719,6 +719,11 @@
             while(!building.progressBuild()){}
             building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
             while(!building.progressBuild()){}
+
+            map.discoveryNearTiles({ x: position.x, y: position.y }, TerrainLayer.Underground);
+            map.discoveryNearTiles({ x: position.x, y: position.y - 1 }, TerrainLayer.Underground);
+            map.discoveryNearTiles({ x: position.x + 1, y: position.y - 1 }, TerrainLayer.Underground);
+            map.discoveryNearTiles({ x: position.x + 1, y: position.y }, TerrainLayer.Underground);
         },
         eventDestroy: function(item, map)
         {
