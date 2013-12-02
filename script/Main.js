@@ -156,7 +156,7 @@
 										}
 										else
 										{
-Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
+Log.dialog("Non \u00E8 disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
 										}
 									}
 									else if(terrainMap.isRazable(point))
@@ -168,7 +168,7 @@ Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Dozer)
 										}
 										else
 										{
-Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
+Log.dialog("Non \u00E8 disponibile nessuna " + TextRepository.get(RobotTypes.Dozer) + "!");
 										}
 									}
 								}
@@ -188,7 +188,7 @@ Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Dozer)
 											}
 											else
 											{
-Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Digger) + "!");
+Log.dialog("Non \u00E8 disponibile nessuna " + TextRepository.get(RobotTypes.Digger) + "!");
 											}
 										}
 									}
@@ -212,7 +212,7 @@ Log.dialog("Non � disponibile nessuna " + TextRepository.get(RobotTypes.Digger
 										}
 										else
 										{
-Log.dialog("Il terreno non � spianato!");
+Log.dialog("Il terreno non \u00E8 spianato!");
 										}
 									}
 									else

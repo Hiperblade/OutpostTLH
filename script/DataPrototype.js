@@ -356,11 +356,11 @@
 
 	//-------------------------------------------------------------
 	// risorse
-	
-	PrototypeLib.addResource("Metal", TerrainLayer.Surface);
-	PrototypeLib.addResource("Mineral", TerrainLayer.Underground);
-	PrototypeLib.addResource("Radioactive", TerrainLayer.Deep);
-	PrototypeLib.addResource("Fumarole", TerrainLayer.Deep);
+
+	PrototypeLib.addResource("Metal", TerrainLayer.Surface, "#22BBFF");
+	PrototypeLib.addResource("Mineral", TerrainLayer.Underground, "#AAAAFF");
+	PrototypeLib.addResource("Radioactive", TerrainLayer.Deep, "#77FF77");
+	PrototypeLib.addResource("Fumarole", TerrainLayer.Deep, "#FF9900");
 	
 	var mine_eventBeginBuilding = function(item, map)
 	{

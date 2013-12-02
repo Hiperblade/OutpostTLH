@@ -137,10 +137,18 @@
 			state.addKnowledge({ discovery: ["ElectrostaticDischarge"] });
 			state.addKnowledge({ discovery: ["Robotics"] });
 			state.addKnowledge({ theory: ["Extraction_Metal"] });
-			
+
+            state.addKnowledge({ theory: ["Find_Metal"] });
+
 			state.addKnowledge({ technology: ["LandingModule"] });
 
-state.addKnowledge({ technology: [ "SpacePort" ] });
+
+
+            state.addKnowledge({ theory: ["Find_Mineral"] });
+            state.addKnowledge({ theory: ["Find_Radioactive"] });
+            state.addKnowledge({ theory: ["Find_Fumarole"] });
+
+            //state.addKnowledge({ technology: ["SpacePort"] });
 
 			/*
 			state.addKnowledge({ technology: [
@@ -186,7 +194,9 @@ state.addKnowledge({ technology: [ "SpacePort" ] });
 				"HotLabAdv",
 				"Lab",
 				"LabAdv",
-				"DeepLab"] });
+				"DeepLab",
+                "SpacePort"
+                ] });
 			*/
 			//state.createMaterials({ repairUnit: 10000 });
 			//state.destroyMaterials({ repairUnit: 10000 });
@@ -222,17 +232,6 @@ state.addKnowledge({ technology: [ "SpacePort" ] });
 		function buildMap(map)
 		{
 			//************ TODO
-			
-			// SPAZIOPORTO			
-			//map.addBuilding(new Building("303A", TerrainLayer.Surface, new Point(4, 6), 0));
-			//map.addBuilding(new Building("303B", TerrainLayer.Surface, new Point(5, 6), 0));
-			//map.addBuilding(new Building("303C", TerrainLayer.Surface, new Point(5, 5), 0));
-			//map.addBuilding(new Building("303D", TerrainLayer.Surface, new Point(4, 5), 0));
-
-			//map.addBuilding(new Building("432A", TerrainLayer.Underground, new Point(4, 6), 0));
-			//map.addBuilding(new Building("432B", TerrainLayer.Underground, new Point(5, 6), 0));
-			//map.addBuilding(new Building("432C", TerrainLayer.Underground, new Point(5, 5), 0));
-			//map.addBuilding(new Building("432D", TerrainLayer.Underground, new Point(4, 5), 0));
 
 			map.addBuilding("Park", { x: 4, y: 3 });
 			

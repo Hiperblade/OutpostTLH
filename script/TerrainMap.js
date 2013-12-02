@@ -978,13 +978,15 @@
 		Miner: "RoboMiner"
 	};
 	
-	function Resource(resourceType, layer, position)
+	function Resource(resourceType, layer, color, position)
 	{
 		Building.call(this, "Resource_" + resourceType, layer, position, 0);
 		
 		this.getType = function() { return StructureTypes.Resource; };
 		
-		this.getResourceType = function() { return resourceType; }
+		this.getResourceType = function() { return resourceType; };
+
+        this.getColor = function() {return color; };
 	}
 	Resource.inherits(Building);
 	
@@ -996,6 +998,6 @@
 		
 		this.getType = function() { return StructureTypes.Robot; };
 		
-		this.getImageId = function() { return this.getBuildingType().toString(); }
+		this.getImageId = function() { return this.getBuildingType().toString(); };
 	}
 	Robot.inherits(Building);

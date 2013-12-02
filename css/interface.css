@@ -1,26 +1,32 @@
-.slider_container {
+.slider_container
+{
     overflow: hidden;
     float:left;
 }
-.scroll-content {
+.scroll-content
+{
     height: auto;
     float: left;
 }
 
-body {
+body
+{
     background-color: black;
 }
 
-.hide {
+.hide
+{
     display: none;
 }
 
-.base, .loadingScreenBar, .loadingScreenBarProgress {
+.base, .loadingScreenBar, .loadingScreenBarProgress
+{
     border:1px solid #77cf3c;
     position: absolute;
 }
 
-.loadingScreenBar, .loadingScreenBarProgress {
+.loadingScreenBar, .loadingScreenBarProgress
+{
     background-color: #1c4103;
     top: 150px;
     left: 150px;
@@ -28,17 +34,20 @@ body {
     width: 300px;
 }
 
-.loadingScreenBarProgress {
+.loadingScreenBarProgress
+{
     background-color: #478f16;
     width: 0;
     border-right: 0;
 }
 
-.buildingArea {
+.buildingArea
+{
     border-top: 0;
     border-bottom: 0;
 }
 
-.slider {
+.slider
+{
     border-left: 0;
 }

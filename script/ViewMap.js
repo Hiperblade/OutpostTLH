@@ -6,6 +6,7 @@
 		//var backgroundImage = backgroundImage;
 		//var areaSize = areaSize;
 		var position = { x: 0, y: 0 };
+        var knownResources = {};
 
 		var _initialize = function()
 		{
@@ -22,9 +23,35 @@
 				onChangePosition(newPosition);
 			}
 		};
-		
+
+        var _contains = function(array, obj)
+        {
+            for (var i = 0; i < array.length; i++)
+            {
+                if (array[i] === obj)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+
 		var _redraw = function()
 		{
+            var knowledge = map.getState().getTheory();
+            knownResources = {};
+            var tmp = PrototypeLib.getAllResources();
+            for(var res = 0; res < tmp.length; res++)
+            {
+                for(var know = 0; know < knowledge.length; know++)
+                {
+                    if(knowledge[know] == "Find_" + tmp[res])
+                    {
+                        knownResources[tmp[res]] = true;
+                    }
+                }
+            }
+
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 			
 			ctx.beginPath();
@@ -41,7 +68,7 @@
 				}
 				else if(structure[i].getType() == StructureTypes.Building)
 				{
-					//_drawBuilding(structure[i].getPosition());
+					_drawBuilding(structure[i].getPosition(), structure[i]);
 				}
 			}
 			
@@ -64,42 +91,31 @@
 
 		var _drawResource = function(position, resource)
 		{
-			var point = _toScreenPosition(position);
-			ctx.beginPath();
-			ctx.arc(point.x, point.y, 3, 0, Math.PI * 2, false);
-			ctx.closePath();
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = _getResourceColor(resource);
-			ctx.stroke();
+            if(knownResources[resource.getResourceType()])
+            {
+                if((resource.getLayer() == map.getLayer()) &&
+                    (map.findBuilding( position, resource.getLayer()) == null))
+                {
+                    var point = _toScreenPosition(position);
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, 3, 0, Math.PI * 2, false);
+                    ctx.closePath();
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = resource.getColor();
+                    ctx.stroke();
+                }
+            }
 	 	};
-		
-		var _getResourceColor = function(resource)
+
+		var _drawBuilding = function(position, building)
 		{
-			var layer = resource.getLayer();
-			//var type = resource.getResourceType();
-			
-			if(layer == TerrainLayer.Surface)
-			{
-				return "#FFFF00";
-			}
-			else if(layer == TerrainLayer.Underground)
-			{
-				return "#FF6600";
-			}
-			else if(layer == TerrainLayer.Deep)
-			{
-				return "#77FF77";
-			}
-			
-			return "#FFFFFF";
-		};
-		
-		var _drawBuilding = function(position)
-		{
-			var point = _toScreenPosition(position);
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = "#00FFFF";
-			ctx.strokeRect(point.x, point.y, 1, 1);
+            if(building.getLayer() == map.getLayer())
+            {
+                var point = _toScreenPosition(position);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "#00FFFF";
+                ctx.strokeRect(point.x, point.y, 1, 1);
+            }
 		};
 		
 		var _fromScreenPosition = function(point)
