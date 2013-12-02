@@ -1,9 +1,14 @@
 	//-----
 	
 	RecipeLib.add(RecipeType.Production, "Robo-Worker", { discovery: ["Robotics"] }, 1, { productionUnit: 3, productionStandardStructure: 1, metalOre: 2 }, { roboWorker: 1 });
-	RecipeLib.add(RecipeType.Production, "Robo-Dozer",  { discovery: ["Robotics"] }, 2, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { dozer: 1, toxicWaste: 1 });
-	RecipeLib.add(RecipeType.Production, "Robo-Digger", { discovery: ["Robotics"] }, 3, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { digger: 1, toxicWaste: 1 });
-	
+	RecipeLib.add(RecipeType.Production, "Robo-Dozer",  { discovery: ["Robotics"] }, 2, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { dozer: 1, fusionWaste: 2, toxicWaste: 1 });
+	RecipeLib.add(RecipeType.Production, "Robo-Digger", { discovery: ["Robotics"] }, 3, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { digger: 1, fusionWaste: 3, toxicWaste: 1 });
+
+    RecipeLib.add(RecipeType.Production, "RadioactiveBar", { technology: ["Tokamak"] }, 1, { productionUnit: 3, productionStandardStructure: 1, radioactiveOre: 2 }, { radioactiveBar: 10, radioactiveWast: 3 });
+
+    RecipeLib.add(RecipeType.Production, "Goods",   { technology: ["GoodsIndustry"] }, 1, { goodsUnit: 10, productionStandardStructure: 1 },                   { goods: 10,  fusionWaste: 3 });
+    RecipeLib.add(RecipeType.Production, "MediKit", { technology: ["PharmaceuticalIndustry"] }, 1, { pharmaceuticalUnit: 15, productionStandardStructure: 1 }, { mediKit: 10, toxicWaste: 3 });
+
 	//-----
 	
 	RecipeLib.add(RecipeType.Research, "ElectrostaticEnergy",	{ discovery: ["ElectrostaticDischarge"] },	2, { researchElaborationUnit: 1 },							{ technology: ["ElectrostaticCoil"] });

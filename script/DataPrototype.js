@@ -161,7 +161,7 @@
 	PrototypeLib.add("Geothermal", TerrainLayer.Deep, 10, {}, { requiredResource: "Fumarole", production: { power: 2000 } });
 	
 	PrototypeLib.add("StorageArea", TerrainLayer.Deep, 2, {}, { consumption: { power: 10 }, capacity: { radioactiveStorage: 100 } });
-	PrototypeLib.add("Tokamak", TerrainLayer.Surface, 4, {}, { consumption: { radioactiveOre: 1 }, production: { power: 1000 }, productionWaste: { radioactiveWaste: 2 },
+	PrototypeLib.add("Tokamak", TerrainLayer.Surface, 4, {}, { consumption: { radioactiveBar: 1 }, production: { power: 1000 },
 		eventBeginBuilding: function(item, map)
 			{
 				var position = item.getPosition();
@@ -199,7 +199,7 @@
 			}
 		});
 	
-	PrototypeLib.add("TokamakAdv", TerrainLayer.Surface, 8, {}, { consumption: { radioactiveOre: 1 }, production: { power: 1500 }, productionWaste: { radioactiveWaste: 1 },
+	PrototypeLib.add("TokamakAdv", TerrainLayer.Surface, 8, {}, { consumption: { radioactiveBar: 1 }, production: { power: 1500 },
 		eventBeginBuilding: function(item, map)
 			{
 				var position = item.getPosition();
@@ -639,11 +639,11 @@
 	
 	PrototypeLib.add("Warehouse", TerrainLayer.Surface, 2, {}, { consumption: { power: 5 }, capacity: { genericStorage: 100 } });
 	
-	PrototypeLib.add("Smelter", TerrainLayer.Surface, 6, {}, { consumption: { power: 40, metalOre: 5 }, production: { ironBar: 3 }, productionWaste: { fusionWaste: 2 } });
-	PrototypeLib.add("SmelterAdv", TerrainLayer.Surface, 7, {}, { consumption: { power: 40, metalOre: 10 }, production: { ironBar: 8 }, productionWaste: { fusionWaste: 4 } });
+	PrototypeLib.add("Smelter", TerrainLayer.Surface, 6, {}, { consumption: { power: 40, metalOre: 5 }, production: { ironBar: 3 }});
+	PrototypeLib.add("SmelterAdv", TerrainLayer.Surface, 7, {}, { consumption: { power: 40, metalOre: 10 }, production: { ironBar: 8 }});
 
-	PrototypeLib.add("GoodsFactory", TerrainLayer.Surface, 10, {}, { consumption: { power: 40, mineralOre: 4, metalOre: 2 }, production: { goodsUnit: 30 }, productionWaste: { toxicWaste: 1 } });
-	PrototypeLib.add("PharmaceuticalIndustry", TerrainLayer.Surface, 20, {}, { consumption: { power: 40, mineralOre: 10, cristalOre: 5 }, production: { pharmaceuticalUnit: 60 }, productionWaste: { toxicWaste: 5 } });
+	PrototypeLib.add("GoodsFactory", TerrainLayer.Surface, 10, {}, { consumption: { power: 40, mineralOre: 4, metalOre: 2 }, production: { goodsUnit: 30 }});
+	PrototypeLib.add("PharmaceuticalIndustry", TerrainLayer.Surface, 20, {}, { consumption: { power: 40, mineralOre: 10, cristalOre: 5 }, production: { pharmaceuticalUnit: 60 }});
 		
 	PrototypeLib.add("IndustrialFactory", TerrainLayer.Surface, 12, {}, { consumption: { power: 40 }, production: { productionUnit: 40, productionStandardStructure: 1 } });
 	PrototypeLib.add("ChemicalFactory", TerrainLayer.Surface, 15, {}, { consumption: { power: 80 }, production: { productionUnit: 80, productionChemicalStructure: 1  } });
