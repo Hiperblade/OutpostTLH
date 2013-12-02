@@ -552,7 +552,7 @@
 		return AreaTypes.Four;
 	};
 		
-	PrototypeLib.add("Park_w", TerrainLayer.Deep, 40, {}, {
+	PrototypeLib.add("Park_w", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
 				var position = item.getPosition();
@@ -579,7 +579,7 @@
 				}
 			}
 		});
-	PrototypeLib.add("Park_n", TerrainLayer.Deep, 40, {}, {
+	PrototypeLib.add("Park_n", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
 				var position = item.getPosition();
@@ -606,7 +606,7 @@
 				}
 			}
 		});
-	PrototypeLib.add("Park_e", TerrainLayer.Deep, 40, {}, {
+	PrototypeLib.add("Park_e", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
 				var position = item.getPosition();
@@ -791,21 +791,21 @@
         }
     };
 
-    PrototypeLib.add("SpacePort_w", TerrainLayer.Surface, 40, {}, {
+    PrototypeLib.add("SpacePort_w", TerrainLayer.Surface, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
             spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
         }
     });
-    PrototypeLib.add("SpacePort_n", TerrainLayer.Surface, 40, {}, {
+    PrototypeLib.add("SpacePort_n", TerrainLayer.Surface, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
             spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
         }
     });
-    PrototypeLib.add("SpacePort_e", TerrainLayer.Surface, 40, {}, {
+    PrototypeLib.add("SpacePort_e", TerrainLayer.Surface, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
@@ -813,28 +813,28 @@
         }
     });
     // underground
-    PrototypeLib.add("SpacePort_u", TerrainLayer.Underground, 40, {}, {
+    PrototypeLib.add("SpacePort_u", TerrainLayer.Underground, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
             spacePort.destroyAll({ x: position.x, y: position.y }, map);
         }
     });
-    PrototypeLib.add("SpacePort_u_w", TerrainLayer.Underground, 40, {}, {
+    PrototypeLib.add("SpacePort_u_w", TerrainLayer.Underground, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
             spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
         }
     });
-    PrototypeLib.add("SpacePort_u_n", TerrainLayer.Underground, 40, {}, {
+    PrototypeLib.add("SpacePort_u_n", TerrainLayer.Underground, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
             spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
         }
     });
-    PrototypeLib.add("SpacePort_u_e", TerrainLayer.Underground, 40, {}, {
+    PrototypeLib.add("SpacePort_u_e", TerrainLayer.Underground, 1, {}, {
         eventDestroy: function(item, map)
         {
             var position = item.getPosition();
