@@ -8,7 +8,6 @@
 	function PrototypeLibConstructor()
 	{	
 		var list = {};
-		var resources = [];
 		var priorityList = [];
 		
 		var _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
@@ -41,7 +40,6 @@
 				return new Resource(resourceType, terrainLayer, color, position);
 			};
 			list[buildingType] = item;
-			resources.push(resourceType);
 			return item;
 		};
 		
@@ -83,12 +81,6 @@
 			return list["Resource_" + resourceType].createItem(position);
 		};
 
-        var _getAllResources = function()
-        {
-            return resources;
-        };
-
-        this.getAllResources = _getAllResources;
 		this.addPipe = _addPipe;
 		this.add = _add;
 		this.addResource = _addResource;

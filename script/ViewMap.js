@@ -6,7 +6,7 @@
 		//var backgroundImage = backgroundImage;
 		//var areaSize = areaSize;
 		var position = { x: 0, y: 0 };
-        var knownResources = {};
+        var findResources = {};
 
 		var _initialize = function()
 		{
@@ -24,31 +24,15 @@
 			}
 		};
 
-        var _contains = function(array, obj)
-        {
-            for (var i = 0; i < array.length; i++)
-            {
-                if (array[i] === obj)
-                {
-                    return true;
-                }
-            }
-            return false;
-        };
-
 		var _redraw = function()
 		{
+            findResources = {};
             var knowledge = map.getState().getTheory();
-            knownResources = {};
-            var tmp = PrototypeLib.getAllResources();
-            for(var res = 0; res < tmp.length; res++)
+            for(var know = 0; know < knowledge.length; know++)
             {
-                for(var know = 0; know < knowledge.length; know++)
+                if(knowledge[know].indexOf("Find_") == 0)
                 {
-                    if(knowledge[know] == "Find_" + tmp[res])
-                    {
-                        knownResources[tmp[res]] = true;
-                    }
+                    findResources[knowledge[know].substr(5)] = true;
                 }
             }
 
@@ -91,7 +75,7 @@
 
 		var _drawResource = function(position, resource)
 		{
-            if(knownResources[resource.getResourceType()])
+            if(findResources[resource.getResourceType()])
             {
                 if((resource.getLayer() == map.getLayer()) &&
                     (map.findBuilding( position, resource.getLayer()) == null))
