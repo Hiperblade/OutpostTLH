@@ -1,4 +1,4 @@
-var imagesList = [];
+var imagesList =[];
 imagesList.push({ id: "baseTile", fileName: "interface/baseTile.gif" });
 imagesList.push({ id: "button_back", fileName: "interface/button_back.gif" });
 imagesList.push({ id: "button_base", fileName: "interface/button_base.gif" });
@@ -229,6 +229,15 @@ imagesList.push({ id: "Ruins_underground", fileName: "buildings/Ruins_undergroun
 imagesList.push({ id: "School", fileName: "buildings/School.gif" });
 imagesList.push({ id: "Smelter", fileName: "buildings/Smelter.gif" });
 imagesList.push({ id: "SmelterAdv", fileName: "buildings/SmelterAdv.gif" });
+imagesList.push({ id: "SpacePort", fileName: "buildings/SpacePort.gif" });
+imagesList.push({ id: "SpacePort_e", fileName: "buildings/SpacePort_e.gif" });
+imagesList.push({ id: "SpacePort_mini", fileName: "buildings/SpacePort_mini.gif" });
+imagesList.push({ id: "SpacePort_n", fileName: "buildings/SpacePort_n.gif" });
+imagesList.push({ id: "SpacePort_u", fileName: "buildings/SpacePort_u.gif" });
+imagesList.push({ id: "SpacePort_u_e", fileName: "buildings/SpacePort_u_e.gif" });
+imagesList.push({ id: "SpacePort_u_n", fileName: "buildings/SpacePort_u_n.gif" });
+imagesList.push({ id: "SpacePort_u_w", fileName: "buildings/SpacePort_u_w.gif" });
+imagesList.push({ id: "SpacePort_w", fileName: "buildings/SpacePort_w.gif" });
 imagesList.push({ id: "StorageArea", fileName: "buildings/StorageArea.gif" });
 imagesList.push({ id: "SupportModule", fileName: "buildings/SupportModule.gif" });
 imagesList.push({ id: "Tokamak", fileName: "buildings/Tokamak.gif" });

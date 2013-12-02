@@ -656,3 +656,188 @@
 	PrototypeLib.add("Lab", TerrainLayer.Underground, 6, {}, { consumption: { power: 25 }, production: { researchUnit: 10, researchStructureUnderground: 2 } });
 	PrototypeLib.add("LabAdv", TerrainLayer.Underground, 8, {}, { consumption: { power: 50 }, production: { researchUnit: 15, researchStructureUnderground: 4, researchStructureUndergroundAdv: 1 } });
 	PrototypeLib.add("DeepLab", TerrainLayer.Deep, 10, {}, { consumption: { power: 100 }, production: { researchUnit: 20, researchStructureDeep: 1, researchStructureDeepAdv: 1 } });
+
+    //-------------------------------------------------------------
+    // speciali
+
+    var spacePort = PrototypeLib.add("SpacePort", TerrainLayer.Surface, 4, {}, { consumption: { power: 200 }, production: {  },
+        eventBeginBuilding: function(item, map)
+        {
+            var position = item.getPosition();
+            var layer = item.getLayer();
+            if((position.x > 1) && (position.y > 1) &&
+                (position.x < map.getSize().x) && (position.y < map.getSize().y))
+            {
+                if( (map.findResource({ x: position.x,		y: position.y - 1 }, layer) == null) &&
+                    (map.findResource({ x: position.x + 1,	y: position.y - 1 }, layer) == null) &&
+                    (map.findResource({ x: position.x + 1,	y: position.y }, layer) == null) &&
+                    (map.findResource({ x: position.x    ,  y: position.y }, layer) == null) &&
+                    (map.findBuilding({ x: position.x,		y: position.y - 1 }, layer) == null) &&
+                    (map.findBuilding({ x: position.x + 1,	y: position.y - 1 }, layer) == null) &&
+                    (map.findBuilding({ x: position.x + 1,	y: position.y }, layer) == null) &&
+                    (map.findBuilding({ x: position.x    ,  y: position.y }, layer) == null) &&
+                    // undergound
+                    (map.findResource({ x: position.x,		y: position.y - 1 }, TerrainLayer.Underground) == null) &&
+                    (map.findResource({ x: position.x + 1,	y: position.y - 1 }, TerrainLayer.Underground) == null) &&
+                    (map.findResource({ x: position.x + 1,	y: position.y }, TerrainLayer.Underground) == null) &&
+                    (map.findResource({ x: position.x    ,  y: position.y }, TerrainLayer.Underground) == null) &&
+                    (map.findBuilding({ x: position.x,		y: position.y - 1 }, TerrainLayer.Underground) == null) &&
+                    (map.findBuilding({ x: position.x + 1,	y: position.y - 1 }, TerrainLayer.Underground) == null) &&
+                    (map.findBuilding({ x: position.x + 1,	y: position.y }, TerrainLayer.Underground) == null) &&
+                    (map.findBuilding({ x: position.x    ,  y: position.y }, TerrainLayer.Underground) == null) )
+                {
+                    map.addBuilding("SpacePort_w", { x: position.x    , y: position.y - 1} ).setFrozen(true);
+                    map.addBuilding("SpacePort_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true);
+                    map.addBuilding("SpacePort_e", { x: position.x + 1, y: position.y} ).setFrozen(true);
+
+                    map.addBuilding("SpacePort_u",   { x: position.x    , y: position.y} ).setFrozen(true);
+                    map.addBuilding("SpacePort_u_w", { x: position.x    , y: position.y - 1} ).setFrozen(true);
+                    map.addBuilding("SpacePort_u_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true);
+                    map.addBuilding("SpacePort_u_e", { x: position.x + 1, y: position.y} ).setFrozen(true);
+                    return true;
+                }
+            }
+            return false;
+        },
+        eventEndBuilding: function(item, map)
+        {
+            var position = item.getPosition();
+            var layer = item.getLayer();
+            var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+            while(!building.progressBuild()){}
+            building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
+            while(!building.progressBuild()){}
+            building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
+            while(!building.progressBuild()){}
+            // undergound
+            layer = TerrainLayer.Underground;
+            building = map.findBuilding({ x: position.x, y: position.y }, layer);
+            while(!building.progressBuild()){}
+            building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+            while(!building.progressBuild()){}
+            building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
+            while(!building.progressBuild()){}
+            building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
+            while(!building.progressBuild()){}
+        },
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll(position, map);
+        }
+    });
+    spacePort.getBuildingImageId = function()
+    {
+        return "SpacePort_mini";
+    };
+    spacePort.getAreaType = function()
+    {
+        return AreaTypes.Four;
+    };
+    spacePort.destroyAll = function(position, map)
+    {
+        var layer = TerrainLayer.Surface;
+        var building = map.findBuilding({ x: position.x, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        // undergound
+        layer = TerrainLayer.Underground;
+        building = map.findBuilding({ x: position.x, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+        building = map.findBuilding({ x: position.x, y: position.y }, layer);
+        if(building != null)
+        {
+            building.destroy();
+        }
+    };
+
+    PrototypeLib.add("SpacePort_w", TerrainLayer.Surface, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
+        }
+    });
+    PrototypeLib.add("SpacePort_n", TerrainLayer.Surface, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
+        }
+    });
+    PrototypeLib.add("SpacePort_e", TerrainLayer.Surface, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x - 1, y: position.y }, map);
+        }
+    });
+    // underground
+    PrototypeLib.add("SpacePort_u", TerrainLayer.Underground, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x, y: position.y }, map);
+        }
+    });
+    PrototypeLib.add("SpacePort_u_w", TerrainLayer.Underground, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
+        }
+    });
+    PrototypeLib.add("SpacePort_u_n", TerrainLayer.Underground, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
+        }
+    });
+    PrototypeLib.add("SpacePort_u_e", TerrainLayer.Underground, 40, {}, {
+        eventDestroy: function(item, map)
+        {
+            var position = item.getPosition();
+            spacePort.destroyAll({ x: position.x - 1, y: position.y }, map);
+        }
+    });

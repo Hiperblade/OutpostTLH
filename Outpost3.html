@@ -34,7 +34,7 @@
 
 	<script type="text/javascript">
 		var onUpdateLoading = function ()
-		{		
+		{
 			var loadingPercentage = ImagesLib.getLoadingPercentage();
 			var loadingScreenBar = document.getElementById("loadingScreenBar");
 			loadingScreenBar.style.width = Math.floor(loadingPercentage * 300) + "px";
@@ -139,7 +139,9 @@
 			state.addKnowledge({ theory: ["Extraction_Metal"] });
 			
 			state.addKnowledge({ technology: ["LandingModule"] });
-			
+
+state.addKnowledge({ technology: [ "SpacePort" ] });
+
 			/*
 			state.addKnowledge({ technology: [
 				"LandingModule",
