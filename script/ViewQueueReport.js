@@ -75,7 +75,8 @@
 				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var consumption = PrototypeLib.get(list[i]).getConsumption()[material] * active;
 				totalConsumption += consumption;
-				if(PrototypeLib.get(list[i]).create({ x: 0, y: 0 }).isPipe())
+
+				if(PrototypeLib.get(list[i]).createItem({ x: 0, y: 0 }).isPipe())
 				{
 					activePipe += active;
 					idlePipe += idle;
@@ -309,7 +310,7 @@
 				idle = (colonyState.getInactiveList()[list[i]] || []).length;
 				var consumption = PrototypeLib.get(list[i]).getConsumption()[material] * active;
 				totalConsumption += consumption;
-				if(PrototypeLib.get(list[i]).create({ x: 0, y: 0 }).isPipe())
+				if(PrototypeLib.get(list[i]).createItem({ x: 0, y: 0 }).isPipe())
 				{
 					activePipe += active;
 					idlePipe += idle;

@@ -158,19 +158,22 @@
 			var ret = [];
 			for(var i = 0; i < queue.length; i++)
 			{
-				var item = queue[i];
-				var baseItem = RecipeLib.get(item.getName());
-				var cost = baseItem.getCost(); 
-				
-				var value = 0;
-				
-				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
-				{
-					colonyState.delMaterials(cost);
-					value++;
-				}
-				
-				ret.push({ item: item, value: value });
+                var item = queue[i];
+                var value = 0;
+
+                if(item.getRemainTime() > 0)
+                {
+                    var baseItem = RecipeLib.get(item.getName());
+                    var cost = baseItem.getCost();
+
+                    while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
+                    {
+                        colonyState.delMaterials(cost);
+                        value++;
+                    }
+                }
+
+                ret.push({ item: item, value: value });
 			}
 			
 			colonyState.getSimulationData().productionProgress = ret;
@@ -184,19 +187,23 @@
 			for(var i = 0; i < progressList.length; i++)
 			{
 				var item = progressList[i].item;
-				for(var ii = 0; ii < progressList[i].value; ii++)
-				{
-					var remainTime = item.progress();
-					if(remainTime == 0)
-					{
-						var baseItem = RecipeLib.get(item.getName());
-						colonyState.addMaterials(baseItem.getResult());
-						
-						queue.splice(queue.indexOf(item), 1); // remove
+
+                for(var ii = 0; ii < progressList[i].value; ii++)
+                {
+                    item.progress();
+                }
+
+                if(item.getRemainTime() == 0)
+                {
+                    if(true) //TODO: se c'è spazio
+                    {
+                        var baseItem = RecipeLib.get(item.getName());
+                        colonyState.addMaterials(baseItem.getResult());
+
+                        queue.splice(queue.indexOf(item), 1); // remove
 //Log.dialog("NEW_CREATION");
-						break;
-					}
-				}
+                    }
+                }
 			}
 		};
 		

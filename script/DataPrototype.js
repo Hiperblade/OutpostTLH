@@ -643,7 +643,7 @@
 	PrototypeLib.add("SmelterAdv", TerrainLayer.Surface, 7, {}, { consumption: { power: 40, metalOre: 10 }, production: { ironBar: 8 }});
 
 	PrototypeLib.add("GoodsFactory", TerrainLayer.Surface, 10, {}, { consumption: { power: 40, mineralOre: 4, metalOre: 2 }, production: { goodsUnit: 30 }});
-	PrototypeLib.add("PharmaceuticalIndustry", TerrainLayer.Surface, 20, {}, { consumption: { power: 40, mineralOre: 10, cristalOre: 5 }, production: { pharmaceuticalUnit: 60 }});
+	PrototypeLib.add("PharmaceuticalIndustry", TerrainLayer.Surface, 20, {}, { consumption: { power: 40, mineralOre: 10, cristalOre: 4 }, production: { pharmaceuticalUnit: 60 }});
 		
 	PrototypeLib.add("IndustrialFactory", TerrainLayer.Surface, 12, {}, { consumption: { power: 40 }, production: { productionUnit: 40, productionStandardStructure: 1 } });
 	PrototypeLib.add("ChemicalFactory", TerrainLayer.Surface, 15, {}, { consumption: { power: 80 }, production: { productionUnit: 80, productionChemicalStructure: 1  } });
