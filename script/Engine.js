@@ -195,9 +195,9 @@
 
                 if(item.getRemainTime() == 0)
                 {
-                    if(true) //TODO: se c'è spazio
+                    var baseItem = RecipeLib.get(item.getName());
+                    if(colonyState.haveSpace(baseItem.getResult()))
                     {
-                        var baseItem = RecipeLib.get(item.getName());
                         colonyState.addMaterials(baseItem.getResult());
 
                         queue.splice(queue.indexOf(item), 1); // remove
@@ -258,7 +258,7 @@
 						colonyState.addCompletedResearch(item.getName());
 						
 						queue.splice(queue.indexOf(item), 1); // remove
-Log.dialog("NEW_DISCOVERY");
+Log.dialog("NEW_DISCOVERY: " + item.getName());
 						break;
 					}
 				}

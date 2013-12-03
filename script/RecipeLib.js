@@ -6,7 +6,15 @@
 	function RecipeLibConstructor()
 	{
 		var list = {};
-		
+
+        /**
+         *  @param {RecipeType} recipeType
+         *  @param {string} name
+         *  @param {object} requirement
+         *  @param {number} time
+         *  @param {object} cost
+         *  @param {object} result
+         */
 		var _add = function(recipeType, name, requirement, time, cost, result)
 		{
 			list[name] = new BaseRecipe(recipeType, name, requirement, time, cost, result);

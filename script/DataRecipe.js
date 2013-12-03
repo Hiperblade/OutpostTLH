@@ -1,8 +1,10 @@
 	//-----
-	
+
 	RecipeLib.add(RecipeType.Production, "Robo-Worker", { discovery: ["Robotics"] }, 1, { productionUnit: 3, productionStandardStructure: 1, metalOre: 2 }, { roboWorker: 1 });
 	RecipeLib.add(RecipeType.Production, "Robo-Dozer",  { discovery: ["Robotics"] }, 2, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { dozer: 1, fusionWaste: 2, toxicWaste: 1 });
 	RecipeLib.add(RecipeType.Production, "Robo-Digger", { discovery: ["Robotics"] }, 3, { productionUnit: 2, productionStandardStructure: 1, metalOre: 4 }, { digger: 1, fusionWaste: 3, toxicWaste: 1 });
+
+    RecipeLib.add(RecipeType.Production, "MicrowaveSatellite",  { }, 3, { productionUnit: 3, productionStandardStructure: 1 }, { MicrowaveSatellite: 1 });
 
     RecipeLib.add(RecipeType.Production, "RadioactiveBar", { technology: ["Tokamak"] }, 1, { productionUnit: 3, productionStandardStructure: 1, radioactiveOre: 2 }, { radioactiveBar: 10, radioactiveWaste: 3 });
 
