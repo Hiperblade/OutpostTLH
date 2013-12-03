@@ -91,6 +91,7 @@
 					"IndustrialFactory",
 						//"ChemicalFactory",
 						//"PharmaceuticalIndustry",
+                        //"SpacePort",
 					"HotLab",
 						//"HotLabAdv",
 					"Lab",
@@ -100,7 +101,7 @@
 				
 				map.getState().createMaterials({ dozer: 3, digger: 1 });
 			}
-		}).create = function(position)
+		}).createItem = function(position)
 		{
 			return new Building("LandingModule", TerrainLayer.Surface, position, 1, "LandingPoint");
 		};
@@ -131,7 +132,7 @@
 				item.haveDown  = function() { return false; };
 				return true;
 			}
-		}).create = function(position)
+		}).createItem = function(position)
 		{
 			return new Building("LaunchModule", TerrainLayer.Surface, position, 2, "LandingPoint");
 		};
@@ -148,7 +149,7 @@
 				item.haveDown  = function() { return false; };
 				return true;
 			}
-		}).create = function(position)
+		}).createItem = function(position)
 		{
 			return new Building("CargoModule", TerrainLayer.Surface, position, 2, "LandingPoint");
 		};

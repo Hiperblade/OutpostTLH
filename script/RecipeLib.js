@@ -20,16 +20,25 @@
 			list[name] = new BaseRecipe(recipeType, name, requirement, time, cost, result);
 		};
 
+        /**
+         *  @param {string} name
+         */
 		var _get = function(name)
 		{
 			return list[name];
 		};
 
+        /**
+         *  @param {string} name
+         */
 		var _create = function(name)
 		{
 			return list[name].create();
 		};
-		
+
+        /**
+         *  @param {ColonyState} colonyState
+         */
 		var _getAvailableProduction = function(colonyState)
 		{
 			var ret = [];
@@ -50,6 +59,9 @@
 			return ret;
 		};
 
+        /**
+         *  @param {ColonyState} colonyState
+         */
 		var _getAvailableResearch = function(colonyState)
 		{
 			var ret = [];
@@ -82,13 +94,6 @@
 	
 	function BaseRecipe(recipeType, name, requirement, time, cost, result)
 	{
-		//var recipeType = recipeType;
-		//var name = name;
-		//var requirement = requirement;
-		//var time = time;
-		//var cost = cost;
-		//var result = result;
-		
 		var _create = function()
 		{
 			return new Recipe(this);
@@ -110,7 +115,6 @@
 	
 	function Recipe(baseRecipe)
 	{
-		//var baseRecipe = baseRecipe;
 		var name = baseRecipe.getName();
 		var time = baseRecipe.getTime();
 		var currentTime = 0;

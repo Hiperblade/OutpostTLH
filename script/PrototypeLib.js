@@ -9,7 +9,14 @@
 	{	
 		var list = {};
 		var priorityList = [];
-		
+
+        /**
+         *  @param {PipeType} pipeType
+         *  @param {TerrainLayer} terrainLayer
+         *  @param {number} buildingTime
+         *  @param {object} buildingCost
+         *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
+         */
 		var _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
 			var buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
@@ -23,6 +30,13 @@
 			return item;
 		};
 
+        /**
+         *  @param {string} buildingType
+         *  @param {TerrainLayer} terrainLayer
+         *  @param {number} buildingTime
+         *  @param {object} buildingCost
+         *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
+         */
 		var _add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
 			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
@@ -30,7 +44,12 @@
 			priorityList.push(buildingType);
 			return item;
 		};
-		
+
+        /**
+         *  @param {string} resourceType
+         *  @param {TerrainLayer} terrainLayer
+         *  @param {string} color
+         */
 		var _addResource = function(resourceType, terrainLayer, color)
 		{
 			var buildingType = "Resource_" + resourceType;
@@ -42,7 +61,14 @@
 			list[buildingType] = item;
 			return item;
 		};
-		
+
+        /**
+         *  @param {string} resourceType
+         *  @param {TerrainLayer} terrainLayer
+         *  @param {number} buildingTime
+         *  @param {object} buildingCost
+         *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
+         */
 		var _addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
 			var buildingType = "Mine" + resourceType;
@@ -56,11 +82,19 @@
 			return item;
 		};
 
+        /**
+         *  @param {string} buildingType
+         */
 		var _get = function(buildingType)
 		{
 			return list[buildingType];
 		};
 
+        /**
+         *  @param {string} buildingType
+         *  @param {object} position
+         *  @param {boolean} alreadyBuilt
+         */
 		var _createBuilding = function(buildingType, position, alreadyBuilt)
 		{
 			var ret = list[buildingType].createItem(position);
@@ -70,12 +104,22 @@
 			}
 			return ret;
 		};
-		
+
+        /**
+         *  @param {PipeType} pipeType
+         *  @param {TerrainLayer} layer
+         *  @param {object} position
+         *  @param {boolean} alreadyBuilt
+         */
 		var _createPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
 			return _createBuilding("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
 		};
-		
+
+        /**
+         *  @param {string} resourceType
+         *  @param {object} position
+         */
 		var _createResource = function(resourceType, position)
 		{
 			return list["Resource_" + resourceType].createItem(position);
@@ -96,10 +140,6 @@
 	{
 		parameters = parameters || {};
 
-        //var buildingType = buildingType;
-		//var terrainLayer = terrainLayer;
-		//var buildingTime = buildingTime;
-		//var buildingCost = buildingCost;
 		var consumption = parameters.consumption || {};
 		var production = parameters.production || {};
 		var productionWaste = parameters.productionWaste || {};

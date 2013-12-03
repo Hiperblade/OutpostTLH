@@ -1,10 +1,7 @@
 	function MapView(map, canvasId, backgroundImage, areaSize, onChangePosition)
 	{
-		//var map = map;
-		var canvasMap = document.getElementById(canvasId);
+    	var canvasMap = document.getElementById(canvasId);
 		var ctx = canvasMap.getContext("2d");
-		//var backgroundImage = backgroundImage;
-		//var areaSize = areaSize;
 		var position = { x: 0, y: 0 };
         var findResources = {};
 
@@ -93,7 +90,8 @@
 
 		var _drawBuilding = function(position, building)
 		{
-            if(building.getLayer() == map.getLayer())
+            if(building.getLayer() == map.getLayer()
+                /*&& building.isPipe()*/)
             {
                 var point = _toScreenPosition(position);
                 ctx.lineWidth = 1;
@@ -104,17 +102,18 @@
 		
 		var _fromScreenPosition = function(point)
 		{
-			var curleft = 0, curtop = 0;
+			var currentLeft = 0, currentTop = 0;
 			var obj = ctx.canvas;
 			if (obj.offsetParent)
 			{
 				do
 				{
-					curleft += obj.offsetLeft;
-					curtop += obj.offsetTop;
-				} while (obj = obj.offsetParent);
+                    currentLeft += obj.offsetLeft;
+                    currentTop += obj.offsetTop;
+				}
+                while (obj = obj.offsetParent);
 			}
-			return { x: 150 - (point.y - curtop), y: point.x - curleft };
+			return { x: 150 - (point.y - currentTop), y: point.x - currentLeft };
 		};
 
 		var _toScreenPosition = function(point)
