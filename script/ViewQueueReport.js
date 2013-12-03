@@ -384,7 +384,11 @@
 		{
 			var grid = new CanvasGrid(ctx, position, 16, [10, 10, 140, 50, 90, 80, 20, 60]);
 			var row = 0;
-			
+
+            grid.setText(row, 0, TextRepository.get("subsistence"));
+            grid.setValue(row, 7, colonyState.getPopulation().subsistence);
+
+            row++;
 			grid.setText(row, 0, TextRepository.get("wellness"));
 			grid.setValue(row, 7, colonyState.getPopulation().wellness);
 			

@@ -201,7 +201,7 @@
                         colonyState.addMaterials(baseItem.getResult());
 
                         queue.splice(queue.indexOf(item), 1); // remove
-//Log.dialog("NEW_CREATION");
+Log.dialog("NEW_CREATION: " + item.getName());
                     }
                 }
 			}
@@ -276,21 +276,6 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 	// calcolo manutenzione
 	function MaintenanceEngine()
 	{
-		var _hasHeadquarter = function(graph)
-		{
-			for(var buildingType in graph)
-			{
-                if(graph.hasOwnProperty(buildingType))
-                {
-                    if(graph[buildingType][0].isHeadquarter)
-                    {
-                        return true;
-                    }
-                }
-			}
-			return false;
-		};
-	
 		var _simulation = function(colonyState, graphs)
 		{
 			// costo manutenzione
@@ -299,7 +284,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 			var buildingAmount = 0;
 			for(var i = 0; i < graphs.length; i++)
 			{
-				if(_hasHeadquarter(graphs[i]))
+				if(BuildingGraph.hasHeadquarter(graphs[i]))
 				{
 					for(var buildingType in graphs[i])
 					{
@@ -343,7 +328,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
             var buildingType;
 			for(var i = 0; i < graphs.length; i++)
 			{
-				if(_hasHeadquarter(graphs[i]))
+				if(BuildingGraph.hasHeadquarter(graphs[i]))
 				{
 					if(damageAmount > 0)
 					{
@@ -509,7 +494,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 			
 			colonyState.setRobotsAvailable(
 				{
-				controllers: colonyState.getRemainder("controlUnit") - dozerCount + diggerCount,
+				controllers: colonyState.getRemainder("controlUnit") - (dozerCount + diggerCount),
 				dozer: colonyState.getRemainder("dozer") - dozerCount,
 				digger: colonyState.getRemainder("digger") - diggerCount
 				});
@@ -567,7 +552,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 		//-----------------------------------------
 	}
 	
-	// calcolo popolazione (nascite, ecc)
+	// calcolo popolazione (nascite, morti e stato)
 	function PopulationEngine()
 	{
 		var _simulation = function(colonyState, graphs)
@@ -577,7 +562,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 		var _computation = function(colonyState, graphs, map)
 		{
 			var date = colonyState.getDate();
-//TODO: habitatUnit
+
 			// totale popolazione
 			var people = 0;
 			var population = colonyState.getPopulation();
@@ -589,187 +574,204 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 					people += generations[g].getPopulation();
 				}
 			}
-			
-			// cibo (malnutrizione)
-			var malnutrition = 0;
-			var foodUnit = colonyState.getRemainder("foodUnit");
-			if(people > foodUnit)
-			{
-				malnutrition = people - foodUnit;
-				colonyState.delMaterials( { foodUnit: foodUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { foodUnit: people } );
-			}
-			if(people > 0)
-			{
-				malnutrition = malnutrition / people;
-			}
-			
-			// alloggi (sovraffollamento)
-			var overcrowding = 0;
-			var residentialUnit = colonyState.getRemainder("residentialUnit");
-			if(people > residentialUnit)
-			{
-				overcrowding = people - residentialUnit;
-				colonyState.delMaterials( { residentialUnit: residentialUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { residentialUnit: people } );
-			}
-			if(people > 0)
-			{
-				overcrowding = overcrowding / people;
-			}
-			
-			// medicinali (copertura sanitaria mancante)
-			var missingHealthCover = 0;
-			var medicalUnit = colonyState.getRemainder("medicalUnit");
-			if(people > medicalUnit)
-			{
-				missingHealthCover = people - medicalUnit;
-				colonyState.delMaterials( { medicalUnit: medicalUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { medicalUnit: people } );
-			}
-			if(people > 0)
-			{
-				missingHealthCover = missingHealthCover / people;
-			}
 
-			// istruzione (mancanza di istruzione)
-			var missingEducation = 0;
-			var educationUnit = colonyState.getRemainder("educationUnit");
-			var students = 0;
-			var missingHigthEducation = 0;
-			var higthEducationUnit = colonyState.getRemainder("higthEducationUnit");
-			var researchers = 0;
-			for(var i = 0; i < generations.length; i++)
-			{
-				var lots = generations[i].getLots();
-				var minEducationLevel = lots[lots.length - 1].getEducationLevel();
-				var ii;
-				for(ii = 0; ii < lots.length; ii++)
-				{
-					if(lots[ii].getEducationLevel() == minEducationLevel)
-					{
-						break;
-					}
-				}
-				for(var index = ii; index < ii + lots.length; index++)
-				{
-					if(generations[i].getState(date) == GenerationState.Students)
-					{
-						// Students
-						students += lots[index % lots.length].getPopulation();
-						// avanzamento istruzione
-						if(students <= educationUnit)
-						{
-							lots[index % lots.length].teach();
-						}
-					}
-					else if(generations[i].getState(date) == GenerationState.Researchers)
-					{
-						// Researchers
-						researchers += lots[index % lots.length].getPopulation();
-						// avanzamento istruzione
-						if(researchers <= higthEducationUnit)
-						{
-							lots[index % lots.length].teach();
-						}
-					}
-				}
-			}
-			// Students
-			if(students > educationUnit)
-			{
-				missingEducation = students - educationUnit;
-				colonyState.delMaterials( { educationUnit: educationUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { educationUnit: students } );
-			}
-			if(students > 0)
-			{
-				missingEducation = missingEducation / students;
-			}
-			// Researchers
-			if(researchers > higthEducationUnit)
-			{
-				missingHigthEducation = researchers - higthEducationUnit;
-				colonyState.delMaterials( { higthEducationUnit: higthEducationUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { higthEducationUnit: researchers } );
-			}
-			if(researchers > 0)
-			{
-				missingHigthEducation = missingHigthEducation / researchers;
-			}
-			
-			// felicità (tristezza)
-			var sadness = 0;
-			var recreationalUnit = colonyState.getRemainder("recreationalUnit");
-			if(people > recreationalUnit)
-			{
-				sadness = people - recreationalUnit;
-				colonyState.delMaterials( { recreationalUnit: recreationalUnit } );
-			}
-			else
-			{
-				colonyState.delMaterials( { recreationalUnit: people } );
-			}
-			if(people > 0)
-			{
-				sadness = sadness / people;
-			}
-			
-			//wellness
-			//	malnutrition // malnutrizione
+            // totale tubi
+            var countPipes = 0;
+            for(var graph = 0; graph < graphs.length; graph++)
+            {
+                if(BuildingGraph.hasHeadquarter(graphs[graph]))
+                {
+                    countPipes += BuildingGraph.countPipes(graphs[graph]);
+                }
+            }
+
+            var inhospitality = 1;
+            var malnutrition = 1;
+            var overcrowding = 1;
+            var missingHealthCover = 1;
+            var missingEducation = 1;
+            var missingHighEducation = 1;
+            var sadness = 1;
+
+            // ambiente (aria - acqua - temperatura) (inhospitality)
+            if(countPipes > 0)
+            {
+                var habitatUnit = colonyState.getRemainder("habitatUnit");
+                colonyState.delMaterials( { habitatUnit: Math.min(habitatUnit, countPipes) } );
+                inhospitality = 1 - (habitatUnit / countPipes);
+                if(inhospitality < 0)
+                {
+                    inhospitality = 0;
+                }
+            }
+
+            // se ci sono persone
+            if(people > 0)
+            {
+                // cibo (malnutrizione)
+                var foodUnit = colonyState.getRemainder("foodUnit");
+                colonyState.delMaterials( { foodUnit: Math.min(foodUnit, people) } );
+                malnutrition = 1 - (foodUnit / people);
+                if(malnutrition < 0)
+                {
+                    malnutrition = 0;
+                }
+
+                // alloggi (sovraffollamento)
+                var residentialUnit = colonyState.getRemainder("residentialUnit");
+                colonyState.delMaterials( { foodUnit: Math.min(residentialUnit, people) } );
+                overcrowding = 1 - (residentialUnit / people);
+                if(overcrowding < 0)
+                {
+                    overcrowding = 0;
+                }
+
+                // medicinali (copertura sanitaria mancante)
+                var medicalUnit = colonyState.getRemainder("medicalUnit");
+                colonyState.delMaterials( { medicalUnit: Math.min(medicalUnit, people) } );
+                missingHealthCover = 1 - (medicalUnit / people);
+                if(missingHealthCover < 0)
+                {
+                    missingHealthCover = 0;
+                }
+
+                // istruzione (mancanza di istruzione)
+                var educationUnit = colonyState.getRemainder("educationUnit");
+                var students = 0;
+                var highEducationUnit = colonyState.getRemainder("highEducationUnit");
+                var researchers = 0;
+                for(var i = 0; i < generations.length; i++)
+                {
+                    var lots = generations[i].getLots();
+                    var minEducationLevel = lots[lots.length - 1].getEducationLevel();
+                    var ii;
+                    for(ii = 0; ii < lots.length; ii++)
+                    {
+                        if(lots[ii].getEducationLevel() == minEducationLevel)
+                        {
+                            break;
+                        }
+                    }
+                    for(var index = ii; index < ii + lots.length; index++)
+                    {
+                        if(generations[i].getState(date) == GenerationState.Students)
+                        {
+                            // Students
+                            students += lots[index % lots.length].getPopulation();
+                            // avanzamento istruzione
+                            if(students <= educationUnit)
+                            {
+                                lots[index % lots.length].teach();
+                            }
+                        }
+                        else if(generations[i].getState(date) == GenerationState.Researchers)
+                        {
+                            // Researchers
+                            researchers += lots[index % lots.length].getPopulation();
+                            // avanzamento istruzione
+                            if(researchers <= highEducationUnit)
+                            {
+                                lots[index % lots.length].teach();
+                            }
+                        }
+                    }
+                }
+
+                // Students
+                colonyState.delMaterials( { educationUnit: Math.min(educationUnit, students) } );
+                if(students > 0)
+                {
+                    missingEducation = 1 - (educationUnit / students);
+                    if(missingEducation < 0)
+                    {
+                        missingEducation = 0;
+                    }
+                }
+                else
+                {
+                    missingEducation = 0;
+                }
+
+                // Researchers
+                colonyState.delMaterials( { highEducationUnit: Math.min(highEducationUnit, researchers) } );
+                if(researchers > 0)
+                {
+                    missingHighEducation = 1 - (highEducationUnit / researchers);
+                    if(missingHighEducation < 0)
+                    {
+                        missingHighEducation = 0;
+                    }
+                }
+                else
+                {
+                    missingHighEducation = 0;
+                }
+
+                // felicità (tristezza)
+                var recreationalUnit = colonyState.getRemainder("recreationalUnit");
+                colonyState.delMaterials( { recreationalUnit: Math.min(recreationalUnit, people) } );
+                sadness = 1 - (recreationalUnit / people);
+                if(sadness < 0)
+                {
+                    sadness = 0;
+                }
+            }
+            else // non ci sono persone
+            {
+                if(colonyState.getRemainder("foodUnit") > 0)
+                {
+                    malnutrition = 0;
+                }
+
+                if(colonyState.getRemainder("residentialUnit") > 0)
+                {
+                    overcrowding = 0;
+                }
+
+                if(colonyState.getRemainder("medicalUnit") > 0)
+                {
+                    missingHealthCover = 0;
+                }
+            }
+
+            //subsistence
+            //  inhospitality // inospitabilità dell'ambiente
+            //	malnutrition // malnutrizione
+            var subsistence = 1 - Math.max(inhospitality, malnutrition);
+
+            //wellness
 			//	overcrowding // sovraffollamento
 			//	missingHealthCover // copertura sanitaria mancante		
-			var wellness = 1 - (malnutrition + overcrowding + missingHealthCover);
-			if(wellness < 0)
-			{
-				wellness = 0;
-			}
+			var wellness = 1 - Math.max(overcrowding, missingHealthCover);
+
 			//happiness
 			//	missingEducation // mancanza di istruzione
-			//	missingHigthEducation // mancanza di alta formazione
+			//	missingHighEducation // mancanza di alta formazione
 			//	sadness // tristezza
-			var happiness = 1 - (missingEducation + missingHigthEducation + sadness);
-			if(happiness < 0)
-			{
-				happiness = 0;
-			}
-			
+			var happiness = 1 - Math.max(missingEducation, missingHighEducation, sadness);
+
+            var subsistenceAverage = (population.subsistence + subsistence) / 2;
 			var wellnessAverage = (population.wellness + wellness) / 2;
-			
-			if(wellnessAverage == 1)
+			if(subsistenceAverage == 1 && wellnessAverage == 1)
 			{
-				//nascite (se le condizioni sanitarie sono favorevoli)
+				// nascite (se le condizioni sono favorevoli)
 				var nurseryUnit = colonyState.getRemainder("nurseryUnit");
 				if(nurseryUnit > 0)
 				{
 					generations.push(new Generation(date, nurseryUnit));
 				}
 			}
-			else if(wellnessAverage < 0)
+			else if(subsistenceAverage < 1)
 			{
 				// morti
-				var dead = Math.floor(people * (1 - wellnessAverage));
+				var dead = Math.floor(people * (1 - subsistenceAverage));
 				for(var d = 0; d < dead; d++)
 				{
                     generations[d % generations.length].kill();
 				}
 			}
-			
+
+            population.subsistence = subsistence;
 			population.wellness = wellness;
 			population.happiness = happiness;
 		};

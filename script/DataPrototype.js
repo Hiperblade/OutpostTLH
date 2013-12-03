@@ -458,8 +458,8 @@
 	//-------------------------------------------------------------
 	// sussistenza
 	
-	PrototypeLib.add("EnvironmentalControl", TerrainLayer.Surface, 10, {}, { consumption: { power: 80 }, production: { habitatUnit: 50 } } );
-	PrototypeLib.add("EnvironmentalControlAdv", TerrainLayer.Surface, 10, {}, { consumption: { power: 80 }, production: { habitatUnit: 100 } } );
+	PrototypeLib.add("EnvironmentalControl", TerrainLayer.Surface, 10, {}, { consumption: { power: 80 }, production: { habitatUnit: 50, habitatResidentialUnit: 20 } } );
+	PrototypeLib.add("EnvironmentalControlAdv", TerrainLayer.Surface, 10, {}, { consumption: { power: 80 }, production: { habitatUnit: 100, habitatResidentialUnit: 50 } } );
 	
 	PrototypeLib.add("Agridome", TerrainLayer.Surface, 3, {}, { consumption: { power: 5 }, production: { foodUnit: 10 }, capacity: { foodUnit: 50 } });
 	PrototypeLib.add("AgridomeAdv", TerrainLayer.Surface, 4, {}, { consumption: { power: 5 }, production: { foodUnit: 20 }, capacity: { foodUnit: 50 } });
@@ -468,8 +468,8 @@
 	PrototypeLib.add("VerticalFarm", TerrainLayer.Deep, 8, {}, { consumption: { power: 15 }, production: { foodUnit: 50 }, capacity: { foodUnit: 100 } });
 	PrototypeLib.add("VerticalFarmAdv", TerrainLayer.Deep, 8, {}, { consumption: { power: 20 }, production: { foodUnit: 70 }, capacity: { foodUnit: 100 } });
 	
-	PrototypeLib.add("Residential", TerrainLayer.Underground, 4, {}, { consumption: { power: 15, habitatUnit: 2 }, production: { residentialUnit: 16 } });
-	PrototypeLib.add("ResidentialAdv", TerrainLayer.Underground, 5, {}, { consumption: { power: 25, habitatUnit: 4 }, production: { residentialUnit: 32 } });
+	PrototypeLib.add("Residential", TerrainLayer.Underground, 4, {}, { consumption: { power: 15, habitatResidentialUnit: 2 }, production: { residentialUnit: 16 } });
+	PrototypeLib.add("ResidentialAdv", TerrainLayer.Underground, 5, {}, { consumption: { power: 25, habitatResidentialUnit: 4 }, production: { residentialUnit: 32 } });
 
 	PrototypeLib.add("Nursery", TerrainLayer.Underground, 20, {}, { consumption: { power: 20 }, production: { nurseryUnit: 5 } });
 	
@@ -477,8 +477,8 @@
 	PrototypeLib.add("MedicalStructureAdv", TerrainLayer.Underground, 10, {}, { consumption: { power: 30, pharmaceuticalUnit: 10 }, production: { medicalUnit: 30 } });
 	
 	PrototypeLib.add("School", TerrainLayer.Underground, 6, {}, { consumption: { power: 20 }, production: { educationUnit: 80 } });
-	PrototypeLib.add("Univesity", TerrainLayer.Underground, 8, {}, { consumption: { power: 30 }, production: { higthEducationUnit: 30 } });
-	PrototypeLib.add("UnivesityAdv", TerrainLayer.Underground, 8, {}, { consumption: { power: 30 }, production: { higthEducationUnit: 60 } });
+	PrototypeLib.add("Univesity", TerrainLayer.Underground, 8, {}, { consumption: { power: 30 }, production: { highEducationUnit: 30 } });
+	PrototypeLib.add("UnivesityAdv", TerrainLayer.Underground, 8, {}, { consumption: { power: 30 }, production: { highEducationUnit: 60 } });
 	
 	PrototypeLib.add("RecreationalFacility", TerrainLayer.Underground, 15, {}, { consumption: { power: 80 }, production: { recreationalUnit: 60 } });
 	

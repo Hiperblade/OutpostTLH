@@ -80,7 +80,7 @@ TextRepository.add("repairUnit", "Manutenzione");
 TextRepository.add("foodUnit", "Cibo");
 TextRepository.add("residentialUnit", "Unità Abitative");
 TextRepository.add("educationUnit", "Unità Educative");
-TextRepository.add("higthEducationUnit", "Unità Educative Superiore");
+TextRepository.add("highEducationUnit", "Unità Educative Superiore");
 TextRepository.add("recreationalUnit", "Unità Ricreative");
 TextRepository.add("pharmaceuticalUnit", "Unità Farmaceutiche");
 TextRepository.add("medicalUnit", "Unità Medicali");

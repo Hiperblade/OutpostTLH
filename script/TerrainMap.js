@@ -470,7 +470,7 @@
 			var ret = [];
 			for (var i = 0; i < tmpRet.length; i++)
 			{
-				var retItem = {};
+				var retItem = new BuildingGraph();
 				for (var ii = 0; ii < tmpRet[i].length; ii++)
 				{
 					var buildingType = tmpRet[i][ii].getBuildingType();
@@ -1001,3 +1001,59 @@
 		this.getImageId = function() { return this.getBuildingType().toString(); };
 	}
 	Robot.inherits(Building);
+
+    function BuildingGraph()
+    {
+        /** @param {BuildingGraph} graph */
+        BuildingGraph.countAll = function(graph)
+        {
+            var ret = 0;
+            for(var buildingType in graph)
+            {
+                if(graph.hasOwnProperty(buildingType))
+                {
+                    ret += graph[buildingType].length;
+                }
+            }
+            return ret;
+        };
+
+        /** @param {BuildingGraph} graph */
+        BuildingGraph.countPipes = function(graph)
+        {
+            var ret = 0;
+            for(var buildingType in graph)
+            {
+                if(graph.hasOwnProperty(buildingType))
+                {
+                    if(graph[buildingType][0].isPipe())
+                    {
+                        ret += graph[buildingType].length;
+                    }
+                }
+            }
+            return ret;
+        };
+
+        /** @param {BuildingGraph} graph */
+        BuildingGraph.getHeadquarter = function(graph)
+        {
+            for(var buildingType in graph)
+            {
+                if(graph.hasOwnProperty(buildingType))
+                {
+                    if(graph[buildingType][0].isHeadquarter)
+                    {
+                        return graph[buildingType][0];
+                    }
+                }
+            }
+            return null;
+        };
+
+        /** @param {BuildingGraph} graph */
+        BuildingGraph.hasHeadquarter = function(graph)
+        {
+            return (BuildingGraph.getHeadquarter(graph) != null);
+        };
+    }

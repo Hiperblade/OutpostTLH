@@ -17,6 +17,7 @@
 			};
 		state.population = {
 			registry: [],
+            subsistence: 0,
 			wellness: 0,
 			happiness: 0
 			};
