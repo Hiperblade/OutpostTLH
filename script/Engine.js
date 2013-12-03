@@ -517,7 +517,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 		
 		var _computation = function(colonyState, graphs, map)
 		{
-//TODO
+//TODO:8
 			//var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
 			//var date = colonyState.getDate();
 			// incidenti, catastrofi (distruzione o danneggiamento edifici, morti o feriti)
@@ -541,7 +541,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 		
 		var _computation = function(colonyState, graphs, map)
 		{
-//TODO
+//TODO:21
 		};
 		
 		//-----------------------------------------
