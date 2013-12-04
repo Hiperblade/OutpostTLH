@@ -40,14 +40,15 @@
     					_goWest();
                         break;
 
-                    case 33: // pagUp
+                    case 33: // pageUp
                         _goUp();
                         break;
-                    case 34: // pagDown
+                    case 34: // pageDown
                         _goDown();
                         break;
 
-                    case 60: // <
+                    case 60: // < (it)
+                    case 220: // \ (en)
                         _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
                         break;
                     case 90: // z
@@ -274,7 +275,7 @@ Log.dialog("Non hai la tecnologia per estrarre questa risorsa!");
 								}
 							}
 
-                            _updateRoboAvailable();
+                            _redraw();
 						}
 						else
 						{
@@ -375,6 +376,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		
 		var _redraw = function()
 		{
+            _updateRoboAvailable();
 			view.redraw();
 			mapView.redraw();
 		};
@@ -391,46 +393,40 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
         var _updateRoboAvailable = function()
         {
+            view.setButton(20, true);
             if(state.getRoboDozerAvailable() <= 0)
             {
                 view.setButton(20, false);
             }
-            if(state.getRoboDiggerAvailable() <= 0)
+
+            view.setButton(21, true);
+            if((state.getRoboDiggerAvailable() <= 0) || (terrainMap.getLayer() == TerrainLayer.Surface))
             {
                 view.setButton(21, false);
             }
-        }
+        };
 
 		var _setLayer = function(layer)
 		{
 			terrainMap.setLayer(layer);
-			
+
+            view.setButton(26, true); // elevator
+            view.setButton(30, true); // up
+            view.setButton(31, true); // down
+
 			if(layer == TerrainLayer.Surface)
 			{
-				view.setButton(21, false);
-				view.setButton(26, true);
-				view.setButton(30, false);
-				view.setButton(31, true);
-			}
-			else if(layer == TerrainLayer.Underground)
-			{
-				view.setButton(21, true);
-				view.setButton(26, true);
-				view.setButton(30, true);
-				view.setButton(31, true);
+				view.setButton(30, false); // up
 			}
 			else if(layer == TerrainLayer.Deep)
 			{
-				view.setButton(21, true);
-				view.setButton(26, false);
-				view.setButton(30, true);
-				view.setButton(31, false);
+				view.setButton(26, false); // elevator
+				view.setButton(31, false); // down
 			}
 
-            _updateRoboAvailable();
-
 			selectorView.setLayer(layer);
-			_redraw(); 
+
+            _redraw();
 		};
 		
 		var _goUp = function()
