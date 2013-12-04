@@ -21,22 +21,74 @@
 			{
 				event = event || window.event;
 				var e = event.keyCode;
-				if(e == 38)
-				{
-					_goNorth();
-				}
-				else if(e == 39)
-				{
-					_goEast();
-				}
-				else if(e == 40)
-				{
-					_goSouth();
-				}
-				else if(e == 37)
-				{
-					_goWest();
-				}
+                switch(e)
+                {
+                    case 38: // up
+                    case 87: // w
+					    _goNorth();
+                        break;
+                    case 39: // right
+                    case 68: // d
+    					_goEast();
+                        break;
+                    case 40: // down
+                    case 83: // s
+	    				_goSouth();
+                        break;
+                    case 37: // left
+                    case 65: // a
+    					_goWest();
+                        break;
+
+                    case 33: // pagUp
+                        _goUp();
+                        break;
+                    case 34: // pagDown
+                        _goDown();
+                        break;
+
+                    case 60: // <
+                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
+                        break;
+                    case 90: // z
+                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } );
+                        break;
+                    case 88: // x
+                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" });
+                        break;
+                    case 67: // c
+                        _setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer()));
+                        break;
+                    case 86: // v
+                        _setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer()));
+                        break;
+                    case 66: // b
+                        _setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer()));
+                        break;
+                    case 78: // n
+                        _setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer()));
+                        break;
+                    case 77: // m
+                        selectorView.show();
+                        break;
+
+                    case 72: // h
+                        _showHelp();
+                        break;
+                    case 74: // j
+                        _showReport();
+                        break;
+                    case 75: // k
+                        _showProduction();
+                        break;
+                    case 76: // l
+                        _showResearch();
+                        break;
+
+                    case 13: // enter
+                        _doNext();
+                        break;
+                }
 			};
 			
 			var _onChangePosition = function(newPosition)
@@ -221,6 +273,8 @@ Log.dialog("Non hai la tecnologia per estrarre questa risorsa!");
 									}
 								}
 							}
+
+                            _updateRoboAvailable();
 						}
 						else
 						{
@@ -334,7 +388,19 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		{
 			return terrainMap.findBuilding(point);
 		};
-		
+
+        var _updateRoboAvailable = function()
+        {
+            if(state.getRoboDozerAvailable() <= 0)
+            {
+                view.setButton(20, false);
+            }
+            if(state.getRoboDiggerAvailable() <= 0)
+            {
+                view.setButton(21, false);
+            }
+        }
+
 		var _setLayer = function(layer)
 		{
 			terrainMap.setLayer(layer);
@@ -360,6 +426,8 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				view.setButton(30, true);
 				view.setButton(31, false);
 			}
+
+            _updateRoboAvailable();
 
 			selectorView.setLayer(layer);
 			_redraw(); 
