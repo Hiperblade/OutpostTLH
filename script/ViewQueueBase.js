@@ -37,7 +37,7 @@
 			
 			_hide();
 			
-			// Slider
+			// Slider queue
 			var scrollPane = $('#' + divId);
 			var scrollContent = $('#' + divId + "_content");
 			
@@ -67,6 +67,36 @@
 					}
 				}
 			});
+
+            // Slider area
+            var scrollPaneArea = $('#' + divId + "Area");
+            var scrollContentArea = $('#' + divId + "Area_content");
+            $('#' + divId + "Area_slider").slider({
+                orientation: "vertical",
+                value: 100,
+                slide: function (event, ui) {
+                    var topMargin = parseInt(canvasView.style.top) + 3;
+                    var cursorPosition = Math.floor((100 - ui.value) * scrollPaneArea.height() / 100);
+                    if(cursorPosition < topMargin)
+                    {
+                        cursorPosition = topMargin;
+                    }
+                    else if(cursorPosition > scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3)
+                    {
+                        cursorPosition = scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3;
+                    }
+                    divViewSliderCursor.style.top = cursorPosition + "px";
+
+                    if (scrollContentArea.height() > scrollPaneArea.height())
+                    {
+                        scrollContentArea.css("margin-top", (-1 * (scrollPaneArea.height() - ((scrollPaneArea.height() * ui.value) / 100))) + "px");
+                    }
+                    else
+                    {
+                        scrollContentArea.css("margin-top", 0);
+                    }
+                }
+            });
 		};
 		
 		var _doMouseDown = function(e)
@@ -242,7 +272,10 @@
 			else
 			{
 				divViewBase.style.display = 'block';
-				
+//TODO
+                //$("#queueDivAreaTitle").html(queueData.getTitle());
+                //$("#queueDivAreaToolsBar")
+
 				ctx.globalAlpha = 0.8;
 				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 				ctx.fillStyle = "black";
