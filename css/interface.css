@@ -1,11 +1,43 @@
+.slider
+{
+    height: 100%;
+    width: 20px;
+    float: right;
+}
+
+.allHeight
+{
+    height: 100%;
+}
+
+#queueDivContainer
+{
+    width: 200px;
+    height: 100%;
+    float: left;
+}
+
+#queueDivAreaRight
+{
+    height: 100%;
+    overflow: hidden;
+}
+
+#queueDivAreaTitle
+{
+    height: 20px;
+}
+
+#queueDivAreaToolsBar
+{
+    height: 20px;
+}
+
+
 .slider_container
 {
     overflow: hidden;
     float:left;
-/*
-    height: 100%;
-    width: 300px;
-    */
 }
 .scroll-content
 {

@@ -20,6 +20,9 @@
 		
 		var _initialize = function()
 		{
+            divViewBase.width = size.x + "px"; //senza "px"
+            divViewBase.height = size.y + "px"; //senza "px"
+
 			canvasView.width = size.x; //senza "px"
 			canvasView.height = size.y; //senza "px"
 			
