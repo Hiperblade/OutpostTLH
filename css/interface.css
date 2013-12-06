@@ -1,53 +1,21 @@
-.slider
-{
-    height: 100%;
-    width: 20px;
-    float: right;
-}
-
-.allHeight
-{
-    height: 100%;
-}
-
-#queueDivContainer
-{
-    width: 200px;
-    height: 100%;
-    float: left;
-}
-
-#queueDivAreaRight
-{
-    height: 100%;
-    overflow: hidden;
-}
-
-#queueDivAreaTitle
-{
-    height: 20px;
-}
-
-#queueDivAreaToolsBar
-{
-    height: 20px;
-}
-
-
-.slider_container
-{
-    overflow: hidden;
-    float:left;
-}
-.scroll-content
-{
-    height: auto;
-    float: left;
-}
-
 body
 {
+    /*margin: 5px;/**/
+    margin: 0;
+    padding: 0;
+
     background-color: black;
+    color: #77cf3c;
+    border-color: #77cf3c;
+
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+
+.startAt
+{
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
 
 .hide
@@ -55,14 +23,68 @@ body
     display: none;
 }
 
-.base, .loadingScreenBar, .loadingScreenBarProgress
+#queueDivContainer
 {
-    border:1px solid #77cf3c;
+    width: 300px;
+    height: 100%;
+    float: left;
+}
+
+#queueDiv, #queueDivAreaRight
+{
+    height: 100%;
+    position:relative;
+    overflow: hidden;
+}
+
+#queueDiv_slider, #queueDivArea_slider
+{
+    border: 1px solid;
+}
+
+#queueDiv_slider
+{
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+#queueDivArea_slider
+{
+    border-right-width: 0;
+}
+
+#queueDivAreaTitle
+{
+    height: 40px;
+    font-size: 1.4em;
+}
+
+#queueDivAreaToolsBar
+{
+    height: 40px;
+}
+
+.background
+{
+    background-color: black;
+    opacity: 0.8;
+    border:1px solid;
     position: absolute;
 }
 
+#tileArea, #mapArea
+{
+    border:1px solid;
+    position: absolute;
+}
+
+/* loading */
+
 .loadingScreenBar, .loadingScreenBarProgress
 {
+    border:1px solid;
+    position: absolute;
+
     background-color: #1c4103;
     top: 150px;
     left: 150px;
@@ -77,13 +99,100 @@ body
     border-right: 0;
 }
 
+/* building form */
+
 .buildingArea
 {
-    border-top: 0;
-    border-bottom: 0;
+    position: absolute;
+    margin: 1px;
+    border: 0;
 }
+
+/* queue*/
+
+.queueItem, .queueSeparator
+{
+    border: 1px solid;
+    margin: 2px 2px 0 2px;
+}
+
+.queueSeparator
+{
+    background-color: #2f6A08;
+    text-align: center;
+    line-height: 20px;
+    height: 20px;
+}
+
+.queueItem
+{
+    height: 35px;
+}
+
+.queueItemImage
+{
+    height: 100%;
+    float: left;
+    width: 30px;
+}
+
+.queueItemButton
+{
+    height: 100%;
+    float: right;
+    width: 30px;
+}
+
+.queueItemText
+{
+    height: 100%;
+}
+
+.queueItemTitle
+{
+    width: 100%;
+    height: 25px;
+}
+
+.queueItemBar
+{
+    width: 100%;
+    height: 5px;
+}
+
+.queueItemBar2
+{
+    height: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* slider */
 
 .slider
 {
-    border-left: 0;
+    height: 100%;
+    width: 20px;
+    float: right;
+}
+
+.sliderCursor
+{
+    border:1px solid;
+    position: absolute;
+
+    width: 12px;
+    height: 12px;
+    margin: 3px;
+}
+
+.slider_container
+{
+    overflow: hidden;
+}
+
+.scroll-content
+{
+    height: auto;
 }

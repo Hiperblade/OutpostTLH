@@ -1,4 +1,364 @@
-	function QueueView(divId, canvasId, size)
+    function QueueView(divId, canvasId, size)
+    {
+        const COLUMN_SLIDER_WIDTH = 20;
+
+        var queueData = null;
+        var currentItem = null;
+        var tagLastId = 0;
+        var tags = {};
+        var tagsNew = {};
+
+        var divViewBase = $("#" + divId + "_wrapper");
+        var divViewAreaContainer = $("#" + divId + "AreaContainer");
+        var divViewBackground = $("#" + divId + "Background");
+        var divViewContent = $("#" + divId + "_content");
+
+        divViewBase.width(size.x);
+        divViewBase.height(size.y);
+
+        divViewAreaContainer.height(size.y - 80);
+
+        divViewBackground.width(size.x);
+        divViewBackground.height(size.y);
+
+        var _initialize = function()
+        {
+            // Slider queue
+            var scrollPane = $('#' + divId);
+            var scrollContent = $('#' + divId + "_content");
+            var scrollCursor = $("#" + divId + "_sliderCursor");
+            $('#' + divId + "_slider").slider({
+                orientation: "vertical",
+                value: 100,
+                slide: function (event, ui) {
+                    var topMargin = 3;
+                    var cursorPosition = Math.floor((100 - ui.value) * scrollPane.height() / 100);
+                    if(cursorPosition < topMargin)
+                    {
+                        cursorPosition = topMargin;
+                    }
+                    else if(cursorPosition > scrollPane.height() - (COLUMN_SLIDER_WIDTH - 13) - 3)
+                    {
+                        cursorPosition = scrollPane.height() - (COLUMN_SLIDER_WIDTH - 13) - 3;
+                    }
+                    scrollCursor.top = cursorPosition + "px";
+
+                    if (scrollContent.height() > scrollPane.height())
+                    {
+                        scrollContent.css("margin-top", (-1 * (scrollPane.height() - ((scrollPane.height() * ui.value) / 100))) + "px");
+                    }
+                    else
+                    {
+                        scrollContent.css("margin-top", 0);
+                    }
+                }
+            });
+
+            // Slider area
+            var scrollPaneArea = $('#' + divId + "Area");
+            var scrollContentArea = $('#' + divId + "Area_content");
+            var scrollCursorArea = $("#" + divId + "Area_sliderCursor");
+            $('#' + divId + "Area_slider").slider({
+                orientation: "vertical",
+                value: 100,
+                slide: function (event, ui) {
+                    var topMargin = 3;
+                    var cursorPosition = Math.floor((100 - ui.value) * scrollPaneArea.height() / 100);
+                    if(cursorPosition < topMargin)
+                    {
+                        cursorPosition = topMargin;
+                    }
+                    else if(cursorPosition > scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3)
+                    {
+                        cursorPosition = scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3;
+                    }
+                    scrollCursorArea.top = cursorPosition + "px";
+
+                    if (scrollContentArea.height() > scrollPaneArea.height())
+                    {
+                        scrollContentArea.css("margin-top", (-1 * (scrollPaneArea.height() - ((scrollPaneArea.height() * ui.value) / 100))) + "px");
+                    }
+                    else
+                    {
+                        scrollContentArea.css("margin-top", 0);
+                    }
+                }
+            });
+        };
+
+        var _setCurrent = function(current)
+        {
+            currentItem = current;
+            //TODO
+        };
+
+        var _show = function(queueDataNew)
+        {
+            queueData = queueDataNew;
+            _inizializeQueue();
+
+            if(queueData.getQueue().length > 0)
+            {
+                _setCurrent(queueData.getQueue()[0]);
+            }
+            else
+            {
+                _setCurrent(null);
+            }
+            divViewBase.show();
+        };
+
+        var _hide = function()
+        {
+            divViewBase.hide();
+        };
+
+        var _inizializeQueue = function()
+        {
+            divViewContent.empty();
+
+            var divUp = document.createElement('div');
+            var divDown = document.createElement('div');
+
+            var li;
+            var ul = document.createElement('ul');
+            ul.id = "sortableInternalList";
+            ul.style.listStyleType = "none";
+            ul.style.margin = "0px";
+            ul.style.padding = "0px";
+
+            tagLastId = 0;
+            tags = {};
+            tagsNew = {};
+
+            // Separatore
+            li = document.createElement('li');
+            li.style.margin = "0px";
+            li.style.padding = "0px";
+            li.style.lineHeight = "0px";
+            li.className = "listSeparator";
+            li.innerHTML = '<div class="queueSeparator">' + TextRepository.get(queueData.getQueueTitle()) + '</div>';
+            li.id = "SortedItemSeparator";
+            ul.appendChild(li);
+
+            var haveBar = queueData.haveBar();
+            var queue = queueData.getQueue();
+            for(var i = 0; i < queue.length; i++)
+            {
+                li = document.createElement('li');
+                li.style.margin = "0px";
+                li.style.padding = "0px";
+                li.style.lineHeight = "0px";
+                li.innerHTML = _createCanvas(queue[i], false, haveBar);
+                //li.appendChild(_createCanvas(queue[i], false, haveBar));
+                li.id = "SortedItem_" + tagLastId++;
+                ul.appendChild(li);
+
+                tags[li.id] = queue[i];
+            }
+            divUp.appendChild(ul);
+
+            //--- new
+            ul = document.createElement('ul');
+            ul.id = "sortableInternalList";
+            ul.style.listStyleType = "none";
+            ul.style.margin = "0px";
+            ul.style.padding = "0px";
+
+            var newItems = queueData.getAvailable();
+            if(newItems.length > 0)
+            {
+                // Separatore
+                li = document.createElement('li');
+                li.style.margin = "0px";
+                li.style.padding = "0px";
+                li.style.lineHeight = "0px";
+                li.className = "listSeparator";
+                li.innerHTML = '<div class="queueSeparator">' + TextRepository.get(queueData.getAvailableTitle()) + '</div>';
+                li.id = "SortedItemSeparator";
+                ul.appendChild(li);
+            }
+            var canAppends = queueData.canAppends();
+            for(var ii = 0; ii < newItems.length; ii++)
+            {
+                var newItem = newItems[ii];
+                li = document.createElement('li');
+                li.style.margin = "0px";
+                li.style.padding = "0px";
+                li.style.lineHeight = "0px";
+                li.innerHTML = _createCanvas(newItem, canAppends, false);
+                //li.appendChild(_createCanvas(newItem, canAppends, false));
+                li.id = "SortedItem_" + newItem.getName();
+                ul.appendChild(li);
+
+                tags[li.id] = newItem;
+                tagsNew[li.id] = newItems[ii];
+            }
+            divDown.appendChild(ul);
+
+            divViewContent.append(divUp);
+            divViewContent.append(divDown);
+
+            if(queueData.isSortable())
+            {
+                var list = $("#sortableInternalList");
+
+                list.sortable(
+                    {
+                        update : function ()
+                        {
+                            queue.length = 0;
+                            var order = $("#sortableInternalList").sortable("toArray");
+                            for(var i = 0; i < order.length; i++)
+                            {
+                                var tag = tags[order[i]];
+                                if(tag == null)
+                                {
+                                    return;
+                                }
+                                queue.push(tag);
+                            }
+                        },
+                        items: "li:not(.listSeparator)"
+                    });
+                list.disableSelection();
+            }
+
+            // Azzeramento barra di scorrimento
+            $("#" + divId + "_sliderCursor").top = 3 + "px";
+
+            // Slider
+            $('#' + divId + "_content").css("margin-top", 0);
+        };
+
+
+        const COLUMN_WIDTH = 300;
+        var buttonBase = ImagesLib.getImage("button_base");
+
+        var _createCanvas = function(item, canAppends, haveBar)
+        {
+            var tmp = '<div class="queueItem">';
+            tmp += '<div class="queueItemImage">' + "Img" + '</div>';
+            if(canAppends)
+            {
+                tmp += '<div class="queueItemButton">' + "B" + '</div>';
+            }
+            tmp += '<div class="queueItemText"><div class="queueItemTitle">' + TextRepository.get(queueData.getAvailableTitle()) + '</div>';
+            if(haveBar)
+            {
+                tmp += '<div class="queueItemBar"><div class="queueItemBar2" style="width: 50px;"></div></div>';
+            }
+            tmp += '</div>';
+            tmp += '</div>';
+            return tmp;
+
+            /*
+            var imageId = item.getName();
+            if(item.getImageId != undefined)
+            {
+                imageId = item.getImageId();
+            }
+            */
+            alert(item.getName());
+
+            var ret = document.createElement('canvas');
+            ret.style.border = "1px";
+            ret.style.borderStyle = "solid";
+            ret.style.borderColor = "#77cf3c";
+            ret.style.margin = "2px";
+            ret.style.marginBottom = "0px";
+            ret.width = (COLUMN_WIDTH - COLUMN_SLIDER_WIDTH - 6); //senza "px"
+            ret.height = "30"; //senza "px"
+
+            var ctx = ret.getContext("2d");
+            var imageId = item.getName();
+            if(item.getImageId != undefined)
+            {
+                imageId = item.getImageId();
+            }
+            var imgWidth = -5;
+            var img = ImagesLib.getImage(imageId);
+            if(img != null)
+            {
+                imgWidth = 28 * img.width / img.height;
+                ctx.beginPath();
+                ctx.drawImage(img, 1, 1, imgWidth, 28);
+            }
+
+            if(canAppends)
+            {
+                // pulsante add
+                ctx.drawImage(buttonBase, ret.width - 28, ret.height + 2 - buttonBase.height, 26, 26);
+
+                ret.addEventListener("mousedown", function(e)
+                {
+                    if(e.pageX >= ret.width - 28)
+                    {
+                        // add
+                        queueData.appends(tagsNew["SortedItem_" + item.getName()]);
+                        _inizializeQueue();
+                    }
+                    else
+                    {
+                        currentItem = item;
+                    }
+                    _redraw();
+                }, false);
+            }
+            else
+            {
+                if(haveBar)
+                {
+                    var maxBar = ret.width - 2 - imgWidth - 5;
+                    ctx.fillStyle = Colors.Dark;
+                    ctx.fillRect(imgWidth + 5, 23, maxBar, 5);
+                    ctx.fillStyle = Colors.Standard;
+                    ctx.fillRect(imgWidth + 5, 23, maxBar - Math.floor(maxBar * item.getRemainTime() / item.getTime()), 5);
+                }
+
+                ret.addEventListener("mousedown", function()
+                {
+                    currentItem = item;
+                    _redraw();
+                }, false);
+            }
+
+            ctx.fillStyle = Colors.Standard;
+            ctx.font = 16 + "px Arial";
+            var text = TextRepository.get(item.getName());
+            ctx.fillText(text, imgWidth + 5, 18);
+            ctx.closePath();
+            ctx.fill();
+
+            return ret;
+        };
+
+        var _redraw = function()
+        {
+            //TODO
+        };
+
+        //------------------------------------------
+
+        this.setAbsolutePosition = function(point)
+        {
+            _hide();
+        };
+
+        this.show = _show;
+        this.hide = _hide;
+        this.redraw = _redraw;
+
+        _initialize();
+    }
+
+
+
+
+
+
+
+	function QueueViewOld(divId, canvasId, size)
 	{
 		const COLUMN_WIDTH = 300;
 		const COLUMN_SLIDER_WIDTH = 20;
@@ -20,12 +380,9 @@
 		
 		var _initialize = function()
 		{
-            divViewBase.width = size.x + "px"; //senza "px"
-            divViewBase.height = size.y + "px"; //senza "px"
-
 			canvasView.width = size.x; //senza "px"
 			canvasView.height = size.y; //senza "px"
-			
+
 			divView.style.width = (COLUMN_WIDTH - COLUMN_SLIDER_WIDTH) + "px";
 			divView.style.height = size.y + "px";
 		
@@ -37,9 +394,9 @@
 			
 			divViewSliderCursor.style.width = COLUMN_SLIDER_WIDTH - 8 + "px";
 			divViewSliderCursor.style.height = COLUMN_SLIDER_WIDTH - 8 + "px";
-			
+
 			_hide();
-			
+
 			// Slider queue
 			var scrollPane = $('#' + divId);
 			var scrollContent = $('#' + divId + "_content");

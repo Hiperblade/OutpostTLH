@@ -57,46 +57,45 @@
 		<div id="loadingScreenBar" class="loadingScreenBarProgress"></div>
 	</div>
 	<div id="mainScreen" class="hide">
-		<canvas id="tileArea" class="base">Your browser does not support the HTML5 canvas tag.</canvas>
-		<canvas id="mapArea" class="base"></canvas>
-		<canvas id="buildingArea" class="base buildingArea"></canvas>
+		<canvas id="tileArea">Your browser does not support the HTML5 canvas tag.</canvas>
+		<canvas id="mapArea"></canvas>
+		<canvas id="buildingArea" class="buildingArea"></canvas>
 
-		<div id="queueDiv_wrapper">
-            <canvas id="queueCanvas" class="base"></canvas>
+		<div id="queueDiv_wrapper" class="startAt">
+            <div id="queueDivBackground" class="background"></div>
             <div id="queueDivContainer">
-                <div id="queueDiv_slider" class="base slider">
-                    <div id="queueDiv_sliderCursor" class="base"></div>
+                <div id="queueDiv_slider" class="slider">
+                    <div id="queueDiv_sliderCursor" class="sliderCursor"></div>
                 </div>
-			    <div id="queueDiv" class="base slider_container allHeight">
+
+			    <div id="queueDiv" class="slider_container">
 				    <div id="queueDiv_content" class="scroll-content"></div>
 			    </div>
             </div>
-            <div id="queueDivAreaRight" class="base">
-                <div id="queueDivAreaTitle" class="base">TITOLO</div>
+            <div id="queueDivAreaRight">
+                <div id="queueDivAreaTitle">TITOLO</div>
                 <div id="queueDivAreaContainer">
-                    <div id="queueDivArea_slider" class="base slider">
-                        <div id="queueDivArea_sliderCursor" class="base"></div>
+                    <div id="queueDivArea_slider" class="slider">
+                        <div id="queueDivArea_sliderCursor" class="sliderCursor"></div>
                     </div>
 
-                    <div id="queueDivArea" class="base slider_container allHeight">
-                        <div id="queueDivArea_content" class="scroll-content">
-<!--canvas id="queueCanvas" class="base"></canvas-->
-                        </div>
+                    <div id="queueDivArea" class="slider_container">
+                        <div id="queueDivArea_content" class="scroll-content"></div>
                     </div>
                 </div>
-                <div id="queueDivAreaToolsBar" class="base">PULSANTI</div>
+                <div id="queueDivAreaToolsBar" class="">PULSANTI</div>
             </div>
 		</div>
 
 
         <!--div id="queueDiv_wrapper">
-            <canvas id="queueCanvas" class="base"></canvas>
+            <canvas id="queueCanvas" style="position: absolute; border: 1px solid #77cf3c;"></canvas>
 
-            <div id="queueDiv" class="base slider_container">
+            <div id="queueDiv" class="slider_container" style="position: absolute; border: 1px solid #77cf3c;">
                 <div id="queueDiv_content" class="scroll-content"></div>
             </div>
-            <div id="queueDiv_sliderCursor" class="base"></div>
-            <div id="queueDiv_slider" class="base slider"></div>
+            <div id="queueDiv_sliderCursor" style="position: absolute; border: 1px solid #77cf3c;"></div>
+            <div id="queueDiv_slider" class="slider" style="position: absolute; border: 1px solid #77cf3c;"></div>
         </div-->
 	</div>
 
