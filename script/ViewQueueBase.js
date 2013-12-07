@@ -1,4 +1,13 @@
-    function QueueView(divId, canvasId, size)
+    var Queue;
+
+    function InitializeQueueView(divId, size)
+    {
+        Queue = new QueueViewConstructor(divId, size);
+        //Queue = new QueueViewOld(divId, "queueCanvas", size);
+        return Queue;
+    }
+
+    function QueueViewConstructor(divId, size)
     {
         const COLUMN_SLIDER_WIDTH = 20;
 
@@ -27,21 +36,22 @@
             var scrollPane = $('#' + divId);
             var scrollContent = $('#' + divId + "_content");
             var scrollCursor = $("#" + divId + "_sliderCursor");
-            $('#' + divId + "_slider").slider({
+            var scrollSlider = $('#' + divId + "_slider");
+            scrollSlider.slider({
                 orientation: "vertical",
                 value: 100,
                 slide: function (event, ui) {
-                    var topMargin = 3;
-                    var cursorPosition = Math.floor((100 - ui.value) * scrollPane.height() / 100);
+                    var topMargin = 0;
+                    var cursorPosition = Math.floor((100 - ui.value) * scrollSlider.height() / 100);
                     if(cursorPosition < topMargin)
                     {
                         cursorPosition = topMargin;
                     }
-                    else if(cursorPosition > scrollPane.height() - (COLUMN_SLIDER_WIDTH - 13) - 3)
+                    else if(cursorPosition > scrollSlider.height() - COLUMN_SLIDER_WIDTH - 3)
                     {
-                        cursorPosition = scrollPane.height() - (COLUMN_SLIDER_WIDTH - 13) - 3;
+                        cursorPosition = scrollSlider.height() - COLUMN_SLIDER_WIDTH - 3;
                     }
-                    scrollCursor.top = cursorPosition + "px";
+                    scrollCursor.css('top', cursorPosition);
 
                     if (scrollContent.height() > scrollPane.height())
                     {
@@ -58,21 +68,22 @@
             var scrollPaneArea = $('#' + divId + "Area");
             var scrollContentArea = $('#' + divId + "Area_content");
             var scrollCursorArea = $("#" + divId + "Area_sliderCursor");
-            $('#' + divId + "Area_slider").slider({
+            var scrollSliderArea = $('#' + divId + "Area_slider");
+            scrollSliderArea.slider({
                 orientation: "vertical",
                 value: 100,
                 slide: function (event, ui) {
-                    var topMargin = 3;
-                    var cursorPosition = Math.floor((100 - ui.value) * scrollPaneArea.height() / 100);
+                    var topMargin = 0;
+                    var cursorPosition = Math.floor((100 - ui.value) * scrollSliderArea.height() / 100);
                     if(cursorPosition < topMargin)
                     {
                         cursorPosition = topMargin;
                     }
-                    else if(cursorPosition > scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3)
+                    else if(cursorPosition > scrollSliderArea.height() - COLUMN_SLIDER_WIDTH)
                     {
-                        cursorPosition = scrollPaneArea.height() - (COLUMN_SLIDER_WIDTH - 13) - 3;
+                        cursorPosition = scrollSliderArea.height() - COLUMN_SLIDER_WIDTH;
                     }
-                    scrollCursorArea.top = cursorPosition + "px";
+                    scrollCursorArea.css('top', cursorPosition);
 
                     if (scrollContentArea.height() > scrollPaneArea.height())
                     {
@@ -86,10 +97,22 @@
             });
         };
 
-        var _setCurrent = function(current)
+        var _internalSetCurrent = function(current)
         {
             currentItem = current;
-            //TODO
+
+            $("#queueDivArea_content").html(queueData.getInfo(currentItem));
+        };
+
+        var _setCurrent = function(itemName)
+        {
+            _internalSetCurrent(tags["SortedItem_" + itemName]);
+        };
+
+        var _addItem = function(itemName)
+        {
+            queueData.appends(tags["SortedItem_" + itemName]);
+            _inizializeQueue();
         };
 
         var _show = function(queueDataNew)
@@ -99,11 +122,11 @@
 
             if(queueData.getQueue().length > 0)
             {
-                _setCurrent(queueData.getQueue()[0]);
+                _internalSetCurrent(queueData.getQueue()[0]);
             }
             else
             {
-                _setCurrent(null);
+                _internalSetCurrent(null);
             }
             divViewBase.show();
         };
@@ -115,87 +138,53 @@
 
         var _inizializeQueue = function()
         {
-            divViewContent.empty();
+            //Titolo
+            $("#queueDivAreaTitle").html(TextRepository.get(queueData.getTitle()));
 
-            var divUp = document.createElement('div');
-            var divDown = document.createElement('div');
-
-            var li;
-            var ul = document.createElement('ul');
-            ul.id = "sortableInternalList";
-            ul.style.listStyleType = "none";
-            ul.style.margin = "0px";
-            ul.style.padding = "0px";
-
-            tagLastId = 0;
             tags = {};
             tagsNew = {};
 
+            var text = "";
+            text += '<ul id="sortableInternalList" class="queueList">';
             // Separatore
-            li = document.createElement('li');
-            li.style.margin = "0px";
-            li.style.padding = "0px";
-            li.style.lineHeight = "0px";
-            li.className = "listSeparator";
-            li.innerHTML = '<div class="queueSeparator">' + TextRepository.get(queueData.getQueueTitle()) + '</div>';
-            li.id = "SortedItemSeparator";
-            ul.appendChild(li);
+            text += '<li id="SortedItemSeparator" class="queueListSeparator"><div class="queueSeparator">' + TextRepository.get(queueData.getQueueTitle()) + '</div></li>';
 
             var haveBar = queueData.haveBar();
             var queue = queueData.getQueue();
+            tagLastId = 0;
             for(var i = 0; i < queue.length; i++)
             {
-                li = document.createElement('li');
-                li.style.margin = "0px";
-                li.style.padding = "0px";
-                li.style.lineHeight = "0px";
-                li.innerHTML = _createCanvas(queue[i], false, haveBar);
-                //li.appendChild(_createCanvas(queue[i], false, haveBar));
-                li.id = "SortedItem_" + tagLastId++;
-                ul.appendChild(li);
-
-                tags[li.id] = queue[i];
+                text += '<li id="SortedItem_' + tagLastId + '" class="queueListItem">' + _createCanvas(queue[i], false, haveBar, tagLastId) + '</li>';
+                tags["SortedItem_" + tagLastId] = queue[i];
+                tagLastId++;
             }
-            divUp.appendChild(ul);
+            text += '</ul>';
+            var divUp = '<div>' + text + '</div>';
 
             //--- new
-            ul = document.createElement('ul');
-            ul.id = "sortableInternalList";
-            ul.style.listStyleType = "none";
-            ul.style.margin = "0px";
-            ul.style.padding = "0px";
+            text = "";
+            text += '<ul class="queueList">';
 
             var newItems = queueData.getAvailable();
             if(newItems.length > 0)
             {
                 // Separatore
-                li = document.createElement('li');
-                li.style.margin = "0px";
-                li.style.padding = "0px";
-                li.style.lineHeight = "0px";
-                li.className = "listSeparator";
-                li.innerHTML = '<div class="queueSeparator">' + TextRepository.get(queueData.getAvailableTitle()) + '</div>';
-                li.id = "SortedItemSeparator";
-                ul.appendChild(li);
+                text += '<li id="SortedItemSeparator" class="queueListSeparator"><div class="queueSeparator">' + TextRepository.get(queueData.getAvailableTitle()) + '</div></li>';
             }
+
             var canAppends = queueData.canAppends();
             for(var ii = 0; ii < newItems.length; ii++)
             {
                 var newItem = newItems[ii];
-                li = document.createElement('li');
-                li.style.margin = "0px";
-                li.style.padding = "0px";
-                li.style.lineHeight = "0px";
-                li.innerHTML = _createCanvas(newItem, canAppends, false);
-                //li.appendChild(_createCanvas(newItem, canAppends, false));
-                li.id = "SortedItem_" + newItem.getName();
-                ul.appendChild(li);
 
-                tags[li.id] = newItem;
-                tagsNew[li.id] = newItems[ii];
+                text += '<li id="SortedItem_' + newItem.getName() + '" class="queueListItem">' + _createCanvas(newItem, canAppends, false, null) + '</li>';
+                tags["SortedItem_" + newItem.getName()] = newItem;
+                tagsNew["SortedItem_" + newItem.getName()] = newItem;
             }
-            divDown.appendChild(ul);
+            text += '</ul>';
+            var divDown = '<div>' + text + '</div>';
 
+            divViewContent.empty();
             divViewContent.append(divUp);
             divViewContent.append(divDown);
 
@@ -219,7 +208,7 @@
                                 queue.push(tag);
                             }
                         },
-                        items: "li:not(.listSeparator)"
+                        items: "li:not(.queueListSeparator)"
                     });
                 list.disableSelection();
             }
@@ -231,111 +220,31 @@
             $('#' + divId + "_content").css("margin-top", 0);
         };
 
-
-        const COLUMN_WIDTH = 300;
-        var buttonBase = ImagesLib.getImage("button_base");
-
-        var _createCanvas = function(item, canAppends, haveBar)
+        var _createCanvas = function(item, canAppends, haveBar, currentId)
         {
-            var tmp = '<div class="queueItem">';
-            tmp += '<div class="queueItemImage">' + "Img" + '</div>';
+            if(currentId == null)
+            {
+                currentId = item.getName();
+            }
+
+            var tmp = '<div class="queueItem" onclick="Queue.setCurrent(\'' + currentId + '\');">';
+            var imageId = item.getName();
+            if(item.getImageId != undefined)
+            {
+                imageId = item.getImageId();
+            }
+            tmp += '<img class="queueItemImage" src="' + ImagesLib.getFileName(imageId) + '">';
             if(canAppends)
             {
-                tmp += '<div class="queueItemButton">' + "B" + '</div>';
+                tmp += '<div class="queueItemButton" onclick="Queue.addItem(\'' + item.getName() + '\');"></div>';
             }
-            tmp += '<div class="queueItemText"><div class="queueItemTitle">' + TextRepository.get(queueData.getAvailableTitle()) + '</div>';
+            tmp += '<div class="queueItemText"><div class="queueItemTitle">' + TextRepository.get(item.getName()) + '</div>';
             if(haveBar)
             {
-                tmp += '<div class="queueItemBar"><div class="queueItemBar2" style="width: 50px;"></div></div>';
+                tmp += '<div class="queueItemBar"><div class="queueItemBar2" style="width: ' + (100 - Math.floor(100 * item.getRemainTime() / item.getTime()))+ '%;"></div></div>';
             }
-            tmp += '</div>';
-            tmp += '</div>';
+            tmp += '</div></div>';
             return tmp;
-
-            /*
-            var imageId = item.getName();
-            if(item.getImageId != undefined)
-            {
-                imageId = item.getImageId();
-            }
-            */
-            alert(item.getName());
-
-            var ret = document.createElement('canvas');
-            ret.style.border = "1px";
-            ret.style.borderStyle = "solid";
-            ret.style.borderColor = "#77cf3c";
-            ret.style.margin = "2px";
-            ret.style.marginBottom = "0px";
-            ret.width = (COLUMN_WIDTH - COLUMN_SLIDER_WIDTH - 6); //senza "px"
-            ret.height = "30"; //senza "px"
-
-            var ctx = ret.getContext("2d");
-            var imageId = item.getName();
-            if(item.getImageId != undefined)
-            {
-                imageId = item.getImageId();
-            }
-            var imgWidth = -5;
-            var img = ImagesLib.getImage(imageId);
-            if(img != null)
-            {
-                imgWidth = 28 * img.width / img.height;
-                ctx.beginPath();
-                ctx.drawImage(img, 1, 1, imgWidth, 28);
-            }
-
-            if(canAppends)
-            {
-                // pulsante add
-                ctx.drawImage(buttonBase, ret.width - 28, ret.height + 2 - buttonBase.height, 26, 26);
-
-                ret.addEventListener("mousedown", function(e)
-                {
-                    if(e.pageX >= ret.width - 28)
-                    {
-                        // add
-                        queueData.appends(tagsNew["SortedItem_" + item.getName()]);
-                        _inizializeQueue();
-                    }
-                    else
-                    {
-                        currentItem = item;
-                    }
-                    _redraw();
-                }, false);
-            }
-            else
-            {
-                if(haveBar)
-                {
-                    var maxBar = ret.width - 2 - imgWidth - 5;
-                    ctx.fillStyle = Colors.Dark;
-                    ctx.fillRect(imgWidth + 5, 23, maxBar, 5);
-                    ctx.fillStyle = Colors.Standard;
-                    ctx.fillRect(imgWidth + 5, 23, maxBar - Math.floor(maxBar * item.getRemainTime() / item.getTime()), 5);
-                }
-
-                ret.addEventListener("mousedown", function()
-                {
-                    currentItem = item;
-                    _redraw();
-                }, false);
-            }
-
-            ctx.fillStyle = Colors.Standard;
-            ctx.font = 16 + "px Arial";
-            var text = TextRepository.get(item.getName());
-            ctx.fillText(text, imgWidth + 5, 18);
-            ctx.closePath();
-            ctx.fill();
-
-            return ret;
-        };
-
-        var _redraw = function()
-        {
-            //TODO
         };
 
         //------------------------------------------
@@ -347,7 +256,9 @@
 
         this.show = _show;
         this.hide = _hide;
-        this.redraw = _redraw;
+
+        this.setCurrent = _setCurrent;
+        this.addItem = _addItem;
 
         _initialize();
     }
@@ -360,6 +271,14 @@
 
 	function QueueViewOld(divId, canvasId, size)
 	{
+        $("#queueDiv_wrapper").html(
+            '<canvas id="queueCanvas" style="position: absolute; border: 1px solid #77cf3c;"></canvas>' +
+            '<div id="queueDiv" class="slider_container" style="position: absolute; border: 1px solid #77cf3c;">' +
+                '<div id="queueDiv_content" class="scroll-content"></div>' +
+            '</div>' +
+            '<div id="queueDiv_sliderCursor" style="position: absolute; border: 1px solid #77cf3c;"></div>' +
+            '<div id="queueDiv_slider" class="slider" style="position: absolute; border: 1px solid #77cf3c;"></div>');
+
 		const COLUMN_WIDTH = 300;
 		const COLUMN_SLIDER_WIDTH = 20;
 		var divViewBase = document.getElementById(divId + "_wrapper");
@@ -632,9 +551,6 @@
 			else
 			{
 				divViewBase.style.display = 'block';
-//TODO
-                //$("#queueDivAreaTitle").html(queueData.getTitle());
-                //$("#queueDivAreaToolsBar")
 
 				ctx.globalAlpha = 0.8;
 				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -775,7 +691,6 @@
 		
 		this.getQueue = function() { return queue; };
 		this.getAvailable = function() { return available; };
-		this.printInfo = undefined;
 		this.appends = undefined;
 		this.canAppends = function() { return (this.appends != null); };
 		this.haveBar = function() { return false; };
@@ -785,12 +700,70 @@
 		this.getQueueTitle = function() { return "Working"; };
 		this.getAvailableTitle = function() { return "Available"; };
 
+        this.getInfo = undefined;
+
 		//-----------------------------------------
 	}
 	
 	function BaseQueueData(colonyState, queue, available)
 	{
 		QueueData.call(this, queue, available);
+
+        this.getInfo = function(item)
+        {
+            var text = "";
+            if(item != null)
+            {
+                var cost;
+                var time;
+                var remainTime;
+                if(item.getBase != undefined)
+                {
+                    time = item.getTime();
+                    remainTime = item.getRemainTime();
+                    cost = item.getBase().getCost();
+                }
+                else
+                {
+                    time = item.getTime();
+                    remainTime = item.getTime();
+                    cost = item.getCost();
+                }
+
+                text += '<div class="queueInfo">';
+                text += '<div class="queueInfoTitle">';
+                text += '<img class="queueInfoTitleImage" src="' + ImagesLib.getFileName(item.getName()) + '">';
+                text += '<div class="queueInfoTitleData">';
+                text += '<div class="queueInfoTitleName">' + TextRepository.get(item.getName()) + '</div>';
+                text += '<div class="queueInfoTitleDescription">' + TextRepository.get(item.getName() + "Description") + '</div>';
+                text += '<div class="queueInfoTitleBar"><div class="queueInfoTitleBar2" style="width: ' + (100 - Math.floor(100 * remainTime / time)) + '%"></div></div>';
+                text += '</div>';
+                text += '</div>';
+
+                text += '<div class="queueInfoDetails">';
+                text += '<table>';
+                text += '<th></th>';
+                text += '<tr><td class="tableMainColumn">' + TextRepository.get("Progress") + ':</td><td>' + (time - remainTime) + ' / ' + time + '</td></tr>';
+
+                for (var resource in cost)
+                {
+                    if(cost.hasOwnProperty(resource))
+                    {
+                        text += '<tr><td>' + TextRepository.get(resource) + '</td><td>' + cost[resource] + '</td>';
+                        if(cost[resource] > colonyState.getProduced(resource))
+                        {
+                            text += '<td class="colorError">' + TextRepository.get("unavailable") + '</td>';
+                        }
+                        text += '</tr>';
+                    }
+                }
+
+                text += '</table>';
+                text += '</div>';
+                text += '</div>';
+            }
+            return text;
+        };
 
         this.printInfo = function(ctx, position, size, item)
 		{

@@ -11,6 +11,16 @@ body
     font-family: "Helvetica", "Arial", sans-serif;
 }
 
+.colorError
+{
+    color: rgb(200,100,100);
+}
+
+.tableMainColumn
+{
+    width: 240px;
+}
+
 .startAt
 {
     position: absolute;
@@ -116,9 +126,13 @@ body
     margin: 2px 2px 0 2px;
 }
 
-.queueSeparator
+.queueSeparator, .queueItemButton
 {
     background-color: #2f6A08;
+}
+
+.queueSeparator
+{
     text-align: center;
     line-height: 20px;
     height: 20px;
@@ -126,46 +140,119 @@ body
 
 .queueItem
 {
-    height: 35px;
+    height: 30px;
 }
 
 .queueItemImage
 {
     height: 100%;
     float: left;
-    width: 30px;
 }
 
 .queueItemButton
 {
-    height: 100%;
+    border: 1px solid;
     float: right;
-    width: 30px;
+    margin: 2px;
+    height: 24px;
+    width: 24px;
 }
 
 .queueItemText
 {
-    height: 100%;
+    overflow: hidden;
+    height: 26px;
+    padding: 2px;
 }
 
 .queueItemTitle
 {
     width: 100%;
-    height: 25px;
 }
 
 .queueItemBar
 {
     width: 100%;
+    background-color: #2f6A08;
     height: 5px;
 }
 
 .queueItemBar2
 {
+    background-color: #478f16;
     height: 5px;
-    position: absolute;
-    top: 0;
-    left: 0;
+}
+
+.queueList, .queueListSeparator
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.queueListItem
+{
+}
+
+.queueListSeparator
+{
+    line-height: 0;
+}
+
+/* queue info */
+
+.queueInfo
+{
+    padding: 5px;
+}
+
+.queueInfoTitle
+{
+    width: 100%;
+    height: 125px;
+}
+
+.queueInfoTitleImage
+{
+    float: left;
+    border:1px solid;
+    height: 120px;
+}
+
+.queueInfoTitleData
+{
+    overflow: hidden;
+    padding-left: 5px;
+}
+
+.queueInfoTitleName
+{
+    font-size: 1.2em;
+    height: 25px;
+}
+
+.queueInfoTitleDescription
+{
+    min-height: 85px;
+}
+
+.queueInfoTitleBar
+{
+    width: 100%;
+    background-color: #2f6A08;
+    height: 10px;
+}
+
+.queueInfoTitleBar2
+{
+    background-color: #478f16;
+    height: 10px;
+}
+
+.queueInfoDetails
+{
+    height: 100%;
+    width: 100%;
 }
 
 /* slider */
@@ -180,7 +267,7 @@ body
 .sliderCursor
 {
     border:1px solid;
-    position: absolute;
+    position: relative;/*absolute;*/
 
     width: 12px;
     height: 12px;

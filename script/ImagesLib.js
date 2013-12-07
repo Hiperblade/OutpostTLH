@@ -18,17 +18,19 @@
 		{
 			loading++;
 			loadingMax++;
-			var ret = { code: code, image: new Image() };
+			var ret = { code: code, image: new Image(), fileName: null };
 			ret.image.onload = onLoadCallback;
 			ret.image.crossOrigin='anonymous';
 			if(fileName == undefined)
 			{
-				ret.image.src = "images/" + code + ".gif";
+                fileName = "images/" + code + ".gif";
 			}
 			else
 			{
-				ret.image.src = "images/" + fileName;
+                fileName = "images/" + fileName;
 			}
+            ret.fileName = fileName;
+            ret.image.src = fileName;
 			images[code] = ret;
 			return ret;
 		};
@@ -70,7 +72,7 @@
 			}
 			return ret.image;
 		};
-		
+
 		var _getPattern = function(id, ctx)
 		{
 			if(id == null)
@@ -92,9 +94,21 @@
 			}
 			return ret.pattern;
 		};
-		
+
+        var _getFileName = function(id)
+        {
+            var ret = images[id];
+            if(ret == undefined)
+            {
+                Log.error("Immagine non trovata: \"" + id + "\"");
+                return null;
+            }
+            return ret.fileName;
+        };
+
 		this.getImage = _getImage;
 		this.getPattern = _getPattern;
+        this.getFileName = _getFileName;
 		this.initialize = _initialize;
 		this.getLoadingPercentage = _getLoadingPercentage;
 	}

@@ -120,7 +120,7 @@
 			mapView = new MapView(terrainMap, miniMapCanvas, site.getImageName(), areaSize, _onChangePosition);
 			var canvasSize = view.getCanvasSize();
 			selectorView = new BuildingSelectorView(selectorCanvas, canvasSize.x, state, _onSelected);
-			queueView = new QueueView("queueDiv", "queueCanvas", canvasSize);
+			queueView = InitializeQueueView("queueDiv", canvasSize);
 					
 			// pulsanti spostamento
 			view.addButtonGrid(10, { x: Math.floor(areaSize.x / 2), y: -1 }, "button_west", function (){ _goWest(); });
