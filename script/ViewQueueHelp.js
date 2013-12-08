@@ -29,171 +29,144 @@
 		}
 	
 		QueueData.call(this, queue, available);
-		
-		this.printInfo = function(ctx, position, size, item)
-		{
-			if(item != null)
-			{
-				ctx.beginPath();
 
-				var topInfo = position.y + 10;
-				var leftInfo = position.x + 10;
+        this.getInfo = function(item)
+        {
+            var text = "";
+            if(item != null)
+            {
+                var imgSize = GetImageSize(ImagesLib.getImage(item.getImageId()));
 
-                var img;
-                var imgSize;
-				if(item.getText != undefined)
-				{
-					img = ImagesLib.getImage(item.getImageId());
-                    imgSize = GetImageSize(img);
-					ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
-					ctx.lineWidth = "1px";
-					ctx.strokeStyle = Colors.Standard;
-					ctx.strokeRect(leftInfo, topInfo, imgSize.width, imgSize.height);
-				
-					ctx.font = 20 + "px Arial";
-					ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 28);
-				
-					ctx.font = 16 + "px Arial";
+                text += '<div class="queueInfo">';
+                if(item.getText != undefined)
+                {
+                    text += '<div class="queueInfoTitle" style="height: ' + (imgSize.height + 5) + 'px;">';
+                    text += '<img class="queueInfoTitleImage" style="height: ' + imgSize.height + 'px;" src="' + ImagesLib.getFileName(item.getImageId()) + '">';
+                    text += '<div class="queueInfoTitleData queueInfoTitleName">' + TextRepository.get(item.getName()) + '</div>';
+                    text += '</div>';
 
-					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo, topInfo + imgSize.height + 10, size.x - 20, size.y - (imgSize.height * 2) - 40, 'top', 'left', 16);
-				}
-				else
-				{
-					var baseTile = ImagesLib.getImage("baseTile");
-					img = ImagesLib.getImage(item.getImageId());
-                    imgSize = GetImageSize(img);
-					ctx.drawImage(baseTile, leftInfo, topInfo - baseTile.height + imgSize.height, baseTile.width, baseTile.height);
-					ctx.drawImage(img, leftInfo, topInfo, imgSize.width, imgSize.height);
-					
-					ctx.font = 20 + "px Arial";
-					ctx.fillText(TextRepository.get(item.getName()), leftInfo + imgSize.width + 10, topInfo + 20);
-						
-					ctx.font = 16 + "px Arial";
+                    text += '<div class="queueInfoDetails">' + TextRepository.get(item.getName() + "Description") + '</div>';
+                }
+                else
+                {
+                    var baseImgSize = GetImageSize(ImagesLib.getImage("baseTile"));
 
-					ctx.mlFillText(TextRepository.get(item.getName() + "Description"), leftInfo + imgSize.width + 10, topInfo + 24, size.x - imgSize.width - 30, imgSize.height - 24 - 2, 'top', 'left', 16);
-					
-					//-------
-					
-					var proto = PrototypeLib.get(item.getName());
-					
-					var grid = new CanvasGrid(ctx, {x: leftInfo, y: topInfo + imgSize.height + 10}, 16, [10, 10, 140, 50, 30, 20, 30]);
-					var row = 0;
-					grid.setText(row, 0, TextRepository.get("TerrainLayer") + ":");
-					grid.setText(row, 4, TextRepository.get(proto.getTerrainLayer()));
+                    text += '<div class="queueInfoTitle" style="height: ' + (imgSize.height + 5) + 'px;">';
+                    text += '<div style="float: left; height: ' + imgSize.height + 'px; background: url(\'' + ImagesLib.getFileName("baseTile") + '\') no-repeat; background-position: 0 ' + (imgSize.height - baseImgSize.height) + 'px;">';
+                    text += '<img style="height: ' + imgSize.height + 'px; border-size= 0;" src="' + ImagesLib.getFileName(item.getImageId()) + '">';
+                    text += '</div>';
+                    text += '<div class="queueInfoTitleData">';
+                    text += '<div class="queueInfoTitleName">' + TextRepository.get(item.getName()) + '</div>';
+                    text += '<div class="queueInfoTitleDescription">' + TextRepository.get(item.getName() + "Description") + '</div>';
+                    text += '</div>';
+                    text += '</div>';
 
+                    text += '<div class="queueInfoDetails">';
+
+                    var proto = PrototypeLib.get(item.getName());
+
+                    text += '<table>';
+                    text += '<tr><td class="tableMainColumn">' + TextRepository.get("TerrainLayer") + ':</td><td></td><td>' + TextRepository.get(proto.getTerrainLayer()) + '</td></tr>';
+
+                    var list;
                     var listItem;
-					if(proto.getBuildingTime() > 0 || Object.keys(proto.getBuildingCost()).length > 0)
-					{
-						row++;
-						grid.setText(row, 0, TextRepository.get("BuildingTitle"));
-						
-						row++;
-						grid.setText(row, 1, TextRepository.get("BuildingTime") + ":");
-						grid.setValue(row, 4, proto.getBuildingTime());
-					
-						var list = proto.getBuildingCost();
-						if(Object.keys(list).length > 0)
-						{
-							row++;
-							grid.setText(row, 1, TextRepository.get("BuildingCost") + ":");
-							for (listItem in list)
-							{
+                    if(proto.getBuildingTime() > 0 || Object.keys(proto.getBuildingCost()).length > 0)
+                    {
+                        //text += '<tr><td>' + TextRepository.get("BuildingTitle") + '</td></tr>';
+
+                        text += '<tr><td>' + TextRepository.get("BuildingTime") + ':</td><td class="tableDataRight">' + proto.getBuildingTime() + '</td><td>' + TextRepository.get("TimeUnit") + '</td></tr>';
+
+                        list = proto.getBuildingCost();
+                        if(Object.keys(list).length > 0)
+                        {
+                            text += '<tr><td>' + TextRepository.get("BuildingCost") + ':</td></tr>';
+                            for (listItem in list)
+                            {
                                 if(list.hasOwnProperty(listItem))
                                 {
-                                    row++;
-                                    grid.setText(row, 2, TextRepository.get(listItem));
-                                    grid.setValue(row, 4, list[listItem]);
+                                    text += '<tr><td class="tableIndentation">' + TextRepository.get(listItem) + '</td><td class="tableDataRight">' + list[listItem] + '</td>';
+                                    if(list[listItem] > colonyState.getProduced(listItem))
+                                    {
+                                        text += '<td class="colorError">' + TextRepository.get("unavailable") + '</td>';
+                                    }
+                                    text += '</tr>';
                                 }
-							}
-						}
-					}
-					
-					list = proto.getCapacity();
-					if(Object.keys(list).length > 0)
-					{
-						row++;
-						grid.setText(row, 0, TextRepository.get("BuildingCapacity"));
-						for (listItem in list)
-						{
+                            }
+                        }
+                    }
+
+                    if(proto.getRequiredResource() != null)
+                    {
+                        text += '<tr><td>' + TextRepository.get("Requirements") + ':</td><td>' + TextRepository.get(proto.getRequiredResource()) + '</td></tr>';
+                    }
+
+                    list = proto.getCapacity();
+                    if(Object.keys(list).length > 0)
+                    {
+                        text += '<tr><td>' + TextRepository.get("BuildingCapacity") + ':</td></tr>';
+                        for (listItem in list)
+                        {
                             if(list.hasOwnProperty(listItem))
                             {
-                                row++;
-                                grid.setText(row, 1, TextRepository.get(listItem));
-                                grid.setValue(row, 4, list[listItem]);
+                                text += '<tr><td class="tableIndentation">' + TextRepository.get(listItem) + '</td><td class="tableDataRight">' + list[listItem] + '</td></tr>';
                             }
-						}
-					}
-					
-					if((Object.keys(proto.getConsumption()).length +
-						Object.keys(proto.getProduction()).length +
-						Object.keys(proto.getProductionWaste()).length) > 0)
-					{
-						row++;
-						grid.setText(row, 0, TextRepository.get("ProductionTitle"));
-					
-						list = proto.getConsumption();
-						if(Object.keys(list).length > 0)
-						{
-							row++;
-							grid.setText(row, 1, TextRepository.get("BuildingConsumption") + ":");
-							for (listItem in list)
-							{
-                                if(list.hasOwnProperty(listItem))
-                                {
-								    row++;
-								    grid.setText(row, 2, TextRepository.get(listItem));
-								    grid.setValue(row, 4, list[listItem]);
-                                }
-							}
-						}
-						
-						list = proto.getProduction();
-						if(Object.keys(list).length > 0)
-						{
-							row++;
-							grid.setText(row, 1, TextRepository.get("BuildingProduction") + ":");
-							for (listItem in list)
-							{
-                                if(list.hasOwnProperty(listItem))
-                                {
-                                    row++;
-                                    grid.setText(row, 2, TextRepository.get(listItem));
-                                    grid.setValue(row, 4, list[listItem]);
-                                }
-							}
-						}
-						
-						list = proto.getProductionWaste();
-						if(Object.keys(list).length > 0)
-						{
-							row++;
-							grid.setText(row, 1, TextRepository.get("BuildingWaste") + ":");
-							for (listItem in list)
-							{
-                                if(list.hasOwnProperty(listItem))
-                                {
-                                    row++;
-                                    grid.setText(row, 2, TextRepository.get(listItem));
-                                    grid.setValue(row, 4, list[listItem]);
-                                }
-							}
-						}
-					}
-					
-					if(proto.getRequiredResource() != null)
-					{
-						row++;
-						grid.setText(row, 0, TextRepository.get("Requirements") + ":");
-						grid.setText(row, 4, TextRepository.get(proto.getRequiredResource()));
-					}
+                        }
+                    }
 
-					//-------
-				}
-			
-				ctx.closePath();
-				ctx.fill();
-			}
-		};
+                    if((Object.keys(proto.getConsumption()).length +
+                        Object.keys(proto.getProduction()).length +
+                        Object.keys(proto.getProductionWaste()).length) > 0)
+                    {
+                        //text += '<tr><td>' + TextRepository.get("ProductionTitle") + '</td></tr>';
+
+                        list = proto.getConsumption();
+                        if(Object.keys(list).length > 0)
+                        {
+                            text += '<tr><td>' + TextRepository.get("BuildingConsumption") + ':</td></tr>';
+                            for (listItem in list)
+                            {
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    text += '<tr><td class="tableIndentation">' + TextRepository.get(listItem) + '</td><td class="tableDataRight">' + list[listItem] + '</td></tr>';
+                                }
+                            }
+                        }
+
+                        list = proto.getProduction();
+                        if(Object.keys(list).length > 0)
+                        {
+                            text += '<tr><td>' + TextRepository.get("BuildingProduction") + ':</td></tr>';
+                            for (listItem in list)
+                            {
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    text += '<tr><td class="tableIndentation">' + TextRepository.get(listItem) + '</td><td class="tableDataRight">' + list[listItem] + '</td></tr>';
+                                }
+                            }
+                        }
+
+                        list = proto.getProductionWaste();
+                        if(Object.keys(list).length > 0)
+                        {
+                            text += '<tr><td>' + TextRepository.get("BuildingWaste") + ':</td></tr>';
+                            for (listItem in list)
+                            {
+                                if(list.hasOwnProperty(listItem))
+                                {
+                                    text += '<tr><td class="tableIndentation">' + TextRepository.get(listItem) + '</td><td class="tableDataRight">' + list[listItem] + '</td></tr>';
+                                }
+                            }
+                        }
+                    }
+
+                    text += '</table>';
+                    text += '</div>';
+                }
+
+                text += '</div>';
+            }
+            return text;
+        };
 
 		this.isSortable = function() { return false; };
 		this.getTitle = function() { return "HelpTitle"; };

@@ -8,7 +8,7 @@ body
     color: #77cf3c;
     border-color: #77cf3c;
 
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Arial", "Arial", sans-serif;
 }
 
 .colorError
@@ -19,6 +19,27 @@ body
 .tableMainColumn
 {
     width: 240px;
+}
+
+.tableDataColumn, .tableDataRight
+{
+    width: 80px;
+}
+
+.tableIndentation
+{
+    padding-left: 10px;
+}
+
+.tableSeparator
+{
+    height: 0;
+    border-bottom: 1px solid;
+}
+
+.tableDataRight
+{
+    text-align: right;
 }
 
 .startAt
@@ -42,8 +63,7 @@ body
 
 #queueDiv, #queueDivAreaRight
 {
-    height: 100%;
-    position:relative;
+    position: relative;
     overflow: hidden;
 }
 
@@ -65,26 +85,33 @@ body
 
 #queueDivAreaTitle
 {
-    height: 40px;
+    height: 30px;
     font-size: 1.4em;
 }
 
 #queueDivAreaToolsBar
 {
-    height: 40px;
+    height: 30px;
+    padding: 10px;
+}
+
+.buttonBack
+{
+    background: url("../images/interface/button_back.gif") no-repeat center;
+    /*background-size: 90%;*/
 }
 
 .background
 {
     background-color: black;
     opacity: 0.8;
-    border:1px solid;
+    border: 1px solid;
     position: absolute;
 }
 
 #tileArea, #mapArea
 {
-    border:1px solid;
+    border: 1px solid;
     position: absolute;
 }
 
@@ -92,7 +119,7 @@ body
 
 .loadingScreenBar, .loadingScreenBarProgress
 {
-    border:1px solid;
+    border: 1px solid;
     position: absolute;
 
     background-color: #1c4103;
@@ -215,7 +242,7 @@ body
 .queueInfoTitleImage
 {
     float: left;
-    border:1px solid;
+    border: 1px solid;
     height: 120px;
 }
 
@@ -266,8 +293,8 @@ body
 
 .sliderCursor
 {
-    border:1px solid;
-    position: relative;/*absolute;*/
+    border: 1px solid;
+    position: relative;
 
     width: 12px;
     height: 12px;
@@ -276,6 +303,7 @@ body
 
 .slider_container
 {
+    height: 100%;
     overflow: hidden;
 }
 

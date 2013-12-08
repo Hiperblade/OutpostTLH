@@ -14,7 +14,7 @@ function TextRepositoryConstructor()
 		
 		if(data[language][id] == undefined)
 		{
-			return "<" + id + ">";
+			return "[" + id + "]";
 		}
 		return data[language][id];
 	};
