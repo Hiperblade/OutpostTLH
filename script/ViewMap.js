@@ -120,13 +120,7 @@
 		{
 			return { x: 0 + point.y, y: 150 - point.x };
 		};
-		
-		var _setAbsolutePosition = function(point)
-		{
-			canvasMap.style.top = point.y + "px";
-			canvasMap.style.left = point.x + "px";
-		};
-		
+
 		_initialize();
 		
 		//-----------------------------------------
@@ -136,7 +130,6 @@
 		this.setPosition = _setPosition;
 		this.redraw = _redraw;
 		this.fromScreenPosition = _fromScreenPosition;
-		this.setAbsolutePosition = _setAbsolutePosition;
 		
 		//-----------------------------------------
 	}

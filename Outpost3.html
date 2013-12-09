@@ -19,6 +19,7 @@
 	<script src="script/ViewIsometric.js" type="text/javascript"></script>
 	<script src="script/ViewMap.js" type="text/javascript"></script>
 	<script src="script/ViewBuildingSelector.js" type="text/javascript"></script>
+    <script src="script/ViewBuildingInfo.js" type="text/javascript"></script>
 	<script src="script/ViewQueueBase.js" type="text/javascript"></script>
 	<script src="script/ViewQueueHelp.js" type="text/javascript"></script>
 	<script src="script/ViewQueueReport.js" type="text/javascript"></script>
@@ -57,9 +58,10 @@
 		<div id="loadingScreenBar" class="loadingScreenBarProgress"></div>
 	</div>
 	<div id="mainScreen" class="hide">
-		<canvas id="tileArea">Your browser does not support the HTML5 canvas tag.</canvas>
-		<canvas id="mapArea"></canvas>
-		<canvas id="buildingArea" class="buildingArea"></canvas>
+		<canvas id="tileArea" class="startAt">Your browser does not support the HTML5 canvas tag.</canvas>
+        <canvas id="buildingArea" class="buildingArea"></canvas>
+		<canvas id="mapArea" class="startAt"></canvas>
+        <div id="buildingInfo" class="startAt"></div>
 
 		<div id="queueDiv_wrapper" class="startAt">
             <div id="queueDivBackground" class="background"></div>
@@ -83,7 +85,7 @@
                         <div id="queueDivArea_content" class="scroll-content"></div>
                     </div>
                 </div>
-                <div id="queueDivAreaToolsBar" class=""><div class="queueItemButton buttonBack" onclick="Queue.hide();"></div></div>
+                <div id="queueDivAreaToolsBar" class=""><div class="toolBarButton buttonBack" onclick="Queue.hide();"></div></div>
             </div>
 		</div>
 	</div>

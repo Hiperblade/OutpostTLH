@@ -53,7 +53,7 @@
 
                     text += '<div class="queueInfoTitle" style="height: ' + (imgSize.height + 5) + 'px;">';
                     text += '<div style="float: left; height: ' + imgSize.height + 'px; background: url(\'' + ImagesLib.getFileName("baseTile") + '\') no-repeat; background-position: 0 ' + (imgSize.height - baseImgSize.height) + 'px;">';
-                    text += '<img style="height: ' + imgSize.height + 'px; border-size= 0;" src="' + ImagesLib.getFileName(item.getImageId()) + '">';
+                    text += '<img style="height: ' + imgSize.height + 'px; border-size: 0;" src="' + ImagesLib.getFileName(item.getImageId()) + '">';
                     text += '</div>';
                     text += '<div class="queueInfoTitleData">';
                     text += '<div class="queueInfoTitleName">' + TextRepository.get(item.getName()) + '</div>';

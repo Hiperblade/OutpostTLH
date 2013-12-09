@@ -10,6 +10,7 @@
 		var mapView;
 		var selectorView;
 		var queueView;
+        var buildingInfo;
 		var position = { x: 0, y: 0 };
 		var state = null;
 		
@@ -117,9 +118,16 @@
 			terrainMap = new TerrainMap(site.getTypology(), MAP_SIZE);
 			state = terrainMap.getState();
 			view = new IsometricView (terrainMap, mapCanvas, areaSize, TILE_DIMENSION);
+            var canvasSize = view.getCanvasSize();
+
+            var mainArea = $("#mainScreen");
+            mainArea.css("width", canvasSize.x);
+            mainArea.css("height", canvasSize.y);
+
 			mapView = new MapView(terrainMap, miniMapCanvas, site.getImageName(), areaSize, _onChangePosition);
-			var canvasSize = view.getCanvasSize();
 			selectorView = new BuildingSelectorView(selectorCanvas, canvasSize.x, state, _onSelected);
+
+            buildingInfo = InitializeBuildingInfoView("buildingInfo", _onChangePosition);
 			queueView = InitializeQueueView("queueDiv", canvasSize);
 					
 			// pulsanti spostamento
@@ -330,9 +338,11 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 					}
 					else
 					{
-						if(target != null && target.isPipe())
+						if(target != null)
 						{
-							if(!target.underConstruction() && !target.isDestroyed())
+                            buildingInfo.show(target);
+
+							if(target.isPipe() && !target.underConstruction() && !target.isDestroyed())
 							{
 								if(target.haveUp())
 								{
@@ -344,6 +354,10 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 								}
 							}
 						}
+                        else
+                        {
+                            buildingInfo.hide();
+                        }
 					}
 				});
 			
@@ -352,7 +366,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				});
 		
 			terrainMap.simulation();		
-			_setAbsolutePosition({x: 5, y: 5});
+            _setAbsolutePosition({x: 0, y: 0});
 			_setLayer(TerrainLayer.Surface);
 		};
 		
@@ -408,6 +422,8 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
 		var _setLayer = function(layer)
 		{
+            buildingInfo.hide();
+
 			terrainMap.setLayer(layer);
 
             view.setButton(26, true); // elevator
@@ -498,15 +514,16 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			terrainMap.computation();
 			terrainMap.simulation();
 			_redraw();
+            buildingInfo.redraw();
 		};
 		
 		var _setAbsolutePosition = function(point)
 		{
+//TODO
 			var canvasSize = view.getCanvasSize();
 			view.setAbsolutePosition(point);
-			mapView.setAbsolutePosition({x: canvasSize.x - MAP_SIZE.y + point.x, y: point.y});
+
 			selectorView.setAbsolutePosition({x: point.x, y: point.y + canvasSize.y});
-			queueView.setAbsolutePosition(point);
 		};
 		
 		var _setCurrentTile = function(item)

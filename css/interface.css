@@ -1,6 +1,5 @@
 body
 {
-    /*margin: 5px;/**/
     margin: 0;
     padding: 0;
 
@@ -9,6 +8,28 @@ body
     border-color: #77cf3c;
 
     font-family: "Arial", "Arial", sans-serif;
+}
+
+.startAt
+{
+    position: absolute;
+}
+
+#mainScreen
+{
+    margin: 5px;
+    position: relative;
+}
+
+#tileArea, #mapArea
+{
+    border: 1px solid;
+}
+
+#mapArea
+{
+    top: 0;
+    right: -2px; /* bordo */
 }
 
 .colorError
@@ -42,13 +63,6 @@ body
     text-align: right;
 }
 
-.startAt
-{
-    position: absolute;
-    top: 5px;
-    left: 5px;
-}
-
 .hide
 {
     display: none;
@@ -65,6 +79,7 @@ body
 {
     position: relative;
     overflow: hidden;
+    height: 100%;
 }
 
 #queueDiv_slider, #queueDivArea_slider
@@ -91,26 +106,32 @@ body
 
 #queueDivAreaToolsBar
 {
-    height: 30px;
-    padding: 10px;
+    height: 45px;
+    width: 100%;
+
+    position: absolute;
+    bottom: 0;
+}
+
+.toolBarButton
+{
+    border: 1px solid;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    height: 24px;
+    width: 24px;
 }
 
 .buttonBack
 {
     background: url("../images/interface/button_back.gif") no-repeat center;
-    /*background-size: 90%;*/
 }
 
 .background
 {
     background-color: black;
     opacity: 0.8;
-    border: 1px solid;
-    position: absolute;
-}
-
-#tileArea, #mapArea
-{
     border: 1px solid;
     position: absolute;
 }
@@ -136,6 +157,43 @@ body
     border-right: 0;
 }
 
+/* building info*/
+
+.buildingInfo
+{
+    border: 1px solid;
+    height: 100%;
+    width: 100%;
+}
+
+.buildingInfoBackground
+{
+    margin: 10px;
+    float: left;
+}
+
+.buildingInfoButton
+{
+    border: 1px solid;
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    top: 107px;
+    left: 107px;
+}
+
+.buildingInfoData
+{
+    overflow: hidden;
+    margin-top: 90px;
+    margin-right: 10px;
+}
+
+.buildingInfoDataTitle
+{
+    margin-bottom: 3px;
+}
+
 /* building form */
 
 .buildingArea
@@ -153,7 +211,7 @@ body
     margin: 2px 2px 0 2px;
 }
 
-.queueSeparator, .queueItemButton
+.queueSeparator, .queueItemButton, .toolBarButton, .buildingInfoButton
 {
     background-color: #2f6A08;
 }

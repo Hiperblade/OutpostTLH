@@ -24,7 +24,7 @@
         divViewBase.width(size.x);
         divViewBase.height(size.y);
 
-        divViewAreaContainer.height(size.y - 80);
+        divViewAreaContainer.height(size.y - ($("#queueDivAreaTitle").height() + $("#queueDivAreaToolsBar").height())); //
 
         divViewBackground.width(size.x);
         divViewBackground.height(size.y);
@@ -94,6 +94,8 @@
                     }
                 }
             });
+
+            _hide();
         };
 
         var _internalSetCurrent = function(current)
@@ -247,11 +249,6 @@
         };
 
         //------------------------------------------
-
-        this.setAbsolutePosition = function(point)
-        {
-            _hide();
-        };
 
         this.show = _show;
         this.hide = _hide;

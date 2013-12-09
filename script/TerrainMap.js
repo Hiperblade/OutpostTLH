@@ -925,7 +925,7 @@
 		this.getPosition = function() { return position; };
 		this.getLayer = function() { return layer; };
 		this.getIntegrity = function() { return integrity; };
-		//this.getProgressState = function() { return progressState; };
+		this.getProgressState = function() { return progressState; };
 		this.getFrozen = function() { return frozen; };
 		this.setFrozen = function(value) { return frozen = value; };
 		//this.getOwner = function() { return owner; };
