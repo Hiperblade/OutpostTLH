@@ -10,6 +10,95 @@ body
     font-family: "Arial", "Arial", sans-serif;
 }
 
+.buttonDozer
+{
+    background: url("../images/interface/button_roboDozer.gif") no-repeat center;
+}
+
+.buttonDigger
+{
+    background: url("../images/interface/button_roboDigger.gif") no-repeat center;
+}
+
+.buttonMiner
+{
+    background: url("../images/interface/button_roboMiner.gif") no-repeat center;
+}
+
+.buttonPipeNorthEastSouthWest
+{
+    background: url("../images/interface/button_pipeNorthEastSouthWest.gif") no-repeat center;
+}
+
+.buttonPipeEastWest
+{
+    background: url("../images/interface/button_pipeEastWest.gif") no-repeat center;
+}
+
+.buttonPipeNorthSouth
+{
+    background: url("../images/interface/button_pipeNorthSouth.gif") no-repeat center;
+}
+
+.buttonPipeDown
+{
+    background: url("../images/interface/button_pipeDown.gif") no-repeat center;
+}
+
+.buttonBuilding
+{
+    background: url("../images/interface/button_building.gif") no-repeat center;
+}
+
+.buttonHelp
+{
+    background: url("../images/interface/button_help.gif") no-repeat center;
+}
+
+.buttonReport
+{
+    background: url("../images/interface/button_report.gif") no-repeat center;
+}
+
+.buttonProduction
+{
+    background: url("../images/interface/button_production.gif") no-repeat center;
+}
+
+.buttonResearch
+{
+    background: url("../images/interface/button_research.gif") no-repeat center;
+}
+
+.buttonTime
+{
+    background: url("../images/interface/button_time.gif") no-repeat center;
+}
+
+.buttonBack
+{
+    background: url("../images/interface/button_back.gif") no-repeat center;
+}
+
+.buttonEnable
+{
+    color: #77cf3c;
+    border-color: #77cf3c;
+    background-color: #2f6A08;
+}
+
+.buttonEnable:active
+{
+    background-color: #BAF395;
+}
+
+.buttonDisable
+{
+    color: #A08528;
+    border-color: #A08528;
+    background-color: #4E3E06;
+}
+
 .startAt
 {
     position: absolute;
@@ -104,7 +193,7 @@ body
     font-size: 1.4em;
 }
 
-#queueDivAreaToolsBar
+.toolBar
 {
     height: 45px;
     width: 100%;
@@ -113,19 +202,41 @@ body
     bottom: 0;
 }
 
-.toolBarButton
+.toolBarButtonRight, .toolBarButtonLeft
 {
     border: 1px solid;
-    float: right;
     margin-top: 10px;
-    margin-right: 10px;
     height: 24px;
     width: 24px;
 }
 
-.buttonBack
+.toolBarButtonRight
 {
-    background: url("../images/interface/button_back.gif") no-repeat center;
+    float: right;
+    margin-right: 10px;
+}
+
+.toolBarButtonLeft
+{
+    float: left;
+    margin-left: 10px;
+}
+
+.toolBarSeparatorRight, .toolBarSeparatorLeft
+{
+    margin-top: 10px;
+    height: 24px;
+    width: 10px;
+}
+
+.toolBarSeparatorRight
+{
+    float: right;
+}
+
+.toolBarSeparatorLeft
+{
+    float: left;
 }
 
 .background
@@ -166,8 +277,7 @@ body
     left: 10px;
     height: 107px;
     width: 107px;
-    background: url("../images/interface/baseTile.gif") no-repeat center;
-    background-position: 0 61px;
+    background: url("../images/interface/baseTile.gif") no-repeat 0 61px;
 }
 
 .buildingInfoMicroTail
@@ -219,13 +329,9 @@ body
     margin: 2px 2px 0 2px;
 }
 
-.queueSeparator, .queueItemButton, .toolBarButton, .buildingInfoButton
-{
-    background-color: #2f6A08;
-}
-
 .queueSeparator
 {
+    background-color: #2f6A08;
     text-align: center;
     line-height: 20px;
     height: 20px;

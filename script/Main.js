@@ -1,4 +1,36 @@
-	function MainSystem(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
+	var Main;
+
+    function InitializeMainSystem(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
+    {
+        Main = new MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType);
+        return Main;
+    }
+
+    var MainCommand =
+    {
+        GoNorth: "GoNorth",
+        GoEast: "GoEast",
+        GoSouth: "GoSouth",
+        GoWest: "GoWest",
+        GoUp: "GoUp",
+        GoDown: "GoDown",
+        Dozer: "Dozer",
+        Digger: "Digger",
+        Miner: "Miner",
+        PipeNorthEastSouthWest: "PipeNorthEastSouthWest",
+        PipeEastWest: "PipeEastWest",
+        PipeNorthSouth: "PipeNorthSouth",
+        PipeDown: "PipeDown",
+        SelectBuilding: "Building",
+        ShowHelp: "ShowHelp",
+        ShowReport: "ShowReport",
+        ShowProduction: "ShowProduction",
+        ShowResearch: "ShowResearch",
+        DoNext: "DoNext",
+        ClearSelection: "ClearSelection"
+    };
+
+    function MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
 	{
 		const MAP_SIZE = { x: 150, y: 300 };
 		const TILE_DIMENSION = { x: 106, y: 46 };
@@ -26,69 +58,69 @@
                 {
                     case 38: // up
                     case 87: // w
-					    _goNorth();
+                        _executeCommand(MainCommand.GoNorth);
                         break;
                     case 39: // right
                     case 68: // d
-    					_goEast();
+                        _executeCommand(MainCommand.GoEast);
                         break;
                     case 40: // down
                     case 83: // s
-	    				_goSouth();
+                        _executeCommand(MainCommand.GoSouth);
                         break;
                     case 37: // left
                     case 65: // a
-    					_goWest();
+                        _executeCommand(MainCommand.GoWest);
                         break;
 
                     case 33: // pageUp
-                        _goUp();
+                        _executeCommand(MainCommand.GoUp);
                         break;
                     case 34: // pageDown
-                        _goDown();
+                        _executeCommand(MainCommand.GoDown);
                         break;
 
                     case 60: // < (it)
                     case 220: // \ (en)
-                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
+                        _executeCommand(MainCommand.Dozer);
                         break;
                     case 90: // z
-                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } );
+                        _executeCommand(MainCommand.Digger);
                         break;
                     case 88: // x
-                        _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" });
+                        _executeCommand(MainCommand.Miner);
                         break;
                     case 67: // c
-                        _setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer()));
+                        _executeCommand(MainCommand.PipeNorthEastSouthWest);
                         break;
                     case 86: // v
-                        _setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer()));
+                        _executeCommand(MainCommand.PipeEastWest);
                         break;
                     case 66: // b
-                        _setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer()));
+                        _executeCommand(MainCommand.PipeNorthSouth);
                         break;
                     case 78: // n
-                        _setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer()));
+                        _executeCommand(MainCommand.PipeDown);
                         break;
                     case 77: // m
-                        selectorView.show();
+                        _executeCommand(MainCommand.SelectBuilding);
                         break;
 
                     case 72: // h
-                        _showHelp();
+                        _executeCommand(MainCommand.ShowHelp);
                         break;
                     case 74: // j
-                        _showReport();
+                        _executeCommand(MainCommand.ShowReport);
                         break;
                     case 75: // k
-                        _showProduction();
+                        _executeCommand(MainCommand.ShowProduction);
                         break;
                     case 76: // l
-                        _showResearch();
+                        _executeCommand(MainCommand.ShowResearch);
                         break;
 
                     case 13: // enter
-                        _doNext();
+                        _executeCommand(MainCommand.DoNext);
                         break;
                 }
 			};
@@ -150,31 +182,6 @@
             // pulsanti selezione livello
             view.addButton(30, { x: canvasSize.x - 40, y: view.getVerticalMiddle() - 50 }, "button_up", function() { _goUp(); });
             view.addButton(31, { x: canvasSize.x - 40, y: view.getVerticalMiddle() + 50 + 30 }, "button_down", function() { _goDown(); });
-
-
-
-
-
-	//TODO
-			view.addImageButton(20, { x: 10, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" }); }, "button_roboDozer");
-			view.addImageButton(21, { x: 50, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } ); }, "button_roboDigger");
-			view.addImageButton(22, { x: 90, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" }); }, "button_roboMiner");
-			
-			view.addImageButton(23, { x: 140, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer())); }, "button_pipeNorthEastSouthWest");
-			view.addImageButton(24, { x: 180, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer())); }, "button_pipeEastWest");
-			view.addImageButton(25, { x: 220, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer())); }, "button_pipeNorthSouth");
-			view.addImageButton(26, { x: 260, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer())); }, "button_pipeDown");
-			
-			view.addImageButton(27, { x: 310, y: canvasSize.y - 10 }, "button_base", function() { selectorView.show(); }, "button_building");
-			
-			view.addImageButton(40, { x: canvasSize.x - 220, y: canvasSize.y - 10 }, "button_base", function() { _showHelp(); }, "button_help");
-			
-			view.addImageButton(50, { x: canvasSize.x - 170, y: canvasSize.y - 10 }, "button_base", function() { _showReport(); }, "button_report");
-			view.addImageButton(51, { x: canvasSize.x - 130, y: canvasSize.y - 10 }, "button_base", function() { _showProduction(); }, "button_production");
-			view.addImageButton(52, { x: canvasSize.x - 90, y: canvasSize.y - 10 }, "button_base", function() { _showResearch(); }, "button_research");
-			
-			view.addImageButton(60, { x: canvasSize.x - 40, y: canvasSize.y - 10 }, "button_base", function() { _doNext(); }, "button_time");
-
 
 			view.setGridCallback(function(point)
 				{
@@ -402,18 +409,44 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			return terrainMap.findBuilding(point);
 		};
 
+        var disableCommand = {};
+
+        var _setAbilitationButton = function(name, enable)
+        {
+            disableCommand[name] = !enable;
+
+            var button = $(".button" + name);
+            if(enable)
+            {
+                button.addClass("buttonEnable");
+                button.removeClass("buttonDisable");
+            }
+            else
+            {
+                button.addClass("buttonDisable");
+                button.removeClass("buttonEnable");
+            }
+        };
+
         var _updateRoboAvailable = function()
         {
-            view.setButton(20, true);
             if(state.getRoboDozerAvailable() <= 0)
             {
-                view.setButton(20, false);
+                _setAbilitationButton(MainCommand.Dozer, false);
+
+            }
+            else
+            {
+                _setAbilitationButton(MainCommand.Dozer, true);
             }
 
-            view.setButton(21, true);
             if((state.getRoboDiggerAvailable() <= 0) || (terrainMap.getLayer() == TerrainLayer.Surface))
             {
-                view.setButton(21, false);
+                _setAbilitationButton(MainCommand.Digger, false);
+            }
+            else
+            {
+                _setAbilitationButton(MainCommand.Digger, true);
             }
         };
 
@@ -422,6 +455,8 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
             _setCurrentTile(null);
 
 			terrainMap.setLayer(layer);
+
+            _setAbilitationButton(MainCommand.PipeDown, true);
 
             view.setButton(26, true); // elevator
             view.setButton(30, true); // up
@@ -433,7 +468,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 			else if(layer == TerrainLayer.Deep)
 			{
-				view.setButton(26, false); // elevator
+                _setAbilitationButton(MainCommand.PipeDown, false);
 				view.setButton(31, false); // down
 			}
 
@@ -527,27 +562,84 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
             buildingInfo.show(currentTile);
             _redraw();
 		};
-		
-		var _showReport = function()
-		{
-			queueView.show(new ReportQueueData(state));
-		};
-		
-		var _showProduction = function()
-		{
-			queueView.show(new ProductionQueueData(state));
-		};
-		
-		var _showResearch = function()
-		{
-			queueView.show(new ResearchQueueData(state));
-		};
 
-		var _showHelp = function()
-		{
-			queueView.show(new HelpQueueData(state));
-		};
-		
+        var _executeCommand = function(cmd)
+        {
+            if(disableCommand[cmd])
+            {
+                return;
+            }
+
+            switch(cmd)
+            {
+                case MainCommand.GoNorth:
+                    _goNorth();
+                    break;
+                case MainCommand.GoEast:
+                    _goEast();
+                    break;
+                case MainCommand.GoSouth:
+                    _goSouth();
+                    break;
+                case MainCommand.GoWest:
+                    _goWest();
+                    break;
+
+                case MainCommand.GoUp:
+                    _goUp();
+                    break;
+                case MainCommand.GoDown:
+                    _goDown();
+                    break;
+
+                case MainCommand.Dozer:
+                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
+                    break;
+                case MainCommand.Digger:
+                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } );
+                    break;
+                case MainCommand.Miner:
+                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" });
+                    break;
+                case MainCommand.PipeNorthEastSouthWest:
+                    _setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer()));
+                    break;
+                case MainCommand.PipeEastWest:
+                    _setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer()));
+                    break;
+                case MainCommand.PipeNorthSouth:
+                    _setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer()));
+                    break;
+                case MainCommand.PipeDown:
+                    _setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer()));
+                    break;
+                case MainCommand.SelectBuilding:
+                    selectorView.show();
+                    break;
+
+                case MainCommand.ShowHelp:
+                    queueView.show(new HelpQueueData(state));
+                    break;
+                case MainCommand.ShowReport:
+                    queueView.show(new ReportQueueData(state));
+                    break;
+                case MainCommand.ShowProduction:
+                    queueView.show(new ProductionQueueData(state));
+                    break;
+                case MainCommand.ShowResearch:
+                    queueView.show(new ResearchQueueData(state));
+                    break;
+
+                case MainCommand.DoNext:
+                    _doNext();
+                    break;
+
+                case MainCommand.ClearSelection:
+                    _setCurrentTile(null);
+                    break;
+            }
+        };
+
 		_initialize();
 
 		//-----------------------------------------
@@ -570,7 +662,9 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		this.goWest = _goWest;
 		this.doNext = _doNext;
 		this.setAbsolutePosition = _setAbsolutePosition;
-		
+
+        this.executeCommand = _executeCommand;
+
 		//----------------------------------------- */
 	}
 

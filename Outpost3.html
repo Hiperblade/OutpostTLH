@@ -59,21 +59,44 @@
 	</div>
 	<div id="mainScreen" class="hide">
 		<canvas id="tileArea" class="startAt">Your browser does not support the HTML5 canvas tag.</canvas>
+
 		<canvas id="mapArea" class="startAt"></canvas>
 
         <div class="buildingInfoBackground">
-            <img id="buildingInfoImage" src="">
+            <img id="buildingInfoImage" src="" onclick="Main.executeCommand(MainCommand.ClearSelection);">
             <img id="buildingInfoMicroTail" class="buildingInfoMicroTail" src="images/interface/microTile.gif">
-            <div id="buildingInfoButtonGoto" class="buildingInfoButton" onclick="BuildingInfoView.goto()"></div>
+            <div id="buildingInfoButtonGoto" class="buildingInfoButton buttonEnable" onclick="BuildingInfoView.goto();"></div>
         </div>
         <div class="buildingInfoData">
             <div id="buildingInfoDataTitle" class="buildingInfoDataTitle"></div>
             <div id="buildingInfoDataBar" class="queueItemBar"><div id="buildingInfoDataBarValue" class="queueItemBar2"></div></div>
         </div>
+        <div id="mainToolsBar" class="toolBar">
+            <div class="toolBarButtonLeft buttonEnable buttonDozer" onclick="Main.executeCommand(MainCommand.Dozer);"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonDigger" onclick="Main.executeCommand(MainCommand.Digger);"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonMiner" onclick="Main.executeCommand(MainCommand.Miner);"></div>
+            <div class="toolBarSeparatorLeft"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonPipeNorthEastSouthWest" onclick="Main.executeCommand(MainCommand.PipeNorthEastSouthWest);"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonPipeEastWest" onclick="Main.executeCommand(MainCommand.PipeEastWest);"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonPipeNorthSouth" onclick="Main.executeCommand(MainCommand.PipeNorthSouth);"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonPipeDown" onclick="Main.executeCommand(MainCommand.PipeDown);"></div>
+            <div class="toolBarSeparatorLeft"></div>
+            <div class="toolBarButtonLeft buttonEnable buttonBuilding" onclick="Main.executeCommand(MainCommand.SelectBuilding);"></div>
+
+            <div class="toolBarButtonRight buttonEnable buttonTime" onclick="Main.executeCommand(MainCommand.DoNext);"></div>
+            <div class="toolBarSeparatorRight"></div>
+            <div class="toolBarButtonRight buttonEnable buttonResearch" onclick="Main.executeCommand(MainCommand.ShowResearch);"></div>
+            <div class="toolBarButtonRight buttonEnable buttonProduction" onclick="Main.executeCommand(MainCommand.ShowProduction);"></div>
+            <div class="toolBarButtonRight buttonEnable buttonReport" onclick="Main.executeCommand(MainCommand.ShowReport);"></div>
+            <div class="toolBarSeparatorRight"></div>
+            <div class="toolBarButtonRight buttonEnable buttonHelp" onclick="Main.executeCommand(MainCommand.ShowHelp);"></div>
+        </div>
 
         <canvas id="buildingArea" class="buildingArea"></canvas>
 
-		<div id="queueDiv_wrapper" class="startAt">
+        <!-- ------------------------------------- -->
+
+        <div id="queueDiv_wrapper" class="startAt">
             <div id="queueDivBackground" class="background"></div>
             <div id="queueDivContainer">
                 <div id="queueDiv_slider" class="slider">
@@ -95,7 +118,7 @@
                         <div id="queueDivArea_content" class="scroll-content"></div>
                     </div>
                 </div>
-                <div id="queueDivAreaToolsBar" class=""><div class="toolBarButton buttonBack" onclick="Queue.hide();"></div></div>
+                <div id="queueDivAreaToolsBar" class="toolBar"><div class="toolBarButtonRight buttonEnable buttonBack" onclick="Queue.hide();"></div></div>
             </div>
 		</div>
 	</div>
@@ -138,7 +161,7 @@
 			//var site = new Site(Typology.Rock, "Site_vulcanic_1");
 			//var site = new Site(Typology.Stone, "Site_vulcanic_1");
 
-			main = new MainSystem("tileArea", "mapArea", "buildingArea", site);
+			main = InitializeMainSystem("tileArea", "mapArea", "buildingArea", site);
 
 			//buildMap(main.getTerrainMap());
 
