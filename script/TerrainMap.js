@@ -533,7 +533,7 @@
 				{
 					for(i = 0; i < ret.length; i++)
 					{
-						if(_getGraphIsBound(ret[i], el.getPosition()))
+						if(_getGraphIsBound(ret[i], el.getPosition(), el.getLayer()))
 						{
 							ret[i].push(el);
 							el = null;
@@ -554,11 +554,11 @@
 		};
 
 		// restituisce true se il grafo permette il collegamento verso le coordinate point
-		var _getGraphIsBound = function(graph, point)
+		var _getGraphIsBound = function(graph, point, layer)
 		{
 			for(var i = 0; i < graph.length; i++)
 			{
-				if(!graph[i].isPipe())
+				if(!graph[i].isPipe() || graph[i].getLayer() != layer)
 				{
 					break;
 				}
