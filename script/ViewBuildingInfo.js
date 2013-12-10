@@ -1,12 +1,12 @@
     var BuildingInfoView;
 
-    function InitializeBuildingInfoView(onChangePosition)
+    function InitializeBuildingInfoView(onChangePosition, onClearCurrentItem)
     {
-        BuildingInfoView = new BuildingInfoViewConstructor(onChangePosition);
+        BuildingInfoView = new BuildingInfoViewConstructor(onChangePosition, onClearCurrentItem);
         return BuildingInfoView;
     }
 
-    function BuildingInfoViewConstructor(onChangePosition)
+    function BuildingInfoViewConstructor(onChangePosition, onClearCurrentItem)
 	{
         var currentItem;
 
@@ -24,7 +24,6 @@
                 buildingInfoImage.hide();
                 $("#buildingInfoDataBar").hide();
                 $("#buildingInfoMicroTail").attr("src", ImagesLib.getFileName("microTile"));
-                $("#buildingInfoButtonGoto").hide();
                 return;
             }
 
@@ -35,7 +34,8 @@
 
                 $("#buildingInfoDataTitle").html(TextRepository.get(currentItem.getBuildingType()));
 
-                //buildingInfoImage.attr("src", ImagesLib.getFileName(currentItem.getImageId()));
+                //TODO gestire gli edifici estesi
+                //buildingInfoImage.attr("src", ImagesLib.getFileName(currentItem.getImageId())); // immagine corrente
                 buildingInfoImage.attr("src", ImagesLib.getFileName(protoType.getBuildingImageId()));
                 buildingInfoImage.show();
 
@@ -52,28 +52,17 @@
                 $("#buildingInfoDataBar").show();
 
                 $("#buildingInfoMicroTail").attr("src", ImagesLib.getFileName("microTile_" + protoType.getAreaType()));
-
-                $("#buildingInfoButtonGoto").show();
             }
             else
             {
                 $("#buildingInfoDataBar").hide();
-                $("#buildingInfoButtonGoto").hide();
 
                 if(currentItem.image != undefined)
                 {
                     buildingInfoImage.attr("src", ImagesLib.getFileName(currentItem.image));
                     buildingInfoImage.show();
 
-                    if(currentItem.isRobot)
-                    {
-                        $("#buildingInfoDataTitle").html(TextRepository.get(currentItem.buildingType));
-                    }
-                    else
-                    {
-                        $("#buildingInfoDataTitle").html("");
-                    }
-
+                    $("#buildingInfoDataTitle").html(TextRepository.get(currentItem.buildingType));
                     $("#buildingInfoMicroTail").attr("src", ImagesLib.getFileName("microTile_" + AreaTypes.One));
                 }
                 else
@@ -91,10 +80,14 @@
         {
             if(currentItem != null)
             {
-                if(onChangePosition)
+                if(onChangePosition && currentItem.getPosition)
                 {
                     var tmp = currentItem.getPosition();
                     onChangePosition({ x: tmp.x, y: tmp.y });
+                }
+                if(onClearCurrentItem && !currentItem.getPosition)
+                {
+                    onClearCurrentItem();
                 }
             }
         };
@@ -108,6 +101,11 @@
 		var _show = function(item)
 		{
             currentItem = item;
+            // se si tratta di un edificio esteso seleziono il modulo principale
+            if(currentItem && currentItem.getMainBuilding)
+            {
+                currentItem = currentItem.getMainBuilding();
+            }
             _refresh();
 		};
 

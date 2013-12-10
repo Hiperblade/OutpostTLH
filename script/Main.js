@@ -134,7 +134,12 @@
 				
 				_setPosition(newPosition);
 			};
-			
+
+            var _onClearCurrentItem = function()
+            {
+                _executeCommand(MainCommand.ClearSelection);
+            };
+
 			var _onSelected = function(item)
 			{
 				if(item != null)
@@ -159,7 +164,7 @@
 			mapView = new MapView(terrainMap, miniMapCanvas, site.getImageName(), areaSize, _onChangePosition);
 			selectorView = new BuildingSelectorView(selectorCanvas, canvasSize.x, state, _onSelected);
 
-            buildingInfo = InitializeBuildingInfoView(_onChangePosition);
+            buildingInfo = InitializeBuildingInfoView(_onChangePosition, _onClearCurrentItem);
 			queueView = InitializeQueueView("queueDiv", canvasSize);
 					
 			// pulsanti spostamento

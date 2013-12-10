@@ -289,16 +289,6 @@ body
     left: 0;
 }
 
-.buildingInfoButton
-{
-    border: 1px solid;
-    height: 10px;
-    width: 10px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
 .buildingInfoData
 {
     position: absolute;

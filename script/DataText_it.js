@@ -103,7 +103,21 @@ TextRepository.add("radioactiveStorage", "Aree di Stoccaggio");
 
 
 // --- Edifici
-TextRepository.add("Pipes", "Tubature");
+TextRepository.add("Pipes", "Condutture");
+
+TextRepository.add("Pipe_nesw_surface", "Conduttura");
+TextRepository.add("Pipe_ns_surface", "Conduttura");
+TextRepository.add("Pipe_ew_surface", "Conduttura");
+TextRepository.add("Pipe_d_surface", "Elevatore");
+TextRepository.add("Pipe_nesw_underground", "Conduttura");
+TextRepository.add("Pipe_ns_underground", "Conduttura");
+TextRepository.add("Pipe_ew_underground", "Conduttura");
+TextRepository.add("Pipe_u_underground", "Elevatore");
+TextRepository.add("Pipe_d_underground", "Elevatore");
+TextRepository.add("Pipe_nesw_deep", "Conduttura");
+TextRepository.add("Pipe_ns_deep", "Conduttura");
+TextRepository.add("Pipe_ew_deep", "Conduttura");
+TextRepository.add("Pipe_u_deep", "Elevatore");
 
 TextRepository.add("LandingModule", "Modulo d'Atterraggio");
 TextRepository.add("SupportModule", "Modulo di Supporto");

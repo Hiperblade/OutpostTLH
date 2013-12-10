@@ -835,15 +835,15 @@
 		{
 			if(!frozen && progressState >= 0)
 			{
-				progressState++;
+			    progressState++;
 			}
 		};
 		
 		var _progressBuild = function()
 		{
-			if(progressState < 0)
+			if(!frozen && progressState < 0)
 			{
-				progressState++;
+			    progressState++;
 			}
 			return (progressState == 0);
 		};
@@ -927,7 +927,7 @@
 		this.getIntegrity = function() { return integrity; };
 		this.getProgressState = function() { return progressState; };
 		this.getFrozen = function() { return frozen; };
-		this.setFrozen = function(value) { return frozen = value; };
+		this.setFrozen = function(value) { frozen = value; return this; };
 		//this.getOwner = function() { return owner; };
 		
 		this.progress = _progress;

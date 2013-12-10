@@ -49,9 +49,9 @@
 				
 				map.addBuilding("CommandCenter", { x: position.x - 1, y: position.y - 1 } );
 				map.addBuilding("SupportModule", { x: position.x + 1, y: position.y } );
-				map.addBuilding("CargoModule", { x: position.x, y: position.y + 1 } ).setFrozen(true);
-				map.addBuilding("LaunchModule", { x: position.x + 1, y: position.y + 1 } ).setFrozen(true);
-								
+				map.addBuilding("CargoModule", { x: position.x, y: position.y + 1 } );
+				map.addBuilding("LaunchModule", { x: position.x + 1, y: position.y + 1 } );
+
 				map.getState().addKnowledge({ technology: [
 					"MicrowavePlant",
 						//"ElectrostaticCoil",
@@ -82,7 +82,7 @@
 					"Univesity",
 						//"UnivesityAdv",
 						//"RecreationalFacility",
-						//"Park",
+                        //"Park",
 					"Warehouse",
 					"Smelter",
 						//"SmelterAdv",
@@ -131,7 +131,11 @@
 				item.haveUp    = function() { return false; };
 				item.haveDown  = function() { return false; };
 				return true;
-			}
+			},
+        eventEndBuilding: function(item, map)
+            {
+                item.setFrozen(true);
+            }
 		}).createItem = function(position)
 		{
 			return new Building("LaunchModule", TerrainLayer.Surface, position, 2, "LandingPoint");
@@ -148,7 +152,11 @@
 				item.haveUp    = function() { return false; };
 				item.haveDown  = function() { return false; };
 				return true;
-			}
+			},
+        eventEndBuilding: function(item, map)
+            {
+                item.setFrozen(true);
+            }
 		}).createItem = function(position)
 		{
 			return new Building("CargoModule", TerrainLayer.Surface, position, 2, "LandingPoint");
@@ -169,15 +177,16 @@
 				if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 					(map.findResource(position, TerrainLayer.Underground) == null))
 				{
-					map.addBuilding("TokamakReactor", position).setFrozen(true);
+					var subBuilding = map.addBuilding("TokamakReactor", position);
+                    subBuilding.setFrozen(true);
+                    subBuilding.getMainBuilding = function() { return this; };
 					return true;
 				}
 				return false;
 			},
 		eventEndBuilding: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
-				while(!building.progressBuild()){}
+				map.findBuilding(item.getPosition(), TerrainLayer.Underground).setBuilded();
 				map.discoveryNearTiles(item.getPosition(), TerrainLayer.Underground);
 			},
 		eventDestroy: function(item, map)
@@ -207,15 +216,14 @@
 				if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 					(map.findResource(position, TerrainLayer.Underground) == null))
 				{
-					map.addBuilding("TokamakReactorAdv", position).setFrozen(true);
+					map.addBuilding("TokamakReactorAdv", position).setFrozen(true).getMainBuilding = function() { return item; };
 					return true;
 				}
 				return false;
 			},
 		eventEndBuilding: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
-				while(!building.progressBuild()){}
+				map.findBuilding(item.getPosition(), TerrainLayer.Underground).setBuilded();
 				map.discoveryNearTiles(item.getPosition(), TerrainLayer.Underground);
 			},
 		eventDestroy: function(item, map)
@@ -369,7 +377,7 @@
 		if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 			(map.findResource(position, TerrainLayer.Underground) == null))
 		{
-			map.addBuilding("Mine", position).setFrozen(true);
+			map.addBuilding("Mine", position).setFrozen(true).getMainBuilding = function() { return item; };
 			return true;
 		}
 		return false;
@@ -377,8 +385,7 @@
 	
 	var mine_eventEndBuilding = function(item, map)
 	{
-		var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
-		while(!building.progressBuild()){}
+		map.findBuilding(item.getPosition(), TerrainLayer.Underground).setBuilded();
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Underground);
 	};
 
@@ -397,7 +404,7 @@
 		if((map.findBuilding(position, TerrainLayer.Deep) == null) &&
 			(map.findResource(position, TerrainLayer.Deep) == null))
 		{
-			map.addBuilding("MineDeep", position).setFrozen(true);
+			map.addBuilding("MineDeep", position).setFrozen(true).getMainBuilding = function() { return item; };
 			return true;
 		}
 		return false;
@@ -405,8 +412,7 @@
 	
 	var mineDeep_eventEndBuilding = function(item, map)
 	{
-		var building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
-		while(!building.progressBuild()){}
+		map.findBuilding(item.getPosition(), TerrainLayer.Deep).setBuilded();
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Deep);
 	};
 
@@ -499,9 +505,9 @@
 						(map.findBuilding({ x: position.x + 1,	y: position.y }, layer) == null) &&
 						(map.findBuilding({ x: position.x    ,  y: position.y }, layer) == null) )
 					{
-						map.addBuilding("Park_w", { x: position.x    , y: position.y - 1} ).setFrozen(true);
-						map.addBuilding("Park_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true);
-						map.addBuilding("Park_e", { x: position.x + 1, y: position.y} ).setFrozen(true);
+                        map.addBuilding("Park_w", { x: position.x    , y: position.y - 1} ).setFrozen(true).getMainBuilding = function() { return item; };
+                        map.addBuilding("Park_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true).getMainBuilding = function() { return item; };
+                        map.addBuilding("Park_e", { x: position.x + 1, y: position.y}     ).setFrozen(true).getMainBuilding = function() { return item; };
 						return true;
 					}
 				}
@@ -511,12 +517,9 @@
 			{
 				var position = item.getPosition();
 				var layer = item.getLayer();
-				var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
-				while(!building.progressBuild()){}
-				building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
-				while(!building.progressBuild()){}
-				building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
-				while(!building.progressBuild()){}
+				map.findBuilding({ x: position.x, y: position.y - 1 }, layer).setBuilded();
+				map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer).setBuilded();
+				map.findBuilding({ x: position.x + 1, y: position.y }, layer).setBuilded();
 			},
 		eventDestroy: function(item, map)
 			{
@@ -687,14 +690,14 @@
                     (map.findBuilding({ x: position.x + 1,	y: position.y }, TerrainLayer.Underground) == null) &&
                     (map.findBuilding({ x: position.x    ,  y: position.y }, TerrainLayer.Underground) == null) )
                 {
-                    map.addBuilding("SpacePort_w", { x: position.x    , y: position.y - 1} ).setFrozen(true);
-                    map.addBuilding("SpacePort_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true);
-                    map.addBuilding("SpacePort_e", { x: position.x + 1, y: position.y} ).setFrozen(true);
+                    map.addBuilding("SpacePort_w", { x: position.x    , y: position.y - 1}   ).setFrozen(true).getMainBuilding = function() { return item; };
+                    map.addBuilding("SpacePort_n", { x: position.x + 1, y: position.y - 1}   ).setFrozen(true).getMainBuilding = function() { return item; };
+                    map.addBuilding("SpacePort_e", { x: position.x + 1, y: position.y}       ).setFrozen(true).getMainBuilding = function() { return item; };
 
-                    map.addBuilding("SpacePort_u",   { x: position.x    , y: position.y} ).setFrozen(true);
-                    map.addBuilding("SpacePort_u_w", { x: position.x    , y: position.y - 1} ).setFrozen(true);
-                    map.addBuilding("SpacePort_u_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true);
-                    map.addBuilding("SpacePort_u_e", { x: position.x + 1, y: position.y} ).setFrozen(true);
+                    map.addBuilding("SpacePort_u",   { x: position.x    , y: position.y}     ).setFrozen(true).getMainBuilding = function() { return item; };
+                    map.addBuilding("SpacePort_u_w", { x: position.x    , y: position.y - 1} ).setFrozen(true).getMainBuilding = function() { return item; };
+                    map.addBuilding("SpacePort_u_n", { x: position.x + 1, y: position.y - 1} ).setFrozen(true).getMainBuilding = function() { return item; };
+                    map.addBuilding("SpacePort_u_e", { x: position.x + 1, y: position.y}     ).setFrozen(true).getMainBuilding = function() { return item; };
                     return true;
                 }
             }
@@ -704,22 +707,15 @@
         {
             var position = item.getPosition();
             var layer = item.getLayer();
-            var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
-            while(!building.progressBuild()){}
-            building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
-            while(!building.progressBuild()){}
-            building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
-            while(!building.progressBuild()){}
+            map.findBuilding({ x: position.x, y: position.y - 1 }, layer).setBuilded();
+            map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer).setBuilded();
+            map.findBuilding({ x: position.x + 1, y: position.y }, layer).setBuilded();
             // undergound
             layer = TerrainLayer.Underground;
-            building = map.findBuilding({ x: position.x, y: position.y }, layer);
-            while(!building.progressBuild()){}
-            building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
-            while(!building.progressBuild()){}
-            building = map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer);
-            while(!building.progressBuild()){}
-            building = map.findBuilding({ x: position.x + 1, y: position.y }, layer);
-            while(!building.progressBuild()){}
+            map.findBuilding({ x: position.x, y: position.y }, layer).setBuilded();
+            map.findBuilding({ x: position.x, y: position.y - 1 }, layer).setBuilded();
+            map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer).setBuilded();
+            map.findBuilding({ x: position.x + 1, y: position.y }, layer).setBuilded();
 
             map.discoveryNearTiles({ x: position.x, y: position.y }, TerrainLayer.Underground);
             map.discoveryNearTiles({ x: position.x, y: position.y - 1 }, TerrainLayer.Underground);
