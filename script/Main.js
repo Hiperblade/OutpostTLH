@@ -127,7 +127,7 @@
 			mapView = new MapView(terrainMap, miniMapCanvas, site.getImageName(), areaSize, _onChangePosition);
 			selectorView = new BuildingSelectorView(selectorCanvas, canvasSize.x, state, _onSelected);
 
-            buildingInfo = InitializeBuildingInfoView("buildingInfo", _onChangePosition);
+            buildingInfo = InitializeBuildingInfoView(_onChangePosition);
 			queueView = InitializeQueueView("queueDiv", canvasSize);
 					
 			// pulsanti spostamento
@@ -142,16 +142,20 @@
 			{
 				view.addImageGrid(300 + index, { x: -1, y: index }, "tileBorder_left")
 			}
-			for(index = 0; index < areaSize.x; index++)
-			{
-				// alto sinistra
-			//	view.addImageGrid(200 + index, { x: index, y: -1 }, "tileBorder_right")
-			}
 			for(index = areaSize.x -1; index >= 0; index--)
 			{
 				view.addImageGrid(200 + index, { x: index, y: areaSize.y }, "tileBorder_right")
 			}
-	
+
+            // pulsanti selezione livello
+            view.addButton(30, { x: canvasSize.x - 40, y: view.getVerticalMiddle() - 50 }, "button_up", function() { _goUp(); });
+            view.addButton(31, { x: canvasSize.x - 40, y: view.getVerticalMiddle() + 50 + 30 }, "button_down", function() { _goDown(); });
+
+
+
+
+
+	//TODO
 			view.addImageButton(20, { x: 10, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" }); }, "button_roboDozer");
 			view.addImageButton(21, { x: 50, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } ); }, "button_roboDigger");
 			view.addImageButton(22, { x: 90, y: canvasSize.y - 10 }, "button_base", function() { _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" }); }, "button_roboMiner");
@@ -163,9 +167,6 @@
 			
 			view.addImageButton(27, { x: 310, y: canvasSize.y - 10 }, "button_base", function() { selectorView.show(); }, "button_building");
 			
-			view.addButton(30, { x: canvasSize.x - 40, y: view.getVerticalMiddle() - 50 }, "button_up", function() { _goUp(); });
-			view.addButton(31, { x: canvasSize.x - 40, y: view.getVerticalMiddle() + 50 + 30 }, "button_down", function() { _goDown(); });
-			
 			view.addImageButton(40, { x: canvasSize.x - 220, y: canvasSize.y - 10 }, "button_base", function() { _showHelp(); }, "button_help");
 			
 			view.addImageButton(50, { x: canvasSize.x - 170, y: canvasSize.y - 10 }, "button_base", function() { _showReport(); }, "button_report");
@@ -173,12 +174,8 @@
 			view.addImageButton(52, { x: canvasSize.x - 90, y: canvasSize.y - 10 }, "button_base", function() { _showResearch(); }, "button_research");
 			
 			view.addImageButton(60, { x: canvasSize.x - 40, y: canvasSize.y - 10 }, "button_base", function() { _doNext(); }, "button_time");
-			
-			view.addImage(102, { x: 10, y: canvasSize.y - 60 }, "baseTile");
-			view.addImage(100, { x: 10, y: canvasSize.y - 60 }, null);
-			view.addText(100, { x: 10 + TILE_DIMENSION.x, y: canvasSize.y - 60 }, 20, null);
-			view.addImage(101, { x: 13, y: canvasSize.y - 58 }, "microTile");
-			
+
+
 			view.setGridCallback(function(point)
 				{
 					var target = _findBuilding(point);
@@ -422,7 +419,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
 		var _setLayer = function(layer)
 		{
-            buildingInfo.hide();
+            _setCurrentTile(null);
 
 			terrainMap.setLayer(layer);
 
@@ -455,7 +452,6 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			{
 				_setLayer(TerrainLayer.Underground);
 			}
-			_setCurrentTile(null);
 			_redraw();
 		};
 		
@@ -469,7 +465,6 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			{
 				_setLayer(TerrainLayer.Deep);
 			}
-			_setCurrentTile(null);
 			_redraw();
 		};
 
@@ -514,7 +509,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			terrainMap.computation();
 			terrainMap.simulation();
 			_redraw();
-            buildingInfo.redraw();
+            buildingInfo.refresh();
 		};
 		
 		var _setAbsolutePosition = function(point)
@@ -529,35 +524,8 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		var _setCurrentTile = function(item)
 		{
 			currentTile = item;
-			if(item == null)
-			{
-				view.setImage(100, null);
-				view.setText(100, null);
-				view.setImage(101, "microTile");
-			}
-			else if(item.image != undefined)
-			{
-				view.setImage(100, item.image);
-				
-				if(item.isRobot)
-				{
-					view.setText(100, item.buildingType);
-				}
-				else
-				{
-					view.setText(100, null);
-				}
-				
-				view.setImage(101, "microTile_" + AreaTypes.One);
-			}
-			else
-			{
-				var protoType = PrototypeLib.get(item.buildingType);
-				view.setImage(100, protoType.getBuildingImageId());
-				view.setText(100, item.buildingType);
-				view.setImage(101, "microTile_" + protoType.getAreaType());
-			}
-			_redraw();
+            buildingInfo.show(currentTile);
+            _redraw();
 		};
 		
 		var _showReport = function()

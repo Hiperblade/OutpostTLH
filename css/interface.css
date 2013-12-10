@@ -159,17 +159,24 @@ body
 
 /* building info*/
 
-.buildingInfo
-{
-    border: 1px solid transparent;
-    height: 100%;
-    width: 100%;
-}
-
 .buildingInfoBackground
 {
-    margin: 10px;
-    float: left;
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    height: 107px;
+    width: 107px;
+    background: url("../images/interface/baseTile.gif") no-repeat center;
+    background-position: 0 61px;
+}
+
+.buildingInfoMicroTail
+{
+    height: 13px;
+    width: 29px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .buildingInfoButton
@@ -178,15 +185,16 @@ body
     height: 10px;
     width: 10px;
     position: absolute;
-    top: 107px;
-    left: 107px;
+    bottom: 0;
+    right: 0;
 }
 
 .buildingInfoData
 {
-    overflow: hidden;
-    margin-top: 90px;
-    margin-right: 10px;
+    position: absolute;
+    bottom: 50px;
+    left: 127px;
+    width: 200px;
 }
 
 .buildingInfoDataTitle

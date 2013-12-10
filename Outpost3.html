@@ -59,9 +59,19 @@
 	</div>
 	<div id="mainScreen" class="hide">
 		<canvas id="tileArea" class="startAt">Your browser does not support the HTML5 canvas tag.</canvas>
-        <canvas id="buildingArea" class="buildingArea"></canvas>
 		<canvas id="mapArea" class="startAt"></canvas>
-        <div id="buildingInfo" class="startAt"></div>
+
+        <div class="buildingInfoBackground">
+            <img id="buildingInfoImage" src="">
+            <img id="buildingInfoMicroTail" class="buildingInfoMicroTail" src="images/interface/microTile.gif">
+            <div id="buildingInfoButtonGoto" class="buildingInfoButton" onclick="BuildingInfoView.goto()"></div>
+        </div>
+        <div class="buildingInfoData">
+            <div id="buildingInfoDataTitle" class="buildingInfoDataTitle"></div>
+            <div id="buildingInfoDataBar" class="queueItemBar"><div id="buildingInfoDataBarValue" class="queueItemBar2"></div></div>
+        </div>
+
+        <canvas id="buildingArea" class="buildingArea"></canvas>
 
 		<div id="queueDiv_wrapper" class="startAt">
             <div id="queueDivBackground" class="background"></div>
