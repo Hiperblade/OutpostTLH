@@ -400,16 +400,6 @@
 			return ret;
 		};
 
-		/* TODO
-		var _addResearchQueue = function(name)
-		{
-			if(!_contains(state.knowledge.researchQueue, name))
-			{
-				state.knowledge.researchQueue.push(name);
-			}
-		};
-		*/
-
 		var _contains = function(array, obj)
 		{
 			for (var i = 0; i < array.length; i++)

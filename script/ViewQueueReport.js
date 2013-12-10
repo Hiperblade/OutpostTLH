@@ -435,7 +435,6 @@
 		queue.push(new ReportProductionMaterial(colonyState, "power", "Power" ));
 		queue.push(new ReportHumans(colonyState, "Humans"));
 		queue.push(new ReportProductionMaterial(colonyState, "foodUnit", "Hydroponics"));
-		//queue.push(new ReportRobots(colonyState, "Pipes")); //TODO
 		queue.push(new ReportMetaMaterial(colonyState, "roboticStorage", "Pipes"));
 		queue.push(new ReportMetaMaterial(colonyState, "genericStorage", "Pipes"));
 		queue.push(new ReportMetaMaterial(colonyState, "radioactiveStorage", "PipesWaste"));

@@ -34,8 +34,6 @@
 
 				$("#buildingInfoDataTitle").html(TextRepository.get(currentItem.getBuildingType()));
 
-				//TODO gestire gli edifici estesi
-				//buildingInfoImage.attr("src", ImagesLib.getFileName(currentItem.getImageId())); // immagine corrente
 				buildingInfoImage.attr("src", ImagesLib.getFileName(protoType.getBuildingImageId()));
 				buildingInfoImage.show();
 
