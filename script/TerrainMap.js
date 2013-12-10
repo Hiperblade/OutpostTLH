@@ -596,7 +596,7 @@
 					for(var ii = 0; ii < lower[i].elevators.length; ii++)
 					{
 						var elevator = lower[i].elevators[ii];
-						if(elevator.haveUp())
+						if(elevator.haveUp() && !elevator.isDestroyed())
 						{
                             var iii;
 							var upperGraph = _getGraphFind(upper, elevator.getPosition());
