@@ -14,23 +14,23 @@
 	<script src="script/ColonyState.js" type="text/javascript"></script>
 	<script src="script/Engine.js" type="text/javascript"></script>
 	<script src="script/TextRepository.js" type="text/javascript"></script>
-	
+
 	<script src="script/ViewIsometric.js" type="text/javascript"></script>
 	<script src="script/ViewMap.js" type="text/javascript"></script>
 	<script src="script/ViewBuildingSelector.js" type="text/javascript"></script>
-    <script src="script/ViewBuildingInfo.js" type="text/javascript"></script>
+	<script src="script/ViewBuildingInfo.js" type="text/javascript"></script>
 	<script src="script/ViewQueueBase.js" type="text/javascript"></script>
 	<script src="script/ViewQueueHelp.js" type="text/javascript"></script>
 	<script src="script/ViewQueueReport.js" type="text/javascript"></script>
-	
+
 	<script src="script/DataImagesLib.js" type="text/javascript"></script>
 	<script src="script/DataPrototype.js" type="text/javascript"></script>
 	<script src="script/DataRecipe.js" type="text/javascript"></script>
 	<script src="script/DataText_it.js" type="text/javascript"></script>
-	
+
 	<script src="script/Main.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/interface.css">
+	<link rel="stylesheet" type="text/css" href="css/interface.css">
 
 	<script type="text/javascript">
 		var onUpdateLoading = function ()
@@ -47,7 +47,7 @@
 				mainScreen.style.display = 'block';
 			}
 		};
-		
+
 		ImagesLib.initialize("tileArea", imagesList, onUpdateLoading);
 	</script>
 </head>
@@ -61,67 +61,67 @@
 
 		<canvas id="mapArea" class="startAt"></canvas>
 
-        <div class="buildingInfoBackground">
-            <img id="buildingInfoImage" src="" onclick="BuildingInfoView.goto();">
-            <img id="buildingInfoMicroTail" class="buildingInfoMicroTail" src="images/interface/microTile.gif">
-        </div>
-        <div class="buildingInfoData">
-            <div id="buildingInfoDataTitle" class="buildingInfoDataTitle"></div>
-            <div id="buildingInfoDataBar" class="queueItemBar"><div id="buildingInfoDataBarValue" class="queueItemBar2"></div></div>
-        </div>
-        <div id="mainToolsBar" class="toolBar">
-            <div class="toolBarButtonLeft buttonEnable buttonDozer" onclick="Main.executeCommand(MainCommand.Dozer);"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonDigger" onclick="Main.executeCommand(MainCommand.Digger);"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonMiner" onclick="Main.executeCommand(MainCommand.Miner);"></div>
-            <div class="toolBarSeparatorLeft"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonPipeNorthEastSouthWest" onclick="Main.executeCommand(MainCommand.PipeNorthEastSouthWest);"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonPipeEastWest" onclick="Main.executeCommand(MainCommand.PipeEastWest);"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonPipeNorthSouth" onclick="Main.executeCommand(MainCommand.PipeNorthSouth);"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonPipeDown" onclick="Main.executeCommand(MainCommand.PipeDown);"></div>
-            <div class="toolBarSeparatorLeft"></div>
-            <div class="toolBarButtonLeft buttonEnable buttonBuilding" onclick="Main.executeCommand(MainCommand.SelectBuilding);"></div>
+		<div class="buildingInfoBackground">
+			<img id="buildingInfoImage" src="" onclick="BuildingInfoView.goto();">
+			<img id="buildingInfoMicroTail" class="buildingInfoMicroTail" src="images/interface/microTile.gif">
+		</div>
+		<div class="buildingInfoData">
+			<div id="buildingInfoDataTitle" class="buildingInfoDataTitle"></div>
+			<div id="buildingInfoDataBar" class="queueItemBar"><div id="buildingInfoDataBarValue" class="queueItemBar2"></div></div>
+		</div>
+		<div id="mainToolsBar" class="toolBar">
+			<div class="toolBarButtonLeft buttonEnable buttonDozer" onclick="Main.executeCommand(MainCommand.Dozer);"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonDigger" onclick="Main.executeCommand(MainCommand.Digger);"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonMiner" onclick="Main.executeCommand(MainCommand.Miner);"></div>
+			<div class="toolBarSeparatorLeft"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonPipeNorthEastSouthWest" onclick="Main.executeCommand(MainCommand.PipeNorthEastSouthWest);"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonPipeEastWest" onclick="Main.executeCommand(MainCommand.PipeEastWest);"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonPipeNorthSouth" onclick="Main.executeCommand(MainCommand.PipeNorthSouth);"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonPipeDown" onclick="Main.executeCommand(MainCommand.PipeDown);"></div>
+			<div class="toolBarSeparatorLeft"></div>
+			<div class="toolBarButtonLeft buttonEnable buttonBuilding" onclick="Main.executeCommand(MainCommand.SelectBuilding);"></div>
 
-            <div class="toolBarButtonRight buttonEnable buttonTime" onclick="Main.executeCommand(MainCommand.DoNext);"></div>
-            <div class="toolBarSeparatorRight"></div>
-            <div class="toolBarButtonRight buttonEnable buttonResearch" onclick="Main.executeCommand(MainCommand.ShowResearch);"></div>
-            <div class="toolBarButtonRight buttonEnable buttonProduction" onclick="Main.executeCommand(MainCommand.ShowProduction);"></div>
-            <div class="toolBarButtonRight buttonEnable buttonReport" onclick="Main.executeCommand(MainCommand.ShowReport);"></div>
-            <div class="toolBarSeparatorRight"></div>
-            <div class="toolBarButtonRight buttonEnable buttonHelp" onclick="Main.executeCommand(MainCommand.ShowHelp);"></div>
-        </div>
+			<div class="toolBarButtonRight buttonEnable buttonTime" onclick="Main.executeCommand(MainCommand.DoNext);"></div>
+			<div class="toolBarSeparatorRight"></div>
+			<div class="toolBarButtonRight buttonEnable buttonResearch" onclick="Main.executeCommand(MainCommand.ShowResearch);"></div>
+			<div class="toolBarButtonRight buttonEnable buttonProduction" onclick="Main.executeCommand(MainCommand.ShowProduction);"></div>
+			<div class="toolBarButtonRight buttonEnable buttonReport" onclick="Main.executeCommand(MainCommand.ShowReport);"></div>
+			<div class="toolBarSeparatorRight"></div>
+			<div class="toolBarButtonRight buttonEnable buttonHelp" onclick="Main.executeCommand(MainCommand.ShowHelp);"></div>
+		</div>
 
-        <canvas id="buildingArea" class="buildingArea"></canvas>
+		<canvas id="buildingArea" class="buildingArea"></canvas>
 
-        <!-- ------------------------------------- -->
+		<!-- ------------------------------------- -->
 
-        <div id="queueDiv_wrapper" class="startAt">
-            <div id="queueDivBackground" class="background"></div>
-            <div id="queueDivContainer">
-                <div id="queueDiv_slider" class="slider">
-                    <div id="queueDiv_sliderCursor" class="sliderCursor"></div>
-                </div>
+		<div id="queueDiv_wrapper" class="startAt">
+			<div id="queueDivBackground" class="background"></div>
+			<div id="queueDivContainer">
+				<div id="queueDiv_slider" class="slider">
+					<div id="queueDiv_sliderCursor" class="sliderCursor"></div>
+				</div>
 
-			    <div id="queueDiv" class="slider_container">
-				    <div id="queueDiv_content" class="scroll-content"></div>
-			    </div>
-            </div>
-            <div id="queueDivAreaRight">
-                <div id="queueDivAreaTitle"></div>
-                <div id="queueDivAreaContainer">
-                    <div id="queueDivArea_slider" class="slider">
-                        <div id="queueDivArea_sliderCursor" class="sliderCursor"></div>
-                    </div>
+				<div id="queueDiv" class="slider_container">
+					<div id="queueDiv_content" class="scroll-content"></div>
+				</div>
+			</div>
+			<div id="queueDivAreaRight">
+				<div id="queueDivAreaTitle"></div>
+				<div id="queueDivAreaContainer">
+					<div id="queueDivArea_slider" class="slider">
+						<div id="queueDivArea_sliderCursor" class="sliderCursor"></div>
+					</div>
 
-                    <div id="queueDivArea" class="slider_container">
-                        <div id="queueDivArea_content" class="scroll-content"></div>
-                    </div>
-                </div>
-                <div id="queueDivAreaToolsBar" class="toolBar"><div class="toolBarButtonRight buttonEnable buttonBack" onclick="Queue.hide();"></div></div>
-            </div>
+					<div id="queueDivArea" class="slider_container">
+						<div id="queueDivArea_content" class="scroll-content"></div>
+					</div>
+				</div>
+				<div id="queueDivAreaToolsBar" class="toolBar"><div class="toolBarButtonRight buttonEnable buttonBack" onclick="Queue.hide();"></div></div>
+			</div>
 		</div>
 	</div>
 
-    <!-- ------------------------------------------------------------------------------------------- -->
+	<!-- ------------------------------------------------------------------------------------------- -->
 
 	<div id="debug">
 		<div style="position: absolute; left: 1000px; top: 5px;">
@@ -164,9 +164,9 @@
 			//buildMap(main.getTerrainMap());
 
 			//------------------------
-			
+
 			var map = main.getTerrainMap();
-            var i;
+			var i;
 			for(i = 0; i < 60; i++)
 			{
 				map.addResource("Metal", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
@@ -183,23 +183,23 @@
 			{
 				map.addResource("Fumarole", { x: Math.floor(Math.random() * 150), y: Math.floor(Math.random() * 300) });
 			}
-			
+
 			var state = main.getState();
 			state.addKnowledge({ discovery: ["ElectrostaticDischarge"] });
 			state.addKnowledge({ discovery: ["Robotics"] });
 			state.addKnowledge({ theory: ["Extraction_Metal"] });
 
-            state.addKnowledge({ theory: ["Find_Metal"] });
+			state.addKnowledge({ theory: ["Find_Metal"] });
 
 			state.addKnowledge({ technology: ["LandingModule"] });
 
 
 
-            state.addKnowledge({ theory: ["Find_Mineral"] });
-            state.addKnowledge({ theory: ["Find_Radioactive"] });
-            state.addKnowledge({ theory: ["Find_Fumarole"] });
+			state.addKnowledge({ theory: ["Find_Mineral"] });
+			state.addKnowledge({ theory: ["Find_Radioactive"] });
+			state.addKnowledge({ theory: ["Find_Fumarole"] });
 
-            //state.addKnowledge({ technology: ["SpacePort"] });
+			//state.addKnowledge({ technology: ["SpacePort"] });
 
 			/*
 			state.addKnowledge({ technology: [
@@ -246,8 +246,8 @@
 				"Lab",
 				"LabAdv",
 				"DeepLab",
-                "SpacePort"
-                ] });
+				"SpacePort"
+				] });
 			*/
 			//state.createMaterials({ repairUnit: 10000 });
 			//state.destroyMaterials({ repairUnit: 10000 });
@@ -259,48 +259,48 @@
 			state.configureMaterial("goodsUnit", "genericStorage");
 			state.configureMaterial("pharmaceuticalUnit", "genericStorage");
 			state.configureMaterial("fusionWaste", "genericStorage");
-			
+
 			state.configureMaterial("dozer", "roboticStorage");
 			state.configureMaterial("digger", "roboticStorage");
 			state.configureMaterial("miner", "roboticStorage");
 			state.configureMaterial("worker", "roboticStorage");
 			state.configureMaterial("MicrowaveSatellite", "roboticStorage");
-			
+
 			state.configureMaterial("radioactiveOre", "radioactiveStorage");
 			state.configureMaterial("radioactiveWaste", "radioactiveStorage");
 			state.configureMaterial("toxicWaste", "radioactiveStorage");
 			*/
 
-            state.configureMaterial("mediKit", "genericStorage");
-            state.configureMaterial("goods", "genericStorage");
-            state.configureMaterial("toxicWaste", "genericStorage");
-            state.configureMaterial("fusionWaste", "genericStorage");
+			state.configureMaterial("mediKit", "genericStorage");
+			state.configureMaterial("goods", "genericStorage");
+			state.configureMaterial("toxicWaste", "genericStorage");
+			state.configureMaterial("fusionWaste", "genericStorage");
 
-            state.configureMaterial("dozer", "roboticStorage");
-            state.configureMaterial("digger", "roboticStorage");
-            state.configureMaterial("miner", "roboticStorage");
-            state.configureMaterial("worker", "roboticStorage");
-            state.configureMaterial("MicrowaveSatellite", "roboticStorage");
+			state.configureMaterial("dozer", "roboticStorage");
+			state.configureMaterial("digger", "roboticStorage");
+			state.configureMaterial("miner", "roboticStorage");
+			state.configureMaterial("worker", "roboticStorage");
+			state.configureMaterial("MicrowaveSatellite", "roboticStorage");
 
-            state.configureMaterial("radioactiveBar", "radioactiveStorage");
-            state.configureMaterial("radioactiveWaste", "radioactiveStorage");
+			state.configureMaterial("radioactiveBar", "radioactiveStorage");
+			state.configureMaterial("radioactiveWaste", "radioactiveStorage");
 
 			//state.createMaterials({ dozer: 10 });
 			//state.createMaterials({ digger: 10 });
-					
+
 			//------------------------
-			
+
 			main.redraw();
 		}
-		
+
 		//initialize();
-		
+
 		function buildMap(map)
 		{
 			//************ TODO
 
 			map.addBuilding("Park", { x: 4, y: 3 });
-			
+
 			var layer = TerrainLayer.Surface;
 			for(var i = 0;i < 3; i++)
 			{
@@ -317,23 +317,23 @@
 				//map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 4, y: 2 }, true);
 				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 2 }, true);
 				map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 3, y: 1 }, true);
-				
+
 				map.addPipe(PipeType.EastWest, layer, { x: 0, y: 6 });
 				map.addPipe(PipeType.EastWest, layer, { x: 0, y: 5 });
 
-				
+
 				if(layer == TerrainLayer.Surface)
 				{
 					map.addPipe(PipeType.Down, layer, { x: 0, y: 2 }, true);
 					map.addPipe(PipeType.EastWest, layer, { x: 0, y: 3 }, true);
-					
+
 					layer = TerrainLayer.Underground;
 				}
 				else if(layer == TerrainLayer.Underground)
 				{
 					map.addPipe(PipeType.Up, layer, { x: 0, y: 2 }, true);
 					map.addPipe(PipeType.Down, layer, { x: 0, y: 3 }, true);
-					
+
 					layer = TerrainLayer.Deep;
 				}
 				else
@@ -341,11 +341,11 @@
 					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 0, y: 2 }, true);
 					map.addPipe(PipeType.Up, layer, { x: 0, y: 3 }, true);
 				}
-				
+
 				/*
 				if(layer == TerrainLayer.Surface)
 				{
-				
+
 					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 2, y: 4 }, true);
 					map.addPipe(PipeType.EastWest, layer, { x: 2, y: 5 }, true);
 					map.addPipe(PipeType.NorthEastSouthWest, layer, { x: 2, y: 6 }, true);
@@ -364,14 +364,14 @@
 
 					map.addBuilding("CommandCenter", { x: 1, y: 2 }, true);
 					map.addBuilding("MaintenanceCenter", { x: 1, y: 0 });
-					
+
 					map.addBuilding("RoboCommander", { x: 2, y: 0 });
-					
-					
+
+
 					map.addBuilding("ElectrostaticCoil", { x: 6, y: 2 }, true);
 					map.addBuilding("ElectrostaticCoil", { x: 6, y: 3 });
 					map.addBuilding("ElectrostaticCoil", { x: 6, y: 4 }, true);
-					
+
 					map.addBuilding("Capacitor", { x: 5, y: 5 }, true);
 					map.addBuilding("Capacitor", { x: 4, y: 5 });
 					map.addBuilding("Capacitor", { x: 3, y: 5 });
@@ -403,7 +403,7 @@
 				else
 				{
 					map.addBuilding("StorageArea", { x: 5, y: 5 }, true);
-					
+
 //					map.addBuilding(new Building("DeepLab", layer, new Point(3, 0), 20));
 
 //var test = new Building("DeepLab", layer, new Point(4, 3), 0);
@@ -411,21 +411,21 @@
 
 					//map.addBuilding(new Building("GeothermalAdvA", layer, new Point(4, 1), 0));
 					//map.addBuilding(new Building("GeothermalAdvB", layer, new Point(5, 1), 0));
-					
+
 					//map.addBuilding(new Building("Geothermal", layer, new Point(6, 3), 0));
-					
+
 					//map.addBuilding(new Building("BlueLigth", layer, new Point(1, 4), 0));
 
 				}
-				
+
 				*/
 			}
-			
+
 			showState();
 		}
 
 		//---------------------------------------------------
-		
+
 		function showState()
 		{
 			var state = main.getState();
@@ -434,7 +434,7 @@
 			text += "<tr><td><b>Name </b></td><td><b>Produced </b></td><td><b>Consumed </b></td><td><b>Stored</b></td><td><b>/</b></td><td><b>Capacity</b></td></tr>";
 			var name;
 			var materials = state.getMaterials();
-            var i;
+			var i;
 			for(i = 0; i < materials.length; i++)
 			{
 				name = materials[i];
@@ -446,10 +446,10 @@
 				text += "<tr><td>" + name + "</td><td>" + (state.getProduced(name) || "--") + "</td><td>" + (state.getConsumed(name) || "--") + "</td><td>" + (state.getStored(name) || state.getFullCapacity(name)) + "</td><td>/</td><td>" + capacity + "</td></tr>";
 			}
 			text += "</table></div>";
-			
+
 			var stateDiv = document.getElementById("showStateDiv");
 			stateDiv.innerHTML = text;
-			
+
 			//----
 			text = "<div style=\"color:white;\"><b>Technology:</b><br/>";
 			var technology = state.getTechnology();
@@ -458,28 +458,28 @@
 				text += technology[i] + "<br/>";
 			}
 			//----
-			
+
 			stateDiv = document.getElementById("showResearchStateDiv");
 			stateDiv.innerHTML = text + "</div>";
-			
+
 			text = "<div style=\"color:white;\"><b>Theory:</b><br/>";
 			var theory = state.getTheory();
 			for(i = 0; i < theory.length; i++)
 			{
 				text += theory[i] + "<br/>";
 			}
-			
+
 			text += "<br/>Discovery:<br/>";
 			var discovery = state.getDiscovery();
 			for(i = 0; i < discovery.length; i++)
 			{
 				text += discovery[i] + "<br/>";
 			}
-			
+
 			stateDiv = document.getElementById("showResearchState2Div");
 			stateDiv.innerHTML = text + "</div>";
 		}
-		
+
 		//---------------------------------------------------
 	</script>
 </body>

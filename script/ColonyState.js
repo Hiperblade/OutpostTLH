@@ -1,6 +1,6 @@
 	function ColonyState()
 	{
-        var state = {};
+		var state = {};
 		state.materials = [];
 		state.metaMaterials = [];
 		state.buildList = [];
@@ -17,7 +17,7 @@
 			};
 		state.population = {
 			registry: [],
-            subsistence: 0,
+			subsistence: 0,
 			wellness: 0,
 			happiness: 0
 			};
@@ -29,7 +29,7 @@
 		state.date = 0;
 		state.simulationData = {};
 		state.globalEventList = [];
-		
+
 		var _checkMaterial = function(name)
 		{
 			if(!_contains(state.materials, name))
@@ -41,7 +41,7 @@
 				state.materials.push(name);
 			}
 		};
-		
+
 		var _resetMaterial = function(name)
 		{
 			if(state[name + "Produced"] != undefined)
@@ -57,7 +57,7 @@
 				state[name + "Capacity"] = 0;
 			}
 		};
-		
+
 		var _updateMaterial = function(name)
 		{
 			var sulplus = state[name + "Produced"] - state[name + "Consumed"];
@@ -92,7 +92,7 @@
 		{
 			return (state[name + "MetaMaterial"] != undefined)
 		};
-		
+
 		var _getCapacity = function(name)
 		{
 			_checkMaterial(name);
@@ -105,7 +105,7 @@
 				return state[name + "Capacity"];
 			}
 		};
-		
+
 		var _getFreeCapacity = function(name)
 		{
 			_checkMaterial(name);
@@ -118,7 +118,7 @@
 				return _getCapacity(name) - state[name + "Stored"];
 			}
 		};
-		
+
 		var _getFullCapacity = function(metaName)
 		{
 			var ret = 0;
@@ -133,11 +133,11 @@
 			}
 			return ret;
 		};
-		
+
 		var _configureMaterial = function(name, metaName)
 		{		
 			_checkMaterial(name);
-			
+
 			if(metaName != null)
 			{
 				state[name + "MetaMaterial"] = metaName;
@@ -153,26 +153,26 @@
 				state[name + "Capacity"] = undefined;
 			}
 		};
-		
+
 		var _getMaterialFromMetaMaterial = function(metaName)
 		{
 			return state[metaName + "List"];
 		};
-		
+
 		var _resetAll = function()
 		{
 			for(var i = 0; i < state.materials.length; i++)
 			{
 				_resetMaterial(state.materials[i]);
 			}
-			
+
 			state.buildList = [];
 			state.destroyedList = [];
 			state.activeList = {};
 			state.inactiveList = {};
 			state.simulationData = {};
 		};
-		
+
 		var _updateAll = function()
 		{
 			for(var i = 0; i < state.materials.length; i++)
@@ -180,140 +180,140 @@
 				_updateMaterial(state.materials[i]);
 			}
 		};
-		
+
 		var _addCapacity = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
-				
-				    state[mat + "Capacity"] += materials[mat];
-                }
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
+
+					state[mat + "Capacity"] += materials[mat];
+				}
 			}
 		};
-		
+
 		var _haveMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-				    _checkMaterial(mat);
-				
-                    if(state[mat + "Produced"] - state[mat + "Consumed"] + state[mat + "Stored"] < materials[mat])
-                    {
-                        return false;
-                    }
-                }
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
+
+					if(state[mat + "Produced"] - state[mat + "Consumed"] + state[mat + "Stored"] < materials[mat])
+					{
+						return false;
+					}
+				}
 			}
 			return true;
 		};
-		
+
 		var _haveSpace = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    if(state[mat + "Produced"] - state[mat + "Consumed"] + materials[mat] > _getFreeCapacity(mat))
-                    {
-                        return false;
-                    }
-                }
+					if(state[mat + "Produced"] - state[mat + "Consumed"] + materials[mat] > _getFreeCapacity(mat))
+					{
+						return false;
+					}
+				}
 			}
 			return true;
 		};
-		
+
 		var _delMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    state[mat + "Consumed"] += materials[mat];
-                }
+					state[mat + "Consumed"] += materials[mat];
+				}
 			}
 		};
-		
+
 		var _addMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    state[mat + "Produced"] += materials[mat];
-                }
+					state[mat + "Produced"] += materials[mat];
+				}
 			}
 		};
-		
+
 		var _getRemainder = function(name)
 		{
 			_checkMaterial(name);
-			
+
 			return state[name + "Stored"] + state[name + "Produced"] - state[name + "Consumed"];
 		};
-		
+
 		var _destroyMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    state[mat + "Stored"] -= materials[mat];
-                    if(state[mat + "Stored"] < 0)
-                    {
-                        state[mat + "Stored"] = 0;
-                    }
-                }
+					state[mat + "Stored"] -= materials[mat];
+					if(state[mat + "Stored"] < 0)
+					{
+						state[mat + "Stored"] = 0;
+					}
+				}
 			}
 		};
-		
+
 		var _createMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    state[mat + "Stored"] += materials[mat];
-                }
+					state[mat + "Stored"] += materials[mat];
+				}
 			}
 		};
-		
+
 		var _setMaterials = function(materials)
 		{
 			for(var mat in materials)
 			{
-                if(materials.hasOwnProperty(mat))
-                {
-                    _checkMaterial(mat);
+				if(materials.hasOwnProperty(mat))
+				{
+					_checkMaterial(mat);
 
-                    state[mat + "Stored"] = materials[mat];
-                }
+					state[mat + "Stored"] = materials[mat];
+				}
 			}
 		};
-			
+
 		var _addToBuildList = function(building)
 		{
 			state.buildList.push(building);
 		};
-	
+
 		var _addToDestroyedList = function(building)
 		{
 			state.destroyedList.push(building);
 		};
-		
+
 		var _addToActiveList = function(building)
 		{
 			if(state.activeList[building.getBuildingType()] == undefined)
@@ -322,7 +322,7 @@
 			}
 			state.activeList[building.getBuildingType()].push(building);
 		};
-		
+
 		var _addToInactiveList = function(building)
 		{
 			if(state.inactiveList[building.getBuildingType()] == undefined)
@@ -331,7 +331,7 @@
 			}
 			state.inactiveList[building.getBuildingType()].push(building);
 		};
-		
+
 		// Knowledge
 		var _isCompletedKnowledge = function(name)
 		{
@@ -342,65 +342,65 @@
 		{
 			state.knowledge.completed.push(research);
 		};
-		
+
 		var _checkKnowledge = function(knowledge)
 		{
 			var ret = true;
 			for(var type in knowledge)
 			{
-                if(knowledge.hasOwnProperty(type))
-                {
-                    for(var ii = 0; ii < knowledge[type].length; ii++)
-                    {
-                        if(!_contains(state.knowledge[type], knowledge[type][ii]))
-                        {
-                            ret = false;
-                        }
-                    }
-                }
+				if(knowledge.hasOwnProperty(type))
+				{
+					for(var ii = 0; ii < knowledge[type].length; ii++)
+					{
+						if(!_contains(state.knowledge[type], knowledge[type][ii]))
+						{
+							ret = false;
+						}
+					}
+				}
 			}
 			return ret;
 		};
-			
+
 		var _addKnowledge = function(knowledge)
 		{
 			var ret = true;
 			for(var type in knowledge)
 			{
-                if(knowledge.hasOwnProperty(type))
-                {
-                    for(var ii = 0; ii < knowledge[type].length; ii++)
-                    {
-                        if(!_contains(state.knowledge[type], knowledge[type][ii]))
-                        {
-                            state.knowledge[type].push(knowledge[type][ii]);
-                        }
-                    }
-                }
+				if(knowledge.hasOwnProperty(type))
+				{
+					for(var ii = 0; ii < knowledge[type].length; ii++)
+					{
+						if(!_contains(state.knowledge[type], knowledge[type][ii]))
+						{
+							state.knowledge[type].push(knowledge[type][ii]);
+						}
+					}
+				}
 			}
 			return ret;
 		};
-		
+
 		var _delKnowledge = function(knowledge)
 		{
 			var ret = true;
 			for(var type in knowledge)
 			{
-                if(knowledge.hasOwnProperty(type))
-                {
-                    for(var ii = 0; ii < knowledge[type].length; ii++)
-                    {
-                        if(_contains(state.knowledge[type], knowledge[type][ii]))
-                        {
-                            state.knowledge[type].splice(state.knowledge[type].indexOf(knowledge[type][ii]), 1); // remove
-                        }
-                    }
-                }
+				if(knowledge.hasOwnProperty(type))
+				{
+					for(var ii = 0; ii < knowledge[type].length; ii++)
+					{
+						if(_contains(state.knowledge[type], knowledge[type][ii]))
+						{
+							state.knowledge[type].splice(state.knowledge[type].indexOf(knowledge[type][ii]), 1); // remove
+						}
+					}
+				}
 			}
 			return ret;
 		};
 
-        /* TODO
+		/* TODO
 		var _addResearchQueue = function(name)
 		{
 			if(!_contains(state.knowledge.researchQueue, name))
@@ -409,7 +409,7 @@
 			}
 		};
 		*/
-		
+
 		var _contains = function(array, obj)
 		{
 			for (var i = 0; i < array.length; i++)
@@ -421,12 +421,12 @@
 			}
 			return false;
 		};
-		
+
 		var _getRoboDozerAvailable = function()
 		{
 			return Math.min(state.robotsAvailable.dozer, state.robotsAvailable.controllers);
 		};
-		
+
 		var _useRoboDozer = function()
 		{
 			if(_getRoboDozerAvailable() > 0)
@@ -437,7 +437,7 @@
 			}
 			return false;
 		};
-		
+
 		var _getRoboDiggerAvailable = function()
 		{
 			return Math.min(state.robotsAvailable.digger, state.robotsAvailable.controllers);
@@ -453,19 +453,19 @@
 			}
 			return false;
 		};
-		
+
 		var _setRobotsAvailable = function(data)
 		{
 			state.robotsAvailable.controllers = data.controllers;
 			state.robotsAvailable.dozer = data.dozer;
 			state.robotsAvailable.digger = data.digger;
 		};
-		
+
 		//-----------------------------------------
-		
+
 		this.getDate = function() { return state.date; };
 		this.setDate = function(date) { state.date = date; };
-		
+
 		this.getConsumed = function(name) { _checkMaterial(name); return state[name + "Consumed"]; };
 		this.getProduced = function(name) { _checkMaterial(name); return state[name + "Produced"]; };
 		this.getStored = function(name) { _checkMaterial(name); return state[name + "Stored"]; };
@@ -479,13 +479,13 @@
 		this.getProductionQueue = function() { return state.knowledge.productionQueue; };
 		this.getRoboticsWorkforce = function() { return state.roboticsWorkforce; };
 		this.getPopulation = function() { return state.population; };
-		
+
 		this.getRoboDozerAvailable = _getRoboDozerAvailable;
 		this.useRoboDozer = _useRoboDozer;
 		this.getRoboDiggerAvailable = _getRoboDiggerAvailable;
 		this.useRoboDigger = _useRoboDigger;
 		this.setRobotsAvailable = _setRobotsAvailable;
-		
+
 		this.isMetaMaterial = _isMetaMaterial;
 		this.getMaterialFromMetaMaterial = _getMaterialFromMetaMaterial;
 		this.getCapacity = _getCapacity;
@@ -503,7 +503,7 @@
 		this.destroyMaterials = _destroyMaterials;
 		this.createMaterials = _createMaterials;
 		this.setMaterials = _setMaterials;
-		
+
 		this.addToBuildList = _addToBuildList;
 		this.getBuildList = function() { return state.buildList; };
 		this.addToDestroyedList = _addToDestroyedList;
@@ -512,16 +512,16 @@
 		this.getActiveList = function() { return state.activeList; };
 		this.addToInactiveList = _addToInactiveList;
 		this.getInactiveList = function() { return state.inactiveList; };
-		
+
 		this.getSimulationData = function() { return state.simulationData; };
 		this.getGlobalEventList = function() { return state.globalEventList; };
 		this.resetGlobalEvent = function() { return state.globalEventList = []; };
-		
+
 		this.isCompletedKnowledge = _isCompletedKnowledge;
 		this.addCompletedResearch = _addCompletedResearch;
 		this.checkKnowledge = _checkKnowledge;
 		this.addKnowledge = _addKnowledge;
 		this.delKnowledge = _delKnowledge;
-		
+
 		//-----------------------------------------
 	}

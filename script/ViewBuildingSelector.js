@@ -10,7 +10,7 @@
 		var numTile = 1;
 		var innerspace = 5;
 		var positionIndex = 0;
-		
+
 		var _initialize = function()
 		{
 			canvasView.width = size.x;
@@ -22,10 +22,10 @@
 			innerspace = 5 + Math.floor((remainSize - (numTile * (baseTile.width + 5))) / numTile );
 			numTile += 1;
 			_hide();
-			
+
 			canvasView.addEventListener("mousedown", _doMouseDown, false);
 		};
-		
+
 		var _doMouseDown = function(e)
 		{
 			if((e.pageX > 10) && (e.pageX < 40))
@@ -37,7 +37,7 @@
 					positionIndex--;
 				}
 				_redraw();
-				
+
 				window.setTimeout(function()
 					{
 						_redraw();
@@ -52,7 +52,7 @@
 					positionIndex++;
 				}
 				_redraw();
-				
+
 				window.setTimeout(function()
 					{
 						_redraw();
@@ -72,7 +72,7 @@
 				}
 			}
 		};
-		
+
 		var _countTecnology = function()
 		{
 			var ret = 0;
@@ -87,7 +87,7 @@
 			}
 			return ret;
 		};
-		
+
 		var _findTecnology = function(index)
 		{
 			var ret = 0;
@@ -106,25 +106,25 @@
 			}
 			return null;
 		};
-		
+
 		var _setAbsolutePosition = function(point)
 		{
 			canvasView.style.left = point.x + "px";
 			canvasView.style.top = (point.y - size.y) + "px";
 		};
-		
+
 		var _hide = function()
 		{
 			hidden = true;
 			_redraw();
 		};
-		
+
 		var _show = function()
 		{
 			hidden = false;
 			_redraw();
 		};
-		
+
 		var _redraw = function()
 		{
 			if(hidden)
@@ -136,13 +136,13 @@
 			{
 				canvasView.style.display = 'block';
 				//canvasView.style.visibility = "visible";
-				
+
 				ctx.globalAlpha = 0.8;
 				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 				ctx.globalAlpha = 1;
-				
+
 				//previous
 				if(positionIndex > 0)
 				{
@@ -152,7 +152,7 @@
 				{
 					_drawButton("previous", "_disabled");
 				}
-				
+
 				//next
 				if(positionIndex < _countTecnology() - numTile)
 				{
@@ -162,12 +162,12 @@
 				{
 					_drawButton("next", "_disabled");
 				}
-				
+
 				for(var i = 0; i < numTile; i++)
 				{
 					_drawImage(ctx, i, baseTile);
 				}
-				
+
 				var index = 0;
 				var item;
 				var technology = state.getTechnology();
@@ -189,12 +189,12 @@
 				}
 			}
 		};
-		
+
 		var _toScreenPosition = function(slot)
 		{
 			return { x: 50 + (slot * (baseTile.width + innerspace)), y: size.y - 10 };
 		};
-		
+
 		var _drawImage = function(ctx, slot, image)
 		{
 			var p = _toScreenPosition(slot);
@@ -203,7 +203,7 @@
 			ctx.closePath();
 			ctx.fill();
 		};
-		
+
 		var _drawButton = function(type, state)
 		{
 			var x = 10;
@@ -217,24 +217,24 @@
 			ctx.closePath();
 			ctx.fill();
 		};
-		
+
 		var _setLayer = function(newLayer)
 		{
 			layer = newLayer;
 			positionIndex = 0;
 			_redraw();
 		};
-		
+
 		_initialize();
-		
+
 		//-----------------------------------------
-		
+
 		this.getLayer = function() { return layer; };
 		this.setLayer = _setLayer;
 		this.show = _show;
 		this.hide = _hide;
 		this.redraw = _redraw;
 		this.setAbsolutePosition = _setAbsolutePosition;
-		
+
 		//-----------------------------------------
 	}

@@ -7,12 +7,12 @@
 		Deads: "deads"
 		};
 
-    const GenerationConst = {
-        AGE_INFANTS: 6,
-        AGE_RETIREES: 80,
-        EDUCATIONAL_PRIMARY: 13,
-        EDUCATIONAL_SECONDARY: 5
-    };
+	const GenerationConst = {
+		AGE_INFANTS: 6,
+		AGE_RETIREES: 80,
+		EDUCATIONAL_PRIMARY: 13,
+		EDUCATIONAL_SECONDARY: 5
+	};
 
 	function Generation(date, nurseryUnit)
 	{
@@ -22,7 +22,7 @@
 		{
 			lots[i] = new GenerationalLot(birthDate);
 		}
-		
+
 		var _getPopulation = function()
 		{
 			var ret = 0;
@@ -32,7 +32,7 @@
 			}
 			return ret;
 		};
-		
+
 		var _kill = function()
 		{
 			if(_getPopulation() > 0)
@@ -54,14 +54,14 @@
 			}
 			return 0;
 		};
-		
+
 		var _getState = function(date)
 		{
 			if(_getPopulation() == 0)
 			{
 				return GenerationState.Deads;
 			}
-			
+
 			var age = date - birthDate;
 			if(age < GenerationConst.AGE_INFANTS)
 			{
@@ -88,7 +88,7 @@
 				}
 			}
 		};
-		
+
 		var _getNextLot = function()
 		{
 			if(_getPopulation() > 0)
@@ -104,7 +104,7 @@
 			}
 			return null;
 		};
-		
+
 		var _teach = function()
 		{
 			var lot = _getNextLot();
@@ -113,34 +113,34 @@
 				lot.teach();
 			}
 		};
-		
+
 		//-----------------------------------------
-		
+
 		this.getBirthDate = function() { return birthDate; };
 		this.getLots = function() { return lots; };
-		
+
 		this.getPopulation = _getPopulation;
 		this.kill = _kill;
 		this.getNextLot = _getNextLot;
 		this.teach = _teach;
 		this.getState = _getState;
-		
+
 		//-----------------------------------------
 	}
-	
+
 	function GenerationalLot(date)
 	{
 		const INITIAL_POPULATION = 5;
 
-        var birthDate = date;
+		var birthDate = date;
 		var deadCount = 0;
 		var educationLevel = 0;
-		
+
 		var _getPopulation = function()
 		{
 			return INITIAL_POPULATION - deadCount;
 		};
-		
+
 		var _kill = function()
 		{
 			if(deadCount < INITIAL_POPULATION)
@@ -149,7 +149,7 @@
 			}
 			return _getPopulation();
 		};
-		
+
 		var _teach = function()
 		{
 			if(deadCount < INITIAL_POPULATION)
@@ -157,14 +157,14 @@
 				educationLevel++;
 			}
 		};
-		
+
 		var _getState = function(date)
 		{
 			if(_getPopulation() == 0)
 			{
 				return GenerationState.Deads;
 			}
-			
+
 			var age = date - birthDate;
 			if(age < GenerationConst.AGE_INFANTS)
 			{
@@ -190,15 +190,15 @@
 				}
 			}
 		};
-		
+
 		//-----------------------------------------
-		
+
 		this.getEducationLevel = function() { return educationLevel; };
-		
+
 		this.getPopulation = _getPopulation;
 		this.kill = _kill;
 		this.teach = _teach;
 		this.getState = _getState;
-		
+
 		//-----------------------------------------
 	}

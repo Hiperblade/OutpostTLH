@@ -1,40 +1,40 @@
 	var Main;
 
-    function InitializeMainSystem(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
-    {
-        Main = new MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType);
-        return Main;
-    }
+	function InitializeMainSystem(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
+	{
+		Main = new MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType);
+		return Main;
+	}
 
-    var MainCommand =
-    {
-        GoNorth: "GoNorth",
-        GoEast: "GoEast",
-        GoSouth: "GoSouth",
-        GoWest: "GoWest",
-        GoUp: "GoUp",
-        GoDown: "GoDown",
-        Dozer: "Dozer",
-        Digger: "Digger",
-        Miner: "Miner",
-        PipeNorthEastSouthWest: "PipeNorthEastSouthWest",
-        PipeEastWest: "PipeEastWest",
-        PipeNorthSouth: "PipeNorthSouth",
-        PipeDown: "PipeDown",
-        SelectBuilding: "Building",
-        ShowHelp: "ShowHelp",
-        ShowReport: "ShowReport",
-        ShowProduction: "ShowProduction",
-        ShowResearch: "ShowResearch",
-        DoNext: "DoNext",
-        ClearSelection: "ClearSelection"
-    };
+	var MainCommand =
+	{
+		GoNorth: "GoNorth",
+		GoEast: "GoEast",
+		GoSouth: "GoSouth",
+		GoWest: "GoWest",
+		GoUp: "GoUp",
+		GoDown: "GoDown",
+		Dozer: "Dozer",
+		Digger: "Digger",
+		Miner: "Miner",
+		PipeNorthEastSouthWest: "PipeNorthEastSouthWest",
+		PipeEastWest: "PipeEastWest",
+		PipeNorthSouth: "PipeNorthSouth",
+		PipeDown: "PipeDown",
+		SelectBuilding: "Building",
+		ShowHelp: "ShowHelp",
+		ShowReport: "ShowReport",
+		ShowProduction: "ShowProduction",
+		ShowResearch: "ShowResearch",
+		DoNext: "DoNext",
+		ClearSelection: "ClearSelection"
+	};
 
-    function MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
+	function MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
 	{
 		const MAP_SIZE = { x: 150, y: 300 };
 		const TILE_DIMENSION = { x: 106, y: 46 };
-	
+
 		var site = siteType;
 		var areaSize = { x: 9, y: 9 };
 		var terrainMap;
@@ -42,10 +42,10 @@
 		var mapView;
 		var selectorView;
 		var queueView;
-        var buildingInfo;
+		var buildingInfo;
 		var position = { x: 0, y: 0 };
 		var state = null;
-		
+
 		var currentTile = null;
 
 		var _initialize = function()
@@ -54,91 +54,91 @@
 			{
 				event = event || window.event;
 				var e = event.keyCode;
-                switch(e)
-                {
-                    case 38: // up
-                    case 87: // w
-                        _executeCommand(MainCommand.GoNorth);
-                        break;
-                    case 39: // right
-                    case 68: // d
-                        _executeCommand(MainCommand.GoEast);
-                        break;
-                    case 40: // down
-                    case 83: // s
-                        _executeCommand(MainCommand.GoSouth);
-                        break;
-                    case 37: // left
-                    case 65: // a
-                        _executeCommand(MainCommand.GoWest);
-                        break;
+				switch(e)
+				{
+					case 38: // up
+					case 87: // w
+						_executeCommand(MainCommand.GoNorth);
+						break;
+					case 39: // right
+					case 68: // d
+						_executeCommand(MainCommand.GoEast);
+						break;
+					case 40: // down
+					case 83: // s
+						_executeCommand(MainCommand.GoSouth);
+						break;
+					case 37: // left
+					case 65: // a
+						_executeCommand(MainCommand.GoWest);
+						break;
 
-                    case 33: // pageUp
-                        _executeCommand(MainCommand.GoUp);
-                        break;
-                    case 34: // pageDown
-                        _executeCommand(MainCommand.GoDown);
-                        break;
+					case 33: // pageUp
+						_executeCommand(MainCommand.GoUp);
+						break;
+					case 34: // pageDown
+						_executeCommand(MainCommand.GoDown);
+						break;
 
-                    case 60: // < (it)
-                    case 220: // \ (en)
-                        _executeCommand(MainCommand.Dozer);
-                        break;
-                    case 90: // z
-                        _executeCommand(MainCommand.Digger);
-                        break;
-                    case 88: // x
-                        _executeCommand(MainCommand.Miner);
-                        break;
-                    case 67: // c
-                        _executeCommand(MainCommand.PipeNorthEastSouthWest);
-                        break;
-                    case 86: // v
-                        _executeCommand(MainCommand.PipeEastWest);
-                        break;
-                    case 66: // b
-                        _executeCommand(MainCommand.PipeNorthSouth);
-                        break;
-                    case 78: // n
-                        _executeCommand(MainCommand.PipeDown);
-                        break;
-                    case 77: // m
-                        _executeCommand(MainCommand.SelectBuilding);
-                        break;
+					case 60: // < (it)
+					case 220: // \ (en)
+						_executeCommand(MainCommand.Dozer);
+						break;
+					case 90: // z
+						_executeCommand(MainCommand.Digger);
+						break;
+					case 88: // x
+						_executeCommand(MainCommand.Miner);
+						break;
+					case 67: // c
+						_executeCommand(MainCommand.PipeNorthEastSouthWest);
+						break;
+					case 86: // v
+						_executeCommand(MainCommand.PipeEastWest);
+						break;
+					case 66: // b
+						_executeCommand(MainCommand.PipeNorthSouth);
+						break;
+					case 78: // n
+						_executeCommand(MainCommand.PipeDown);
+						break;
+					case 77: // m
+						_executeCommand(MainCommand.SelectBuilding);
+						break;
 
-                    case 72: // h
-                        _executeCommand(MainCommand.ShowHelp);
-                        break;
-                    case 74: // j
-                        _executeCommand(MainCommand.ShowReport);
-                        break;
-                    case 75: // k
-                        _executeCommand(MainCommand.ShowProduction);
-                        break;
-                    case 76: // l
-                        _executeCommand(MainCommand.ShowResearch);
-                        break;
+					case 72: // h
+						_executeCommand(MainCommand.ShowHelp);
+						break;
+					case 74: // j
+						_executeCommand(MainCommand.ShowReport);
+						break;
+					case 75: // k
+						_executeCommand(MainCommand.ShowProduction);
+						break;
+					case 76: // l
+						_executeCommand(MainCommand.ShowResearch);
+						break;
 
-                    case 13: // enter
-                        _executeCommand(MainCommand.DoNext);
-                        break;
-                }
+					case 13: // enter
+						_executeCommand(MainCommand.DoNext);
+						break;
+				}
 			};
-			
+
 			var _onChangePosition = function(newPosition)
 			{
 				newPosition.x -= Math.floor(areaSize.x / 2);
 				newPosition.y -= Math.floor(areaSize.y / 2);
 				if(newPosition.x < 0) newPosition.x = 0;
 				if(newPosition.y < 0) newPosition.y = 0;
-				
+
 				_setPosition(newPosition);
 			};
 
-            var _onClearCurrentItem = function()
-            {
-                _executeCommand(MainCommand.ClearSelection);
-            };
+			var _onClearCurrentItem = function()
+			{
+				_executeCommand(MainCommand.ClearSelection);
+			};
 
 			var _onSelected = function(item)
 			{
@@ -151,22 +151,22 @@
 					_setCurrentTile(null);
 				}
 			};
-			
+
 			terrainMap = new TerrainMap(site.getTypology(), MAP_SIZE);
 			state = terrainMap.getState();
 			view = new IsometricView (terrainMap, mapCanvas, areaSize, TILE_DIMENSION);
-            var canvasSize = view.getCanvasSize();
+			var canvasSize = view.getCanvasSize();
 
-            var mainArea = $("#mainScreen");
-            mainArea.css("width", canvasSize.x);
-            mainArea.css("height", canvasSize.y);
+			var mainArea = $("#mainScreen");
+			mainArea.css("width", canvasSize.x);
+			mainArea.css("height", canvasSize.y);
 
 			mapView = new MapView(terrainMap, miniMapCanvas, site.getImageName(), areaSize, _onChangePosition);
 			selectorView = new BuildingSelectorView(selectorCanvas, canvasSize.x, state, _onSelected);
 
-            buildingInfo = InitializeBuildingInfoView(_onChangePosition, _onClearCurrentItem);
+			buildingInfo = InitializeBuildingInfoView(_onChangePosition, _onClearCurrentItem);
 			queueView = InitializeQueueView("queueDiv", canvasSize);
-					
+
 			// pulsanti spostamento
 			view.addButtonGrid(10, { x: Math.floor(areaSize.x / 2), y: -1 }, "button_west", function (){ _goWest(); });
 			view.addButtonGrid(11, { x: areaSize.x, y: Math.floor(areaSize.y / 2) }, "button_north", function() { _goNorth(); });
@@ -174,7 +174,7 @@
 			view.addButtonGrid(13, { x: -1, y: Math.floor(areaSize.y / 2) }, "button_south", function() { _goSouth(); });
 
 			// bordo
-            var index;
+			var index;
 			for(index = 0; index < areaSize.y; index++)
 			{
 				view.addImageGrid(300 + index, { x: -1, y: index }, "tileBorder_left")
@@ -184,9 +184,9 @@
 				view.addImageGrid(200 + index, { x: index, y: areaSize.y }, "tileBorder_right")
 			}
 
-            // pulsanti selezione livello
-            view.addButton(30, { x: canvasSize.x - 40, y: view.getVerticalMiddle() - 50 }, "button_up", function() { _goUp(); });
-            view.addButton(31, { x: canvasSize.x - 40, y: view.getVerticalMiddle() + 50 + 30 }, "button_down", function() { _goDown(); });
+			// pulsanti selezione livello
+			view.addButton(30, { x: canvasSize.x - 40, y: view.getVerticalMiddle() - 50 }, "button_up", function() { _goUp(); });
+			view.addButton(31, { x: canvasSize.x - 40, y: view.getVerticalMiddle() + 50 + 30 }, "button_down", function() { _goDown(); });
 
 			view.setGridCallback(function(point)
 				{
@@ -195,10 +195,10 @@
 					{
 						return;
 					}
-					
+
 					if(currentTile != null)
 					{
-                        var resource;
+						var resource;
 
 						if(currentTile.isRobot)
 						{
@@ -220,7 +220,7 @@
 												}
 											}
 											terrainMap.delBuilding(point);
-										
+
 											terrainMap.addRoboDozer(point);
 											_setCurrentTile(null);
 										}
@@ -272,7 +272,7 @@ Log.dialog("Non \u00E8 disponibile nessuna " + TextRepository.get(RobotTypes.Dig
 									var material = resource.getResourceType();
 									var theory = "Extraction_" + material;
 									var mineType = "Mine" + material;
-									
+
 									if(state.checkKnowledge({theory: [theory]})) // controlo se hai la tecnologia richiesta
 									{
 										if(!terrainMap.isRazable(point))
@@ -292,7 +292,7 @@ Log.dialog("Non hai la tecnologia per estrarre questa risorsa!");
 								}
 							}
 
-                            _redraw();
+							_redraw();
 						}
 						else
 						{
@@ -349,7 +349,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 					{
 						if(target != null)
 						{
-                            buildingInfo.show(target);
+							buildingInfo.show(target);
 
 							if(target.isPipe() && !target.underConstruction() && !target.isDestroyed())
 							{
@@ -363,109 +363,109 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 								}
 							}
 						}
-                        else
-                        {
-                            buildingInfo.hide();
-                        }
+						else
+						{
+							buildingInfo.hide();
+						}
 					}
 				});
-			
+
 			view.setButtonsCallback(function(id)
 				{
 				});
-		
+
 			terrainMap.simulation();		
-            _setAbsolutePosition({x: 0, y: 0});
+			_setAbsolutePosition({x: 0, y: 0});
 			_setLayer(TerrainLayer.Surface);
 		};
-		
+
 		var _addBuilding = function(buildingType, point)
 		{
 			var newBuilding = terrainMap.addBuilding(buildingType, point);
 			return (newBuilding != null);
 		};
-		
+
 		var _createCurrentTilePipe = function(pipeType, layer)
 		{
 			return { buildingType: "Pipe_" + pipeType + "_" + layer, image: "Pipe_" + pipeType + "_" + layer};
 		};
-		
+
 		var _setPosition = function(point)
 		{
 			position = point;
 			view.setPosition(position);
 			mapView.setPosition(position);
 		};
-		
+
 		var _redraw = function()
 		{
-            _updateRoboAvailable();
+			_updateRoboAvailable();
 			view.redraw();
 			mapView.redraw();
 		};
-		
+
 		var _fromScreenPosition = function(point)
 		{
 			return view.fromScreenPosition(point);
 		};
-		
+
 		var _findBuilding = function(point)
 		{
 			return terrainMap.findBuilding(point);
 		};
 
-        var disableCommand = {};
+		var disableCommand = {};
 
-        var _setAbilitationButton = function(name, enable)
-        {
-            disableCommand[name] = !enable;
+		var _setAbilitationButton = function(name, enable)
+		{
+			disableCommand[name] = !enable;
 
-            var button = $(".button" + name);
-            if(enable)
-            {
-                button.addClass("buttonEnable");
-                button.removeClass("buttonDisable");
-            }
-            else
-            {
-                button.addClass("buttonDisable");
-                button.removeClass("buttonEnable");
-            }
-        };
+			var button = $(".button" + name);
+			if(enable)
+			{
+				button.addClass("buttonEnable");
+				button.removeClass("buttonDisable");
+			}
+			else
+			{
+				button.addClass("buttonDisable");
+				button.removeClass("buttonEnable");
+			}
+		};
 
-        var _updateRoboAvailable = function()
-        {
-            if(state.getRoboDozerAvailable() <= 0)
-            {
-                _setAbilitationButton(MainCommand.Dozer, false);
+		var _updateRoboAvailable = function()
+		{
+			if(state.getRoboDozerAvailable() <= 0)
+			{
+				_setAbilitationButton(MainCommand.Dozer, false);
 
-            }
-            else
-            {
-                _setAbilitationButton(MainCommand.Dozer, true);
-            }
+			}
+			else
+			{
+				_setAbilitationButton(MainCommand.Dozer, true);
+			}
 
-            if((state.getRoboDiggerAvailable() <= 0) || (terrainMap.getLayer() == TerrainLayer.Surface))
-            {
-                _setAbilitationButton(MainCommand.Digger, false);
-            }
-            else
-            {
-                _setAbilitationButton(MainCommand.Digger, true);
-            }
-        };
+			if((state.getRoboDiggerAvailable() <= 0) || (terrainMap.getLayer() == TerrainLayer.Surface))
+			{
+				_setAbilitationButton(MainCommand.Digger, false);
+			}
+			else
+			{
+				_setAbilitationButton(MainCommand.Digger, true);
+			}
+		};
 
 		var _setLayer = function(layer)
 		{
-            _setCurrentTile(null);
+			_setCurrentTile(null);
 
 			terrainMap.setLayer(layer);
 
-            _setAbilitationButton(MainCommand.PipeDown, true);
+			_setAbilitationButton(MainCommand.PipeDown, true);
 
-            view.setButton(26, true); // elevator
-            view.setButton(30, true); // up
-            view.setButton(31, true); // down
+			view.setButton(26, true); // elevator
+			view.setButton(30, true); // up
+			view.setButton(31, true); // down
 
 			if(layer == TerrainLayer.Surface)
 			{
@@ -473,15 +473,15 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 			else if(layer == TerrainLayer.Deep)
 			{
-                _setAbilitationButton(MainCommand.PipeDown, false);
+				_setAbilitationButton(MainCommand.PipeDown, false);
 				view.setButton(31, false); // down
 			}
 
 			selectorView.setLayer(layer);
 
-            _redraw();
+			_redraw();
 		};
-		
+
 		var _goUp = function()
 		{
 			if(terrainMap.getLayer() == TerrainLayer.Underground)
@@ -494,7 +494,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 			_redraw();
 		};
-		
+
 		var _goDown = function()
 		{
 			if(terrainMap.getLayer() == TerrainLayer.Surface)
@@ -516,7 +516,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				_setPosition(position);
 			}
 		};
-		
+
 		var _goSouth = function()
 		{
 			if(position.x > 0)
@@ -525,7 +525,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				_setPosition(position);
 			}
 		};
-		
+
 		var _goEast = function()
 		{
 			if(position.y < terrainMap.getSize().y - view.getSize().y - 1)
@@ -534,7 +534,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				_setPosition(position);
 			}
 		};
-		
+
 		var _goWest = function()
 		{
 			if(position.y > 0)
@@ -543,15 +543,15 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 				_setPosition(position);
 			}
 		};
-		
+
 		var _doNext = function()
 		{
 			terrainMap.computation();
 			terrainMap.simulation();
 			_redraw();
-            buildingInfo.refresh();
+			buildingInfo.refresh();
 		};
-		
+
 		var _setAbsolutePosition = function(point)
 		{
 //TODO
@@ -560,101 +560,101 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 
 			selectorView.setAbsolutePosition({x: point.x, y: point.y + canvasSize.y});
 		};
-		
+
 		var _setCurrentTile = function(item)
 		{
 			currentTile = item;
-            buildingInfo.show(currentTile);
-            _redraw();
+			buildingInfo.show(currentTile);
+			_redraw();
 		};
 
-        var _executeCommand = function(cmd)
-        {
-            if(disableCommand[cmd])
-            {
-                return;
-            }
+		var _executeCommand = function(cmd)
+		{
+			if(disableCommand[cmd])
+			{
+				return;
+			}
 
-            switch(cmd)
-            {
-                case MainCommand.GoNorth:
-                    _goNorth();
-                    break;
-                case MainCommand.GoEast:
-                    _goEast();
-                    break;
-                case MainCommand.GoSouth:
-                    _goSouth();
-                    break;
-                case MainCommand.GoWest:
-                    _goWest();
-                    break;
+			switch(cmd)
+			{
+				case MainCommand.GoNorth:
+					_goNorth();
+					break;
+				case MainCommand.GoEast:
+					_goEast();
+					break;
+				case MainCommand.GoSouth:
+					_goSouth();
+					break;
+				case MainCommand.GoWest:
+					_goWest();
+					break;
 
-                case MainCommand.GoUp:
-                    _goUp();
-                    break;
-                case MainCommand.GoDown:
-                    _goDown();
-                    break;
+				case MainCommand.GoUp:
+					_goUp();
+					break;
+				case MainCommand.GoDown:
+					_goDown();
+					break;
 
-                case MainCommand.Dozer:
-                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
-                    break;
-                case MainCommand.Digger:
-                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } );
-                    break;
-                case MainCommand.Miner:
-                    _setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" });
-                    break;
-                case MainCommand.PipeNorthEastSouthWest:
-                    _setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer()));
-                    break;
-                case MainCommand.PipeEastWest:
-                    _setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer()));
-                    break;
-                case MainCommand.PipeNorthSouth:
-                    _setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer()));
-                    break;
-                case MainCommand.PipeDown:
-                    _setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer()));
-                    break;
-                case MainCommand.SelectBuilding:
-                    selectorView.show();
-                    break;
+				case MainCommand.Dozer:
+					_setCurrentTile({ isRobot: true, robotType: RobotTypes.Dozer, buildingType: "RoboDozer", image: "RoboDozer" });
+					break;
+				case MainCommand.Digger:
+					_setCurrentTile({ isRobot: true, robotType: RobotTypes.Digger, buildingType: "RoboDigger", image: "RoboDigger" } );
+					break;
+				case MainCommand.Miner:
+					_setCurrentTile({ isRobot: true, robotType: RobotTypes.Miner, buildingType: "RoboMiner", image: "RoboMiner" });
+					break;
+				case MainCommand.PipeNorthEastSouthWest:
+					_setCurrentTile(_createCurrentTilePipe(PipeType.NorthEastSouthWest, terrainMap.getLayer()));
+					break;
+				case MainCommand.PipeEastWest:
+					_setCurrentTile(_createCurrentTilePipe(PipeType.EastWest, terrainMap.getLayer()));
+					break;
+				case MainCommand.PipeNorthSouth:
+					_setCurrentTile(_createCurrentTilePipe(PipeType.NorthSouth, terrainMap.getLayer()));
+					break;
+				case MainCommand.PipeDown:
+					_setCurrentTile(_createCurrentTilePipe(PipeType.Down, terrainMap.getLayer()));
+					break;
+				case MainCommand.SelectBuilding:
+					selectorView.show();
+					break;
 
-                case MainCommand.ShowHelp:
-                    queueView.show(new HelpQueueData(state));
-                    break;
-                case MainCommand.ShowReport:
-                    queueView.show(new ReportQueueData(state));
-                    break;
-                case MainCommand.ShowProduction:
-                    queueView.show(new ProductionQueueData(state));
-                    break;
-                case MainCommand.ShowResearch:
-                    queueView.show(new ResearchQueueData(state));
-                    break;
+				case MainCommand.ShowHelp:
+					queueView.show(new HelpQueueData(state));
+					break;
+				case MainCommand.ShowReport:
+					queueView.show(new ReportQueueData(state));
+					break;
+				case MainCommand.ShowProduction:
+					queueView.show(new ProductionQueueData(state));
+					break;
+				case MainCommand.ShowResearch:
+					queueView.show(new ResearchQueueData(state));
+					break;
 
-                case MainCommand.DoNext:
-                    _doNext();
-                    break;
+				case MainCommand.DoNext:
+					_doNext();
+					break;
 
-                case MainCommand.ClearSelection:
-                    _setCurrentTile(null);
-                    break;
-            }
-        };
+				case MainCommand.ClearSelection:
+					_setCurrentTile(null);
+					break;
+			}
+		};
 
 		_initialize();
 
 		//-----------------------------------------
-		
+
 		this.getTerrainMap = function() { return terrainMap; };
 		this.getState = function() { return state; };
 
 		this.getLayer = function() { return terrainMap.getLayer(); };
 		this.setLayer = _setLayer;
-		
+
 		this.setPosition = _setPosition;
 		this.redraw = _redraw;
 		this.fromScreenPosition = _fromScreenPosition;
@@ -668,7 +668,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 		this.doNext = _doNext;
 		this.setAbsolutePosition = _setAbsolutePosition;
 
-        this.executeCommand = _executeCommand;
+		this.executeCommand = _executeCommand;
 
 		//----------------------------------------- */
 	}
@@ -676,9 +676,9 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 	function Site(typology, imageName)
 	{
 		//-----------------------------------------
-		
+
 		this.getTypology = function() { return typology; };
 		this.getImageName = function() { return imageName; };
-		
+
 		//-----------------------------------------
 	}

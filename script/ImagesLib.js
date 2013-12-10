@@ -4,7 +4,7 @@
 		var loadingMax = 0;
 		var loading = 0;
 		var onUpdateLoadingCallback = undefined;
-		
+
 		var onLoadCallback = function()
 		{
 			loading--;
@@ -13,7 +13,7 @@
 				onUpdateLoadingCallback();
 			}
 		};
-		
+
 		var _addImage = function(code, fileName)
 		{
 			loading++;
@@ -23,18 +23,18 @@
 			ret.image.crossOrigin='anonymous';
 			if(fileName == undefined)
 			{
-                fileName = "images/" + code + ".gif";
+				fileName = "images/" + code + ".gif";
 			}
 			else
 			{
-                fileName = "images/" + fileName;
+				fileName = "images/" + fileName;
 			}
-            ret.fileName = fileName;
-            ret.image.src = fileName;
+			ret.fileName = fileName;
+			ret.image.src = fileName;
 			images[code] = ret;
 			return ret;
 		};
-		
+
 		var _initialize = function(canvasId, imagesList, onUpdateLoading)
 		{
 			onUpdateLoadingCallback = onUpdateLoading;
@@ -46,12 +46,12 @@
 				}
 			}
 		};
-		
+
 		var _getLoadingPercentage = function()
 		{
 			return (loadingMax - loading) / loadingMax;
 		};
-		
+
 		var _waitLoading = function()
 		{
 			if(loading > 0)
@@ -59,11 +59,11 @@
 				Log.dialog("Caricamento in corso!");
 			}
 		};
-		
+
 		var _getImage = function(id)
 		{
 			_waitLoading();
-		
+
 			var ret = images[id];
 			if(ret == undefined)
 			{
@@ -79,9 +79,9 @@
 			{
 				return null;
 			}
-			
+
 			_waitLoading();
-			
+
 			var ret = images[id];
 			if(ret == undefined)
 			{
@@ -95,23 +95,23 @@
 			return ret.pattern;
 		};
 
-        var _getFileName = function(id)
-        {
-            var ret = images[id];
-            if(ret == undefined)
-            {
-                Log.error("Immagine non trovata: \"" + id + "\"");
-                return null;
-            }
-            return ret.fileName;
-        };
+		var _getFileName = function(id)
+		{
+			var ret = images[id];
+			if(ret == undefined)
+			{
+				Log.error("Immagine non trovata: \"" + id + "\"");
+				return null;
+			}
+			return ret.fileName;
+		};
 
 		this.getImage = _getImage;
 		this.getPattern = _getPattern;
-        this.getFileName = _getFileName;
+		this.getFileName = _getFileName;
 		this.initialize = _initialize;
 		this.getLoadingPercentage = _getLoadingPercentage;
 	}
-	
+
 	// singleton
 	var ImagesLib = new ImagesLibConstructor();

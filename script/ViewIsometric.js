@@ -19,15 +19,15 @@
 		var buttons = [];
 		var buttonsCallback = null;
 		var gridCallback = null;
-		
+
 		var images = [];
 		var texts = [];
 		//--------
-		
+
 		var size = viewSize;
 		var tileDimension = viewTileDimension;
 		var position = { x: 0, y: 0 };
-		
+
 		var _initialize = function()
 		{
 			// createMask
@@ -42,11 +42,11 @@
 					ctxMask.stroke();
 				}
 			}
-			
+
 			//pulisco il context
 			ctxMask.beginPath();
 			ctxMask.closePath();
-			
+
 			canvasMap.addEventListener("mousedown", doMouseDown, false);
 			function doMouseDown(e)
 			{
@@ -74,12 +74,12 @@
 									}
 
 									window.setTimeout((function(index){
-                                            return function()
-                                            {
-                                                buttons[index].pressed = false;
-                                                _drawButton(buttons[index]);
-                                            }
-                                        }(i)), 200);
+											return function()
+											{
+												buttons[index].pressed = false;
+												_drawButton(buttons[index]);
+											}
+										}(i)), 200);
 								}
 								return;
 							}
@@ -95,12 +95,12 @@
 				}
 			}
 		};
-		
+
 		var _redraw = function()
 		{
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-            var i;
+			var i;
 			// immagini
 			for(i = 0; i < images.length; i++)
 			{
@@ -113,13 +113,13 @@
 					ctx.fill();
 				}
 			}
-			
+
 			// bottoni
 			for(i = 0; i < buttons.length; i++)
 			{
 				_drawButton(buttons[i]);
 			}
-			
+
 			// testi
 			for(i = 0; i < texts.length; i++)
 			{
@@ -153,7 +153,7 @@
 			//pulisco il context
 			ctx.beginPath();
 			ctx.closePath();
-			
+
 			//Risorse ed Edifici e Robot
 			var structure = map.getStructure();
 			var currentLayer = map.getLayer();
@@ -173,7 +173,7 @@
 				}
 			}
 		};
-		
+
 		var _drawImage = function(ctx, point, image)
 		{
 			var p = _toScreenPosition(point);
@@ -182,7 +182,7 @@
 			ctx.closePath();
 			ctx.fill();
 		};
-		
+
 		var _drawTile = function(ctx, tileDimension, point, pattern, strokeStyle)
 		{
 			if(strokeStyle == undefined)
@@ -201,7 +201,7 @@
 			ctx.strokeStyle = strokeStyle;
 			ctx.fill();
 			ctx.stroke();
-	 	};
+		};
 
 		var _drawButton = function(button)
 		{
@@ -231,7 +231,7 @@
 				ctx.fill();
 			}
 		};
-		
+
 		var _setButtonMask = function(button, erase)
 		{
 			var id = button.id;
@@ -258,7 +258,7 @@
 			{
 				_drawTile(ctxMask, tileDimension, { x: button.pointGrid.x, y: button.pointGrid.y }, "rgb(0,0," + id + ")", "#000000");
 			}
-			
+
 			/* Gestione inibita per compatibilit�
 			var img = ImagesLib.getImage(imageButton);
 			// mask
@@ -268,7 +268,7 @@
 			var ctxTmpMask = canvasTmpMask.getContext("2d");
 			ctxTmpMask.drawImage(img, 0, 0);
 			var imageData = ctxTmpMask.getImageData(0, 0, img.width, img.height);
-			
+
 			var data = imageData.data;
 			for(var y = 0; y < img.height; y++)
 			{
@@ -286,25 +286,25 @@
 			ctxMask.putImageData(imageData, point.x, point.y - img.height);
 			*/
 		};
-		
+
 		var _setPosition = function(point)
 		{
 			position = point;
 			_redraw();
 		};
-	 	
-	 	var _isVisible = function(point)
-	 	{
-	 		var relPos = _toRelativePosition(point);
-            return !(relPos.x < 0 || relPos.y < 0 || relPos.x >= size.x || relPos.y >= size.y);
+
+		var _isVisible = function(point)
+		{
+			var relPos = _toRelativePosition(point);
+			return !(relPos.x < 0 || relPos.y < 0 || relPos.x >= size.x || relPos.y >= size.y);
 		};
-	 	
-	 	var _toRelativePosition = function(point)
-	 	{
-	 		return { x: point.x - position.x, y: point.y - position.y };
-	 	};
-	 	
-	 	var _toScreenPosition = function(point)
+
+		var _toRelativePosition = function(point)
+		{
+			return { x: point.x - position.x, y: point.y - position.y };
+		};
+
+		var _toScreenPosition = function(point)
 		{
 			var retX = 0;
 			retX += point.x * 53;
@@ -313,10 +313,10 @@
 			var retY = yOffset;
 			retY -= point.x * 23;
 			retY += point.y * 23;
-			
+
 			return { x: retX, y: retY };
 		};
-		
+
 		var _fromScreenPosition = function(point)
 		{
 			var curleft = 0, curtop = 0;
@@ -331,7 +331,7 @@
 			}
 			var x = point.x - curleft;
 			var y = point.y - curtop;
-			
+
 			var data = ctxMask.getImageData(x, y, 1, 1).data; 
 
 			if(data[0] == 0 && data[1] == 0)
@@ -344,29 +344,29 @@
 			}
 			return 0;
 		};
-		
+
 		var _internalAddImageButton = function(id, point, imageButton, callback, image, pointGrid)
 		{
 			var newButton = { id: id, position: point, imageButton: imageButton, callback: callback, image: image, pointGrid: pointGrid };
 			buttons.push(newButton);
 			_setButtonMask(newButton);
 		};
-		
+
 		var _addImageButton = function(id, point, imageButton, callback, image)
 		{
 			_internalAddImageButton(id, point, imageButton, callback, image);
 		};
-		
+
 		var _addButtonGrid = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, _toScreenPosition(point), imageButton, callback, null, point);
 		};
-		
+
 		var _addButton = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, point, imageButton, callback);
 		};
-		
+
 		var _setButton = function(id, enabled)
 		{
 			for(var i = 0; i < buttons.length; i++)
@@ -378,7 +378,7 @@
 				}
 			}
 		};
-		
+
 		var _delButton = function(id)
 		{
 			for(var i = 0; i < buttons.length; i++)
@@ -391,12 +391,12 @@
 				}
 			}
 		};
-		
+
 		var _addImageGrid = function(id, point, image)
 		{
 			_addImage(id, _toScreenPosition(point), image);
 		};
-		
+
 		var _addImage = function(id, point, image)
 		{
 			images.push({ id: id, position: point, image: image });
@@ -413,7 +413,7 @@
 				}
 			}
 		};
-		
+
 		var _delImage = function(id)
 		{
 			for(var i = 0; i < images.length; i++)
@@ -425,12 +425,12 @@
 				}
 			}
 		};
-		
+
 		var _addText = function(id, point, size, textId)
 		{
 			texts.push({ id: id, position: point, size: size, textId: textId });
 		};
-		
+
 		var _setText = function(id, textId)
 		{
 			for(var i = 0; i < texts.length; i++)
@@ -442,7 +442,7 @@
 				}
 			}
 		};
-		
+
 		var _delText = function(id)
 		{
 			for(var i = 0; i < texts.length; i++)
@@ -454,20 +454,20 @@
 				}
 			}
 		};
-		
+
 		var _setAbsolutePosition = function(point)
 		{
 			canvasMap.style.top = point.y + "px";
 			canvasMap.style.left = point.x + "px";
 		};
-		
+
 		//-----------------------------------------
-		
+
 		this.getPosition = function() { return position; };
 		this.getSize = function() { return size; };
 		this.getCanvasSize = function() { return { x: canvasMap.width, y: canvasMap.height }; };
 		this.getVerticalMiddle = function() { return yCorner; };
-		
+
 		this.redraw = _redraw;
 		this.fromScreenPosition = _fromScreenPosition;
 		this.setPosition = _setPosition;
@@ -486,7 +486,7 @@
 		this.setText = _setText;
 		this.delText = _delText;
 		this.setAbsolutePosition = _setAbsolutePosition;
-		
+
 		//-----------------------------------------
 		_initialize();
 	}
