@@ -375,24 +375,6 @@
 			text += '<tr><td colspan="4" class="tableSeparator"></td></tr>';
 
 			var surplus = 0;
-			/*
-			 getPopulation()
-			 state.population = {
-			 registry: [],
-			 wellness: 0,
-			 happiness: 0
-			 };
-			 var list = colonyState.getMaterialFromMetaMaterial(metaMaterial);
-			 for(var i = 0; i < list.length; i++)
-			 {
-			 row++;
-			 grid.setText(row, 1, TextRepository.get(list[i]));
-			 grid.setText(row, 4, colonyState.getProduced(list[i]));
-			 grid.setText(row, 5, colonyState.getConsumed(list[i]), Colors.Error);
-			 grid.setValue(row, 7, (colonyState.getStored(list[i]) || 0));
-
-			 surplus += (colonyState.getProduced(list[i]) - colonyState.getConsumed(list[i]));
-			 }*/
 
 			text += '<tr><td>' + TextRepository.get("Surplus") + '</td><td></td><td></td>';
 			if(surplus < 0)
