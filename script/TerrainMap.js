@@ -558,27 +558,31 @@
 		{
 			for(var i = 0; i < graph.length; i++)
 			{
-				if(!graph[i].isPipe() || graph[i].getLayer() != layer)
+				if(!graph[i].isPipe())
 				{
+					// nei grafi sono presenti i tubi poi in fondo gli edifici
 					break;
 				}
 				else
 				{
-					var pos = graph[i].getPosition();
-					if(pos.x == point.x)
+					if(graph[i].getLayer() == layer)
 					{
-						if(((pos.y == point.y -1) && (graph[i].haveEast())) ||
-							((pos.y == point.y +1) && (graph[i].haveWest())))
+						var pos = graph[i].getPosition();
+						if(pos.x == point.x)
 						{
-							return true;
+							if(((pos.y == point.y -1) && (graph[i].haveEast())) ||
+								((pos.y == point.y +1) && (graph[i].haveWest())))
+							{
+								return true;
+							}
 						}
-					}
-					else if (pos.y == point.y)
-					{
-						if(((pos.x == point.x -1) && (graph[i].haveSouth())) ||
-							((pos.x == point.x +1) && (graph[i].haveNorth())))
+						else if (pos.y == point.y)
 						{
-							return true;
+							if(((pos.x == point.x -1) && (graph[i].haveSouth())) ||
+								((pos.x == point.x +1) && (graph[i].haveNorth())))
+							{
+								return true;
+							}
 						}
 					}
 				}
