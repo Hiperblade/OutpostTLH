@@ -7,7 +7,7 @@
 
 	/**
 	 * @param {number} w
-	 *  @param {number} h
+	 * @param {number} h
 	 */
 	function ImageSize(w, h)
 	{
