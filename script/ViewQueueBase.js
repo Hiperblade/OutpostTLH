@@ -1,4 +1,6 @@
-	var Queue;
+"use strict";
+
+	let Queue;
 
 	function InitializeQueueView(divId, size)
 	{
@@ -10,16 +12,16 @@
 	{
 		const COLUMN_SLIDER_WIDTH = 20;
 
-		var queueData = null;
-		var currentItem = null;
-		var tagLastId = 0;
-		var tags = {};
-		var tagsNew = {};
+		let queueData = null;
+		let currentItem = null;
+		let tagLastId = 0;
+		let tags = {};
+		let tagsNew = {};
 
-		var divViewBase = $("#" + divId + "_wrapper");
-		var divViewAreaContainer = $("#" + divId + "AreaContainer");
-		var divViewBackground = $("#" + divId + "Background");
-		var divViewContent = $("#" + divId + "_content");
+		let divViewBase = $("#" + divId + "_wrapper");
+		let divViewAreaContainer = $("#" + divId + "AreaContainer");
+		let divViewBackground = $("#" + divId + "Background");
+		let divViewContent = $("#" + divId + "_content");
 
 		divViewBase.width(size.x);
 		divViewBase.height(size.y);
@@ -29,19 +31,19 @@
 		divViewBackground.width(size.x);
 		divViewBackground.height(size.y);
 
-		var _initialize = function()
+		let _initialize = function()
 		{
 			// Slider queue
-			var scrollPane = $('#' + divId);
-			var scrollContent = $('#' + divId + "_content");
-			var scrollCursor = $("#" + divId + "_sliderCursor");
-			var scrollSlider = $('#' + divId + "_slider");
+			let scrollPane = $('#' + divId);
+			let scrollContent = $('#' + divId + "_content");
+			let scrollCursor = $("#" + divId + "_sliderCursor");
+			let scrollSlider = $('#' + divId + "_slider");
 			scrollSlider.slider({
 				orientation: "vertical",
 				value: 100,
 				slide: function (event, ui) {
-					var topMargin = 0;
-					var cursorPosition = Math.floor((100 - ui.value) * scrollSlider.height() / 100);
+					let topMargin = 0;
+					let cursorPosition = Math.floor((100 - ui.value) * scrollSlider.height() / 100);
 					if(cursorPosition < topMargin)
 					{
 						cursorPosition = topMargin;
@@ -64,16 +66,16 @@
 			});
 
 			// Slider area
-			var scrollPaneArea = $('#' + divId + "Area");
-			var scrollContentArea = $('#' + divId + "Area_content");
-			var scrollCursorArea = $("#" + divId + "Area_sliderCursor");
-			var scrollSliderArea = $('#' + divId + "Area_slider");
+			let scrollPaneArea = $('#' + divId + "Area");
+			let scrollContentArea = $('#' + divId + "Area_content");
+			let scrollCursorArea = $("#" + divId + "Area_sliderCursor");
+			let scrollSliderArea = $('#' + divId + "Area_slider");
 			scrollSliderArea.slider({
 				orientation: "vertical",
 				value: 100,
 				slide: function (event, ui) {
-					var topMargin = 0;
-					var cursorPosition = Math.floor((100 - ui.value) * scrollSliderArea.height() / 100);
+					let topMargin = 0;
+					let cursorPosition = Math.floor((100 - ui.value) * scrollSliderArea.height() / 100);
 					if(cursorPosition < topMargin)
 					{
 						cursorPosition = topMargin;
@@ -98,25 +100,25 @@
 			_hide();
 		};
 
-		var _internalSetCurrent = function(current)
+		let _internalSetCurrent = function(current)
 		{
 			currentItem = current;
 
 			$("#queueDivArea_content").html(queueData.getInfo(currentItem));
 		};
 
-		var _setCurrent = function(itemName)
+		let _setCurrent = function(itemName)
 		{
 			_internalSetCurrent(tags["SortedItem_" + itemName]);
 		};
 
-		var _addItem = function(itemName)
+		let _addItem = function(itemName)
 		{
 			queueData.appends(tags["SortedItem_" + itemName]);
 			_inizializeQueue();
 		};
 
-		var _show = function(queueDataNew)
+		let _show = function(queueDataNew)
 		{
 			queueData = queueDataNew;
 			_inizializeQueue();
@@ -132,12 +134,12 @@
 			divViewBase.show();
 		};
 
-		var _hide = function()
+		let _hide = function()
 		{
 			divViewBase.hide();
 		};
 
-		var _inizializeQueue = function()
+		let _inizializeQueue = function()
 		{
 			//Titolo
 			$("#queueDivAreaTitle").html(TextRepository.get(queueData.getTitle()));
@@ -145,45 +147,45 @@
 			tags = {};
 			tagsNew = {};
 
-			var text = "";
+			let text = "";
 			text += '<ul id="sortableInternalList" class="queueList">';
 			// Separatore
 			text += '<li id="SortedItemSeparator" class="queueListSeparator"><div class="queueSeparator">' + TextRepository.get(queueData.getQueueTitle()) + '</div></li>';
 
-			var haveBar = queueData.haveBar();
-			var queue = queueData.getQueue();
+			let haveBar = queueData.haveBar();
+			let queue = queueData.getQueue();
 			tagLastId = 0;
-			for(var i = 0; i < queue.length; i++)
+			for(let i = 0; i < queue.length; i++)
 			{
 				text += '<li id="SortedItem_' + tagLastId + '" class="queueListItem">' + _createCanvas(queue[i], false, haveBar, tagLastId) + '</li>';
 				tags["SortedItem_" + tagLastId] = queue[i];
 				tagLastId++;
 			}
 			text += '</ul>';
-			var divUp = '<div>' + text + '</div>';
+			let divUp = '<div>' + text + '</div>';
 
 			//--- new
 			text = "";
 			text += '<ul class="queueList">';
 
-			var newItems = queueData.getAvailable();
+			let newItems = queueData.getAvailable();
 			if(newItems.length > 0)
 			{
 				// Separatore
 				text += '<li id="SortedItemSeparator" class="queueListSeparator"><div class="queueSeparator">' + TextRepository.get(queueData.getAvailableTitle()) + '</div></li>';
 			}
 
-			var canAppends = queueData.canAppends();
-			for(var ii = 0; ii < newItems.length; ii++)
+			let canAppends = queueData.canAppends();
+			for(let ii = 0; ii < newItems.length; ii++)
 			{
-				var newItem = newItems[ii];
+				let newItem = newItems[ii];
 
 				text += '<li id="SortedItem_' + newItem.getName() + '" class="queueListItem">' + _createCanvas(newItem, canAppends, false, null) + '</li>';
 				tags["SortedItem_" + newItem.getName()] = newItem;
 				tagsNew["SortedItem_" + newItem.getName()] = newItem;
 			}
 			text += '</ul>';
-			var divDown = '<div>' + text + '</div>';
+			let divDown = '<div>' + text + '</div>';
 
 			divViewContent.empty();
 			divViewContent.append(divUp);
@@ -191,17 +193,17 @@
 
 			if(queueData.isSortable())
 			{
-				var list = $("#sortableInternalList");
+				let list = $("#sortableInternalList");
 
 				list.sortable(
 					{
 						update : function ()
 						{
 							queue.length = 0;
-							var order = $("#sortableInternalList").sortable("toArray");
-							for(var i = 0; i < order.length; i++)
+							let order = $("#sortableInternalList").sortable("toArray");
+							for(let i = 0; i < order.length; i++)
 							{
-								var tag = tags[order[i]];
+								let tag = tags[order[i]];
 								if(tag == null)
 								{
 									return;
@@ -221,15 +223,15 @@
 			$('#' + divId + "_content").css("margin-top", 0);
 		};
 
-		var _createCanvas = function(item, canAppends, haveBar, currentId)
+		let _createCanvas = function(item, canAppends, haveBar, currentId)
 		{
 			if(currentId == null)
 			{
 				currentId = item.getName();
 			}
 
-			var tmp = '<div class="queueItem" onclick="Queue.setCurrent(\'' + currentId + '\');">';
-			var imageId = item.getName();
+			let tmp = '<div class="queueItem" onclick="Queue.setCurrent(\'' + currentId + '\');">';
+			let imageId = item.getName();
 			if(item.getImageId != undefined)
 			{
 				imageId = item.getImageId();
@@ -285,12 +287,12 @@
 
 		this.getInfo = function(item)
 		{
-			var text = "";
+			let text = "";
 			if(item != null)
 			{
-				var cost;
-				var time;
-				var remainTime;
+				let cost;
+				let time;
+				let remainTime;
 				if(item.getBase != undefined)
 				{
 					time = item.getTime();
@@ -318,7 +320,7 @@
 				text += '<table>';
 				text += '<tr><td class="tableMainColumn">' + TextRepository.get("Progress") + ':</td><td class="tableDataRight">' + (time - remainTime) + ' / ' + time + '</td><td>' + TextRepository.get("TimeUnit") + '</td></tr>';
 
-				for (var resource in cost)
+				for (let resource in cost)
 				{
 					if(cost.hasOwnProperty(resource))
 					{
@@ -344,13 +346,13 @@
 
 	function ResearchQueueData(colonyState)
 	{
-		var queue = colonyState.getResearchQueue();
-		var newItems = RecipeLib.getAvailableResearch(colonyState);
-		var available = [];
+		let queue = colonyState.getResearchQueue();
+		let newItems = RecipeLib.getAvailableResearch(colonyState);
+		let available = [];
 
-		var _contains = function(queue, name)
+		let _contains = function(queue, name)
 		{
-			for(var i = 0; i < queue.length; i++)
+			for(let i = 0; i < queue.length; i++)
 			{
 				if(queue[i].getName() == name)
 				{
@@ -361,7 +363,7 @@
 		};
 
 		// solo quelli non presenti nella coda
-		for(var i = 0; i < newItems.length; i++)
+		for(let i = 0; i < newItems.length; i++)
 		{
 			if(!_contains(queue, newItems[i].getName()))
 			{
@@ -384,12 +386,12 @@
 
 	function ProductionQueueData(colonyState)
 	{
-		var queue = colonyState.getProductionQueue();
-		var available = RecipeLib.getAvailableProduction(colonyState);
+		let queue = colonyState.getProductionQueue();
+		let available = RecipeLib.getAvailableProduction(colonyState);
 
 		BaseQueueData.call(this, colonyState, queue, available);
 
-		var _appends = function(item)
+		let _appends = function(item)
 		{
 			queue.push(item.create());
 		};

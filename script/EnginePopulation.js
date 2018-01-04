@@ -1,19 +1,21 @@
+"use strict";
+
 	// calcolo popolazione (nascite, morti e stato)
 	function PopulationEngine()
 	{
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
-			var date = colonyState.getDate();
+			let date = colonyState.getDate();
 
 			// totale popolazione
-			var people = 0;
-			var population = colonyState.getPopulation();
-			var generations = population.registry;
-			for(var g  = 0; g < generations.length; g++)
+			let people = 0;
+			let population = colonyState.getPopulation();
+			let generations = population.registry;
+			for(let g  = 0; g < generations.length; g++)
 			{
 				if(generations[g].getState(date) != GenerationState.Deads)
 				{
@@ -22,8 +24,8 @@
 			}
 
 			// totale tubi
-			var countPipes = 0;
-			for(var graph = 0; graph < graphs.length; graph++)
+			let countPipes = 0;
+			for(let graph = 0; graph < graphs.length; graph++)
 			{
 				if(BuildingGraph.hasHeadquarter(graphs[graph]))
 				{
@@ -31,18 +33,18 @@
 				}
 			}
 
-			var inhospitality = 1;
-			var malnutrition = 1;
-			var overcrowding = 1;
-			var missingHealthCover = 1;
-			var missingEducation = 1;
-			var missingHighEducation = 1;
-			var sadness = 1;
+			let inhospitality = 1;
+			let malnutrition = 1;
+			let overcrowding = 1;
+			let missingHealthCover = 1;
+			let missingEducation = 1;
+			let missingHighEducation = 1;
+			let sadness = 1;
 
 			// ambiente (aria - acqua - temperatura) (inhospitality)
 			if(countPipes > 0)
 			{
-				var habitatUnit = colonyState.getRemainder("habitatUnit");
+				let habitatUnit = colonyState.getRemainder("habitatUnit");
 				colonyState.delMaterials( { habitatUnit: Math.min(habitatUnit, countPipes) } );
 				inhospitality = 1 - (habitatUnit / countPipes);
 				if(inhospitality < 0)
@@ -55,7 +57,7 @@
 			if(people > 0)
 			{
 				// cibo (malnutrizione)
-				var foodUnit = colonyState.getRemainder("foodUnit");
+				let foodUnit = colonyState.getRemainder("foodUnit");
 				colonyState.delMaterials( { foodUnit: Math.min(foodUnit, people) } );
 				malnutrition = 1 - (foodUnit / people);
 				if(malnutrition < 0)
@@ -64,7 +66,7 @@
 				}
 
 				// alloggi (sovraffollamento)
-				var residentialUnit = colonyState.getRemainder("residentialUnit");
+				let residentialUnit = colonyState.getRemainder("residentialUnit");
 				colonyState.delMaterials( { foodUnit: Math.min(residentialUnit, people) } );
 				overcrowding = 1 - (residentialUnit / people);
 				if(overcrowding < 0)
@@ -73,7 +75,7 @@
 				}
 
 				// medicinali (copertura sanitaria mancante)
-				var medicalUnit = colonyState.getRemainder("medicalUnit");
+				let medicalUnit = colonyState.getRemainder("medicalUnit");
 				colonyState.delMaterials( { medicalUnit: Math.min(medicalUnit, people) } );
 				missingHealthCover = 1 - (medicalUnit / people);
 				if(missingHealthCover < 0)
@@ -82,15 +84,15 @@
 				}
 
 				// istruzione (mancanza di istruzione)
-				var educationUnit = colonyState.getRemainder("educationUnit");
-				var students = 0;
-				var highEducationUnit = colonyState.getRemainder("highEducationUnit");
-				var researchers = 0;
-				for(var i = 0; i < generations.length; i++)
+				let educationUnit = colonyState.getRemainder("educationUnit");
+				let students = 0;
+				let highEducationUnit = colonyState.getRemainder("highEducationUnit");
+				let researchers = 0;
+				for(let i = 0; i < generations.length; i++)
 				{
-					var lots = generations[i].getLots();
-					var minEducationLevel = lots[lots.length - 1].getEducationLevel();
-					var ii;
+					let lots = generations[i].getLots();
+					let minEducationLevel = lots[lots.length - 1].getEducationLevel();
+					let ii;
 					for(ii = 0; ii < lots.length; ii++)
 					{
 						if(lots[ii].getEducationLevel() == minEducationLevel)
@@ -98,7 +100,7 @@
 							break;
 						}
 					}
-					for(var index = ii; index < ii + lots.length; index++)
+					for(let index = ii; index < ii + lots.length; index++)
 					{
 						if(generations[i].getState(date) == GenerationState.Students)
 						{
@@ -154,7 +156,7 @@
 				}
 
 				// felicità (tristezza)
-				var recreationalUnit = colonyState.getRemainder("recreationalUnit");
+				let recreationalUnit = colonyState.getRemainder("recreationalUnit");
 				colonyState.delMaterials( { recreationalUnit: Math.min(recreationalUnit, people) } );
 				sadness = 1 - (recreationalUnit / people);
 				if(sadness < 0)
@@ -183,25 +185,25 @@
 			//subsistence
 			//  inhospitality // inospitabilità dell'ambiente
 			//	malnutrition // malnutrizione
-			var subsistence = 1 - Math.max(inhospitality, malnutrition);
+			let subsistence = 1 - Math.max(inhospitality, malnutrition);
 
 			//wellness
 			//	overcrowding // sovraffollamento
 			//	missingHealthCover // copertura sanitaria mancante		
-			var wellness = 1 - Math.max(overcrowding, missingHealthCover);
+			let wellness = 1 - Math.max(overcrowding, missingHealthCover);
 
 			//happiness
 			//	missingEducation // mancanza di istruzione
 			//	missingHighEducation // mancanza di alta formazione
 			//	sadness // tristezza
-			var happiness = 1 - Math.max(missingEducation, missingHighEducation, sadness);
+			let happiness = 1 - Math.max(missingEducation, missingHighEducation, sadness);
 
-			var subsistenceAverage = (population.subsistence + subsistence) / 2;
-			var wellnessAverage = (population.wellness + wellness) / 2;
+			let subsistenceAverage = (population.subsistence + subsistence) / 2;
+			let wellnessAverage = (population.wellness + wellness) / 2;
 			if(subsistenceAverage == 1 && wellnessAverage == 1)
 			{
 				// nascite (se le condizioni sono favorevoli)
-				var nurseryUnit = colonyState.getRemainder("nurseryUnit");
+				let nurseryUnit = colonyState.getRemainder("nurseryUnit");
 				if(nurseryUnit > 0)
 				{
 					generations.push(new Generation(date, nurseryUnit));
@@ -210,8 +212,8 @@
 			else if(subsistenceAverage < 1)
 			{
 				// morti
-				var dead = Math.floor(people * (1 - subsistenceAverage));
-				for(var d = 0; d < dead; d++)
+				let dead = Math.floor(people * (1 - subsistenceAverage));
+				for(let d = 0; d < dead; d++)
 				{
 					generations[d % generations.length].kill();
 				}

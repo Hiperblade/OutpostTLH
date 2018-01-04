@@ -1,9 +1,11 @@
+"use strict";
+
 function TextRepositoryConstructor()
 {
-	var data = {};
-	var defaultLanguage = "it";
+	let data = {};
+	let defaultLanguage = "it";
 
-	var _get = function(id, language)
+	let _get = function(id, language)
 	{
 		language = language || defaultLanguage;
 
@@ -19,7 +21,7 @@ function TextRepositoryConstructor()
 		return data[language][id];
 	};
 
-	var _add = function(id, text, language)
+	let _add = function(id, text, language)
 	{
 		language = language || defaultLanguage;
 
@@ -35,4 +37,4 @@ function TextRepositoryConstructor()
 }
 
 // singleton
-var TextRepository = new TextRepositoryConstructor();
+let TextRepository = new TextRepositoryConstructor();

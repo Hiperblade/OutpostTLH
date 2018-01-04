@@ -1,15 +1,17 @@
+"use strict";
+
 	// generatore di eventi
 	function EventEngine()
 	{
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
 //TODO:8
-			//var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
-			//var date = colonyState.getDate();
+			//let neglectPercentage = colonyState.getSimulationData().neglectPercentage;
+			//let date = colonyState.getDate();
 			// incidenti, catastrofi (distruzione o danneggiamento edifici, morti o feriti)
 			// scoperte (nuove risorse, rovine ecc.)
 		};
@@ -27,7 +29,7 @@
 
 	}
 
-	var EventType = {
+	let EventType = {
 
 	};
 
@@ -42,17 +44,17 @@
 
 	function EventManagerConstructor()
 	{
-		var historicalEvents = [];
-		var minorEvents = [];
+		let historicalEvents = [];
+		let minorEvents = [];
 
 		/** @param {Event} event */
-		var _addHistoricalEvent = function(event)
+		let _addHistoricalEvent = function(event)
 		{
 			historicalEvents.push(event);
 		};
 
 		/** @param {Event} event */
-		var _addEvent = function(event)
+		let _addEvent = function(event)
 		{
 			minorEvents.push(event);
 		};
@@ -61,4 +63,4 @@
 		this.addEvent = _addEvent;
 	}
 
-	var EventManager = new EventManagerConstructor();
+	let EventManager = new EventManagerConstructor();

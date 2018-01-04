@@ -1,11 +1,13 @@
+"use strict";
+
 	function ImagesLibConstructor()
 	{
-		var images = [];
-		var loadingMax = 0;
-		var loading = 0;
-		var onUpdateLoadingCallback = undefined;
+		let images = [];
+		let loadingMax = 0;
+		let loading = 0;
+		let onUpdateLoadingCallback = undefined;
 
-		var onLoadCallback = function()
+		let onLoadCallback = function()
 		{
 			loading--;
 			if(onUpdateLoadingCallback != undefined)
@@ -14,11 +16,11 @@
 			}
 		};
 
-		var _addImage = function(code, fileName)
+		let _addImage = function(code, fileName)
 		{
 			loading++;
 			loadingMax++;
-			var ret = { code: code, image: new Image(), fileName: null };
+			let ret = { code: code, image: new Image(), fileName: null };
 			ret.image.onload = onLoadCallback;
 			ret.image.crossOrigin='anonymous';
 			if(fileName == undefined)
@@ -35,24 +37,24 @@
 			return ret;
 		};
 
-		var _initialize = function(canvasId, imagesList, onUpdateLoading)
+		let _initialize = function(canvasId, imagesList, onUpdateLoading)
 		{
 			onUpdateLoadingCallback = onUpdateLoading;
 			if(imagesList != undefined)
 			{
-				for(var i = 0; i < imagesList.length; i++)
+				for(let i = 0; i < imagesList.length; i++)
 				{
 					_addImage(imagesList[i].id, imagesList[i].fileName);
 				}
 			}
 		};
 
-		var _getLoadingPercentage = function()
+		let _getLoadingPercentage = function()
 		{
 			return (loadingMax - loading) / loadingMax;
 		};
 
-		var _waitLoading = function()
+		let _waitLoading = function()
 		{
 			if(loading > 0)
 			{
@@ -60,11 +62,11 @@
 			}
 		};
 
-		var _getImage = function(id)
+		let _getImage = function(id)
 		{
 			_waitLoading();
 
-			var ret = images[id];
+			let ret = images[id];
 			if(ret == undefined)
 			{
 				Log.error("Immagine non trovata: \"" + id + "\"");
@@ -73,7 +75,7 @@
 			return ret.image;
 		};
 
-		var _getPattern = function(id, ctx)
+		let _getPattern = function(id, ctx)
 		{
 			if(id == null)
 			{
@@ -82,7 +84,7 @@
 
 			_waitLoading();
 
-			var ret = images[id];
+			let ret = images[id];
 			if(ret == undefined)
 			{
 				Log.error("Immagine non trovata: \"" + id + "\"");
@@ -95,9 +97,9 @@
 			return ret.pattern;
 		};
 
-		var _getFileName = function(id)
+		let _getFileName = function(id)
 		{
-			var ret = images[id];
+			let ret = images[id];
 			if(ret == undefined)
 			{
 				Log.error("Immagine non trovata: \"" + id + "\"");
@@ -114,4 +116,4 @@
 	}
 
 	// singleton
-	var ImagesLib = new ImagesLibConstructor();
+	let ImagesLib = new ImagesLibConstructor();

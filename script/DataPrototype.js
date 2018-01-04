@@ -1,3 +1,5 @@
+"use strict";
+ 
 	//eventBeginBuilding
 	//eventEndBuilding
 	//eventDestroy
@@ -18,7 +20,7 @@
 				item.haveUp    = function() { return false; };
 				item.haveDown  = function() { return false; };
 
-				var position = item.getPosition();
+				let position = item.getPosition();
 				if((position.x > 1) && (position.y > 1) &&
 					(position.x < map.getSize().x) && (position.y < map.getSize().y))
 				{
@@ -41,7 +43,7 @@
 			},
 		eventEndBuilding: function(item, map)
 			{
-				var position = item.getPosition();
+				let position = item.getPosition();
 				map.addPipe(PipeType.NorthEastSouthWest, TerrainLayer.Surface, { x: position.x - 1, y: position.y } );
 				map.addPipe(PipeType.NorthEastSouthWest, TerrainLayer.Surface, { x: position.x - 1, y: position.y + 1} );
 				map.addPipe(PipeType.NorthEastSouthWest, TerrainLayer.Surface, { x: position.x, y: position.y - 1} );
@@ -173,11 +175,11 @@
 	PrototypeLib.add("Tokamak", TerrainLayer.Surface, 4, {}, { consumption: { radioactiveBar: 1 }, production: { power: 1000 },
 		eventBeginBuilding: function(item, map)
 			{
-				var position = item.getPosition();
+				let position = item.getPosition();
 				if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 					(map.findResource(position, TerrainLayer.Underground) == null))
 				{
-					var subBuilding = map.addBuilding("TokamakReactor", position);
+					let subBuilding = map.addBuilding("TokamakReactor", position);
 					subBuilding.setFrozen(true);
 					subBuilding.getMainBuilding = function() { return this; };
 					return true;
@@ -191,7 +193,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 				if(building != null)
 				{
 					building.destroy();
@@ -201,7 +203,7 @@
 	PrototypeLib.add("TokamakReactor", TerrainLayer.Underground, 1000, {}, {
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
 				if(building != null)
 				{
 					building.destroy();
@@ -212,7 +214,7 @@
 	PrototypeLib.add("TokamakAdv", TerrainLayer.Surface, 8, {}, { consumption: { radioactiveBar: 1 }, production: { power: 1500 },
 		eventBeginBuilding: function(item, map)
 			{
-				var position = item.getPosition();
+				let position = item.getPosition();
 				if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 					(map.findResource(position, TerrainLayer.Underground) == null))
 				{
@@ -228,7 +230,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 				if(building != null)
 				{
 					building.destroy();
@@ -238,7 +240,7 @@
 	PrototypeLib.add("TokamakReactorAdv", TerrainLayer.Underground, 1000, {}, {
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
 				if(building != null)
 				{
 					building.destroy();
@@ -257,7 +259,7 @@
 	PrototypeLib.addPipe(PipeType.Down, TerrainLayer.Surface, 3, {}, { consumption: { power: 1 },
 		eventBeginBuilding: function(item, map)
 			{
-				var position = item.getPosition();
+				let position = item.getPosition();
 				if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 					(map.findResource(position, TerrainLayer.Underground) == null))
 				{
@@ -268,7 +270,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 				if(building != null)
 				{
 					building.destroy();
@@ -282,7 +284,7 @@
 	PrototypeLib.addPipe(PipeType.Down, TerrainLayer.Underground, 6, {}, { consumption: { power: 1 },
 		eventBeginBuilding: function(item, map)
 			{
-				var position = item.getPosition();
+				let position = item.getPosition();
 				if((map.findBuilding(position, TerrainLayer.Deep) == null) &&
 					(map.findResource(position, TerrainLayer.Deep) == null))
 				{
@@ -293,7 +295,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
 				if(building != null)
 				{
 					building.destroy();
@@ -307,7 +309,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
 				if(building != null)
 				{
 					building.destroy();
@@ -325,7 +327,7 @@
 			},
 		eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 				if(building != null)
 				{
 					building.destroy();
@@ -371,9 +373,9 @@
 	PrototypeLib.addResource("Radioactive", TerrainLayer.Deep, "#77FF77");
 	PrototypeLib.addResource("Fumarole", TerrainLayer.Deep, "#FF9900");
 
-	var mine_eventBeginBuilding = function(item, map)
+	let mine_eventBeginBuilding = function(item, map)
 	{
-		var position = item.getPosition();
+		let position = item.getPosition();
 		if((map.findBuilding(position, TerrainLayer.Underground) == null) &&
 			(map.findResource(position, TerrainLayer.Underground) == null))
 		{
@@ -383,24 +385,24 @@
 		return false;
 	};
 
-	var mine_eventEndBuilding = function(item, map)
+	let mine_eventEndBuilding = function(item, map)
 	{
 		map.findBuilding(item.getPosition(), TerrainLayer.Underground).setBuilded();
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Underground);
 	};
 
-	var mine_eventDestroy = function(item, map)
+	let mine_eventDestroy = function(item, map)
 	{
-		var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+		let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 		if(building != null)
 		{
 			building.destroy();
 		}
 	};
 
-	var mineDeep_eventBeginBuilding = function(item, map)
+	let mineDeep_eventBeginBuilding = function(item, map)
 	{
-		var position = item.getPosition();
+		let position = item.getPosition();
 		if((map.findBuilding(position, TerrainLayer.Deep) == null) &&
 			(map.findResource(position, TerrainLayer.Deep) == null))
 		{
@@ -410,15 +412,15 @@
 		return false;
 	};
 
-	var mineDeep_eventEndBuilding = function(item, map)
+	let mineDeep_eventEndBuilding = function(item, map)
 	{
 		map.findBuilding(item.getPosition(), TerrainLayer.Deep).setBuilded();
 		map.discoveryNearTiles(item.getPosition(), TerrainLayer.Deep);
 	};
 
-	var mineDeep_eventDestroy = function(item, map)
+	let mineDeep_eventDestroy = function(item, map)
 	{
-		var building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
+		let building = map.findBuilding(item.getPosition(), TerrainLayer.Deep);
 		if(building != null)
 		{
 			building.destroy();
@@ -442,7 +444,7 @@
 	PrototypeLib.add("Mine", TerrainLayer.Underground, 1000, {}, {
 			eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Surface);
 				if(building != null)
 				{
 					building.destroy();
@@ -453,7 +455,7 @@
 	PrototypeLib.add("MineDeep", TerrainLayer.Deep, 1000, {}, {
 			eventDestroy: function(item, map)
 			{
-				var building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
+				let building = map.findBuilding(item.getPosition(), TerrainLayer.Underground);
 				if(building != null)
 				{
 					building.destroy();
@@ -488,11 +490,11 @@
 
 	PrototypeLib.add("RecreationalFacility", TerrainLayer.Underground, 15, {}, { consumption: { power: 80 }, production: { recreationalUnit: 60 } });
 
-	var park = PrototypeLib.add("Park", TerrainLayer.Deep, 4, {}, { consumption: { power: 80 }, production: { recreationalUnit: 120 },
+	let park = PrototypeLib.add("Park", TerrainLayer.Deep, 4, {}, { consumption: { power: 80 }, production: { recreationalUnit: 120 },
 		eventBeginBuilding: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
+				let position = item.getPosition();
+				let layer = item.getLayer();
 				if((position.x > 1) && (position.y > 1) &&
 					(position.x < map.getSize().x) && (position.y < map.getSize().y))
 				{
@@ -515,17 +517,17 @@
 			},
 		eventEndBuilding: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
+				let position = item.getPosition();
+				let layer = item.getLayer();
 				map.findBuilding({ x: position.x, y: position.y - 1 }, layer).setBuilded();
 				map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer).setBuilded();
 				map.findBuilding({ x: position.x + 1, y: position.y }, layer).setBuilded();
 			},
 		eventDestroy: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
-				var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+				let position = item.getPosition();
+				let layer = item.getLayer();
+				let building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
 				if(building != null)
 				{
 					building.destroy();
@@ -559,9 +561,9 @@
 	PrototypeLib.add("Park_w", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
-				var building = map.findBuilding({ x: position.x, y: position.y + 1 }, layer);
+				let position = item.getPosition();
+				let layer = item.getLayer();
+				let building = map.findBuilding({ x: position.x, y: position.y + 1 }, layer);
 				if(building != null)
 				{
 					building.destroy();
@@ -586,9 +588,9 @@
 	PrototypeLib.add("Park_n", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
-				var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+				let position = item.getPosition();
+				let layer = item.getLayer();
+				let building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
 				if(building != null)
 				{
 					building.destroy();
@@ -613,9 +615,9 @@
 	PrototypeLib.add("Park_e", TerrainLayer.Deep, 1, {}, {
 			eventDestroy: function(item, map)
 			{
-				var position = item.getPosition();
-				var layer = item.getLayer();
-				var building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
+				let position = item.getPosition();
+				let layer = item.getLayer();
+				let building = map.findBuilding({ x: position.x, y: position.y - 1 }, layer);
 				if(building != null)
 				{
 					building.destroy();
@@ -664,11 +666,11 @@
 	//-------------------------------------------------------------
 	// speciali
 
-	var spacePort = PrototypeLib.add("SpacePort", TerrainLayer.Surface, 4, {}, { consumption: { power: 200 }, production: {  },
+	let spacePort = PrototypeLib.add("SpacePort", TerrainLayer.Surface, 4, {}, { consumption: { power: 200 }, production: {  },
 		eventBeginBuilding: function(item, map)
 		{
-			var position = item.getPosition();
-			var layer = item.getLayer();
+			let position = item.getPosition();
+			let layer = item.getLayer();
 			if((position.x > 1) && (position.y > 1) &&
 				(position.x < map.getSize().x) && (position.y < map.getSize().y))
 			{
@@ -705,8 +707,8 @@
 		},
 		eventEndBuilding: function(item, map)
 		{
-			var position = item.getPosition();
-			var layer = item.getLayer();
+			let position = item.getPosition();
+			let layer = item.getLayer();
 			map.findBuilding({ x: position.x, y: position.y - 1 }, layer).setBuilded();
 			map.findBuilding({ x: position.x + 1, y: position.y - 1 }, layer).setBuilded();
 			map.findBuilding({ x: position.x + 1, y: position.y }, layer).setBuilded();
@@ -724,7 +726,7 @@
 		},
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll(position, map);
 		}
 	});
@@ -738,8 +740,8 @@
 	};
 	spacePort.destroyAll = function(position, map)
 	{
-		var layer = TerrainLayer.Surface;
-		var building = map.findBuilding({ x: position.x, y: position.y }, layer);
+		let layer = TerrainLayer.Surface;
+		let building = map.findBuilding({ x: position.x, y: position.y }, layer);
 		if(building != null)
 		{
 			building.destroy();
@@ -796,21 +798,21 @@
 	PrototypeLib.add("SpacePort_w", TerrainLayer.Surface, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
 		}
 	});
 	PrototypeLib.add("SpacePort_n", TerrainLayer.Surface, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
 		}
 	});
 	PrototypeLib.add("SpacePort_e", TerrainLayer.Surface, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x - 1, y: position.y }, map);
 		}
 	});
@@ -818,28 +820,28 @@
 	PrototypeLib.add("SpacePort_u", TerrainLayer.Underground, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x, y: position.y }, map);
 		}
 	});
 	PrototypeLib.add("SpacePort_u_w", TerrainLayer.Underground, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x, y: position.y + 1 }, map);
 		}
 	});
 	PrototypeLib.add("SpacePort_u_n", TerrainLayer.Underground, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x - 1, y: position.y + 1 }, map);
 		}
 	});
 	PrototypeLib.add("SpacePort_u_e", TerrainLayer.Underground, 1, {}, {
 		eventDestroy: function(item, map)
 		{
-			var position = item.getPosition();
+			let position = item.getPosition();
 			spacePort.destroyAll({ x: position.x - 1, y: position.y }, map);
 		}
 	});

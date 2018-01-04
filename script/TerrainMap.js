@@ -1,4 +1,6 @@
-	var Typology = {
+"use strict";
+
+	let Typology = {
 		Vulcanic: "vulcanic",
 		Asteroid: "asteroid",
 		Ice: "ice",
@@ -8,13 +10,13 @@
 		Stone: "stone"
 	};
 
-	var TerrainLayer = {
+	let TerrainLayer = {
 		Surface: "surface",
 		Underground: "underground",
 		Deep: "deep"
 	};
 
-	var Morphology = {
+	let Morphology = {
 		Razed: "razed",
 		Clear: "clear",
 		Rough: "rough",
@@ -23,7 +25,7 @@
 		Undiscovery: "undiscovered"
 	};
 
-	var StructureTypes = {
+	let StructureTypes = {
 		Resource: "resource",
 		Building: "building",
 		Robot: "robot"
@@ -31,17 +33,17 @@
 
 	function TerrainMap(terrainTypology, size)
 	{
-		var typology = terrainTypology;
-		var layer = TerrainLayer.Surface;
-		var surface = [];
-		var underground = [];
-		var deep = [];
-		var structure = [];
-		var state = new ColonyState();
+		let typology = terrainTypology;
+		let layer = TerrainLayer.Surface;
+		let surface = [];
+		let underground = [];
+		let deep = [];
+		let structure = [];
+		let state = new ColonyState();
 
-		var _initialize = function()
+		let _initialize = function()
 		{
-			var x, y;
+			let x, y;
 			for(x = 0; x < size.x; x++)
 			{
 				surface[x] = [];
@@ -58,9 +60,9 @@
 			}
 		};
 
-		var _randomMorphology = function()
+		let _randomMorphology = function()
 		{
-			var ret = Math.floor(Math.random() * 4);
+			let ret = Math.floor(Math.random() * 4);
 			if(ret == 0) return 1;
 			else if(ret == 1) return 2;
 			else if(ret == 2) return 4;
@@ -68,7 +70,7 @@
 			return 0;
 		};
 
-		var _getMorphology = function(detritus)
+		let _getMorphology = function(detritus)
 		{
 			if(detritus == 0)
 			{
@@ -96,7 +98,7 @@
 			}
 		};
 
-		var _getLayer = function(selectedLayer)
+		let _getLayer = function(selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 			switch(selectedLayer)
@@ -112,9 +114,9 @@
 			}
 		};
 
-		var _getTerrainImageId = function(x, y)
+		let _getTerrainImageId = function(x, y)
 		{
-			var detritus = _getLayer()[x][y];
+			let detritus = _getLayer()[x][y];
 			if(detritus < 9)
 			{
 				return "Terrain_" + typology + "_" + layer + "_" + _getMorphology(detritus);
@@ -122,9 +124,9 @@
 			return null;
 		};
 
-		var _addResource = function(resourceType, position)
+		let _addResource = function(resourceType, position)
 		{
-			var val = PrototypeLib.createResource(resourceType, position);
+			let val = PrototypeLib.createResource(resourceType, position);
 			_addObject(structure, val);
 			if(val.getLayer() == TerrainLayer.Surface)
 			{
@@ -132,11 +134,11 @@
 			}
 		};
 
-		var _addBuilding = function(buildingType, position, alreadyBuilt)
+		let _addBuilding = function(buildingType, position, alreadyBuilt)
 		{
-			var placed = true;
-			var newBuilding = PrototypeLib.createBuilding(buildingType, position, alreadyBuilt);
-			var eventBeginBuilding = PrototypeLib.get(buildingType).eventBeginBuilding;
+			let placed = true;
+			let newBuilding = PrototypeLib.createBuilding(buildingType, position, alreadyBuilt);
+			let eventBeginBuilding = PrototypeLib.get(buildingType).eventBeginBuilding;
 			if(eventBeginBuilding != undefined)
 			{
 				placed = eventBeginBuilding(newBuilding, this);
@@ -151,19 +153,19 @@
 			return null;
 		};
 
-		var _addPipe = function(pipeType, layer, position, alreadyBuilt)
+		let _addPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
-			var val = PrototypeLib.createPipe(pipeType, layer, position, alreadyBuilt);
+			let val = PrototypeLib.createPipe(pipeType, layer, position, alreadyBuilt);
 			_addObject(structure, val);
 			_getLayer(layer)[position.x][position.y] = 0;
 		};
 
-		var _addObject = function(array, val)
+		let _addObject = function(array, val)
 		{
-			var valPosition = val.getPosition();
-			for(var i = 0; i < array.length; i++)
+			let valPosition = val.getPosition();
+			for(let i = 0; i < array.length; i++)
 			{
-				var arrayPosition = array[i].getPosition();
+				let arrayPosition = array[i].getPosition();
 				if((arrayPosition.x == valPosition.x) && (arrayPosition.y == valPosition.y))
 				{
 					if(array[i].getType() == StructureTypes.Resource)
@@ -182,15 +184,15 @@
 			array.push(val);
 		};
 
-		var _delBuilding = function(position, selectedLayer)
+		let _delBuilding = function(position, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			for(var i = 0; i < structure.length; i++)
+			for(let i = 0; i < structure.length; i++)
 			{
 				if(structure[i].getType() == StructureTypes.Building)
 				{
-					var arrayPosition = structure[i].getPosition();
+					let arrayPosition = structure[i].getPosition();
 					if((arrayPosition.x == position.x) &&
 						(arrayPosition.y == position.y) &&
 						(structure[i].getLayer() == selectedLayer))
@@ -203,16 +205,16 @@
 			}
 		};
 
-		var _isVisible = function(point, selectedLayer)
+		let _isVisible = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
 			return (_getLayer(selectedLayer)[point.x][point.y] < 9);
 		};
 
-		var _getNearTiles = function(point)
+		let _getNearTiles = function(point)
 		{	
-			var ret = [];
+			let ret = [];
 			if(point.y > 0)
 			{
 				if(point.x > 0)
@@ -260,12 +262,12 @@
 			return ret;
 		};
 
-		var _isDiggable = function(point, selectedLayer)
+		let _isDiggable = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var tiles = _getNearTiles(point);
-			for(var i = 0; i < tiles.length; i++)
+			let tiles = _getNearTiles(point);
+			for(let i = 0; i < tiles.length; i++)
 			{
 				if(_getLayer(selectedLayer)[tiles[i].x][tiles[i].y] >= 9)
 				{
@@ -275,13 +277,13 @@
 			return false;
 		};
 
-		var _discoveryTile = function(point, selectedLayer)
+		let _discoveryTile = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
 			if(_getLayer(selectedLayer)[point.x][point.y] >= 9)
 			{
-				var resource = _findResource(point, selectedLayer);
+				let resource = _findResource(point, selectedLayer);
 				if(resource != null)
 				{
 					state.addKnowledge({ discovery: [resource.getBuildingType()] });
@@ -294,12 +296,12 @@
 			}
 		};
 
-		var _discoveryNearTiles = function(point, selectedLayer)
+		let _discoveryNearTiles = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var nearTiles = _getNearTiles(point);
-			for(var i = 0; i < nearTiles.length; i++)
+			let nearTiles = _getNearTiles(point);
+			for(let i = 0; i < nearTiles.length; i++)
 			{
 				if(!_isVisible(nearTiles[i], selectedLayer))
 				{
@@ -308,15 +310,15 @@
 			}
 		};
 
-		var _dig = function(point, selectedLayer)
+		let _dig = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var tiles = _getNearTiles(point);
-			var onlyCheck = false;
-			for(var i = 0; i < tiles.length; i++)
+			let tiles = _getNearTiles(point);
+			let onlyCheck = false;
+			for(let i = 0; i < tiles.length; i++)
 			{
-				var detritus = _getLayer(selectedLayer)[tiles[i].x][tiles[i].y];
+				let detritus = _getLayer(selectedLayer)[tiles[i].x][tiles[i].y];
 				if(detritus >= 9)
 				{
 					if(!onlyCheck)
@@ -343,19 +345,19 @@
 			return true;
 		};
 
-		var _isRazable = function(point, selectedLayer)
+		let _isRazable = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var detritus = _getLayer(selectedLayer)[point.x][point.y];
+			let detritus = _getLayer(selectedLayer)[point.x][point.y];
 			return ((detritus > 0) && (detritus < 9));
 		};
 
-		var _raze = function(point, selectedLayer)
+		let _raze = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var detritus = _getLayer(selectedLayer)[point.x][point.y];
+			let detritus = _getLayer(selectedLayer)[point.x][point.y];
 			if((detritus > 0) && (detritus < 9))
 			{
 				detritus -= 1;
@@ -364,11 +366,11 @@
 			return detritus;
 		};
 
-		var _findBuilding = function(position, selectedLayer)
+		let _findBuilding = function(position, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			for (var i = 0; i < structure.length; i++)
+			for (let i = 0; i < structure.length; i++)
 			{
 				if((structure[i].getLayer() == selectedLayer) &&
 					(structure[i].getPosition().x == position.x) &&
@@ -381,11 +383,11 @@
 			return null;
 		};
 
-		var _findResource = function(position, selectedLayer)
+		let _findResource = function(position, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			for (var i = 0; i < structure.length; i++)
+			for (let i = 0; i < structure.length; i++)
 			{
 				if((structure[i].getLayer() == selectedLayer) &&
 					(structure[i].getPosition().x == position.x) &&
@@ -398,27 +400,27 @@
 			return null;
 		};
 
-		var _addRoboDozer = function(point, selectedLayer)
+		let _addRoboDozer = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var val = new Robot(RobotTypes.Dozer, selectedLayer, point);
+			let val = new Robot(RobotTypes.Dozer, selectedLayer, point);
 			_addObject(structure, val);
 		};
 
-		var _addRoboDigger = function(point, selectedLayer)
+		let _addRoboDigger = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			var val = new Robot(RobotTypes.Digger, selectedLayer, point);
+			let val = new Robot(RobotTypes.Digger, selectedLayer, point);
 			_addObject(structure, val);
 		};
 
-		var _getRobot = function(point, selectedLayer)
+		let _getRobot = function(point, selectedLayer)
 		{
 			selectedLayer = selectedLayer || layer;
 
-			for(var i = 0; i < structure.length; i++)
+			for(let i = 0; i < structure.length; i++)
 			{
 				if((structure[i].getPosition().x == point.x) &&
 					(structure[i].getPosition().y == point.y) &&
@@ -432,7 +434,7 @@
 			return null;
 		};
 
-		var _addToGraph = function(list, el)
+		let _addToGraph = function(list, el)
 		{
 			list.push(el);
 
@@ -446,34 +448,34 @@
 			}
 		};
 
-		var _getGraph = function()
+		let _getGraph = function()
 		{
-			var data = {};
+			let data = {};
 			data[TerrainLayer.Surface] = [];
 			data[TerrainLayer.Underground] = [];
 			data[TerrainLayer.Deep] = [];
-			for (var elIndex = 0; elIndex < structure.length; elIndex++)
+			for (let elIndex = 0; elIndex < structure.length; elIndex++)
 			{
-				var el = structure[elIndex];
+				let el = structure[elIndex];
 				if((el.getType() == StructureTypes.Building) && (el.isPipe()))
 				{
 					data[el.getLayer()].push(el);
 				}
 			}
 
-			var upper = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Underground]), _getGraphLayer(data[TerrainLayer.Deep]));    	
-			var graphList = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Surface]), upper);
+			let upper = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Underground]), _getGraphLayer(data[TerrainLayer.Deep]));    	
+			let graphList = _getGraphInternal(_getGraphLayer(data[TerrainLayer.Surface]), upper);
 
-			var tmpRet = _getGraphBoundBildings(graphList, structure);
+			let tmpRet = _getGraphBoundBildings(graphList, structure);
 
 			// conversione da array a object
-			var ret = [];
-			for (var i = 0; i < tmpRet.length; i++)
+			let ret = [];
+			for (let i = 0; i < tmpRet.length; i++)
 			{
-				var retItem = new BuildingGraph();
-				for (var ii = 0; ii < tmpRet[i].length; ii++)
+				let retItem = new BuildingGraph();
+				for (let ii = 0; ii < tmpRet[i].length; ii++)
 				{
-					var buildingType = tmpRet[i][ii].getBuildingType();
+					let buildingType = tmpRet[i][ii].getBuildingType();
 					if(retItem[buildingType] == null)
 					{
 						retItem[buildingType] = [];
@@ -485,12 +487,12 @@
 			return ret;
 		};
 
-		var _getGraphBoundBildings = function (graphList, structure)
+		let _getGraphBoundBildings = function (graphList, structure)
 		{
-			var ret = [];
-			var orphans = [];
-			var added;
-			var i, ii;
+			let ret = [];
+			let orphans = [];
+			let added;
+			let i, ii;
 			for(i = 0; i < graphList.length; i++)
 			{
 				added = false;
@@ -508,7 +510,7 @@
 					orphans.push(graphList[i]);
 				}
 			}
-			var orphan = null;
+			let orphan = null;
 			if(orphans.length > 0)
 			{
 				orphan = orphans[0];
@@ -526,9 +528,9 @@
 			}
 
 			// assegno gli edifici ai grafi
-			for (var elIndex = 0; elIndex < structure.length; elIndex++)
+			for (let elIndex = 0; elIndex < structure.length; elIndex++)
 			{
-				var el = structure[elIndex];
+				let el = structure[elIndex];
 				if((el.getType() == StructureTypes.Building) && (!el.isPipe()))
 				{
 					for(i = 0; i < ret.length; i++)
@@ -554,9 +556,9 @@
 		};
 
 		// restituisce true se il grafo permette il collegamento verso le coordinate point
-		var _getGraphIsBound = function(graph, point, layer)
+		let _getGraphIsBound = function(graph, point, layer)
 		{
-			for(var i = 0; i < graph.length; i++)
+			for(let i = 0; i < graph.length; i++)
 			{
 				if(!graph[i].isPipe())
 				{
@@ -567,7 +569,7 @@
 				{
 					if(graph[i].getLayer() == layer)
 					{
-						var pos = graph[i].getPosition();
+						let pos = graph[i].getPosition();
 						if(pos.x == point.x)
 						{
 							if(((pos.y == point.y -1) && (graph[i].haveEast())) ||
@@ -590,20 +592,20 @@
 			return false;
 		};
 
-		var _getGraphInternal = function(upper, lower)
+		let _getGraphInternal = function(upper, lower)
 		{
-			for(var i = 0; i < lower.length; i++)
+			for(let i = 0; i < lower.length; i++)
 			{
-				var rootGraph = null;
+				let rootGraph = null;
 				if(lower[i].elevators != undefined)
 				{
-					for(var ii = 0; ii < lower[i].elevators.length; ii++)
+					for(let ii = 0; ii < lower[i].elevators.length; ii++)
 					{
-						var elevator = lower[i].elevators[ii];
+						let elevator = lower[i].elevators[ii];
 						if(elevator.haveUp() && !elevator.isDestroyed())
 						{
-							var iii;
-							var upperGraph = _getGraphFind(upper, elevator.getPosition());
+							let iii;
+							let upperGraph = _getGraphFind(upper, elevator.getPosition());
 							if(rootGraph != null)
 							{
 								if(rootGraph != upperGraph)
@@ -636,15 +638,15 @@
 			return upper;
 		};
 
-		var _getGraphFind = function(upper, position)
+		let _getGraphFind = function(upper, position)
 		{
-			for(var i = 0; i < upper.length; i++)
+			for(let i = 0; i < upper.length; i++)
 			{
 				if(upper[i].elevators != undefined)
 				{
-					for(var ii = 0; ii < upper[i].elevators.length; ii++)
+					for(let ii = 0; ii < upper[i].elevators.length; ii++)
 					{
-						var elevator = upper[i].elevators[ii];
+						let elevator = upper[i].elevators[ii];
 						if(elevator.haveDown())
 						{
 							if((elevator.getPosition().x == position.x) &&
@@ -659,28 +661,28 @@
 			return null;
 		};
 
-		var _getGraphLayer = function(pipes)
+		let _getGraphLayer = function(pipes)
 		{
-			var a = null;
-			var ay = -1;
+			let a = null;
+			let ay = -1;
 
-			var b = [];
-			var b1 = [];
+			let b = [];
+			let b1 = [];
 
 			// lista di grafi
-			var ret = [];
+			let ret = [];
 
-			var d = null;
-			var e = [];
-			var e1 = [];
+			let d = null;
+			let e = [];
+			let e1 = [];
 
-			var x = 0;
-			var l = null;
+			let x = 0;
+			let l = null;
 
-			var elementPosition;
-			for (var elementIndex = 0; elementIndex < pipes.length; elementIndex++)
+			let elementPosition;
+			for (let elementIndex = 0; elementIndex < pipes.length; elementIndex++)
 			{
-				var element = pipes[elementIndex];
+				let element = pipes[elementIndex];
 
 				elementPosition = element.getPosition();
 				if (x > elementPosition.x)
@@ -713,8 +715,8 @@
 				{
 					if ((l != null) && (b[elementPosition.y] != a))
 					{
-						var tmp = b[elementPosition.y];
-						var i;
+						let tmp = b[elementPosition.y];
+						let i;
 						for(i = 0; i < a.length; i++)
 						{
 							_addToGraph(tmp, a[i]);
@@ -764,20 +766,20 @@
 			return ret;
 		};
 
-		var _computation = function()
+		let _computation = function()
 		{
-			var en = new Engine();
-			var tmp = _getGraph();
+			let en = new Engine();
+			let tmp = _getGraph();
 			en.computation(state, tmp, this);
 			state.setDate(state.getDate() + 1);
 
 			_simulation();
 		};
 
-		var _simulation = function()
+		let _simulation = function()
 		{
-			var en = new Engine();
-			var tmp = _getGraph();
+			let en = new Engine();
+			let tmp = _getGraph();
 			en.simulation(state, tmp);
 		};
 
@@ -821,13 +823,13 @@
 	{
 		const MAX_INTEGRITY = 1000;
 
-		//var buildingType = buildingType;
-		//var position = position;
-		var layer = terrainLayer;
-		var integrity = MAX_INTEGRITY;
-		var progressState = - (buildingTime || 0);
-		var frozen = false;
-		//var owner = null;
+		//let buildingType = buildingType;
+		//let position = position;
+		let layer = terrainLayer;
+		let integrity = MAX_INTEGRITY;
+		let progressState = - (buildingTime || 0);
+		let frozen = false;
+		//let owner = null;
 
 		//var	builder = builder;
 		if(builder == undefined)
@@ -835,7 +837,7 @@
 			builder = "Building_" + layer;
 		}
 
-		var _progress = function()
+		let _progress = function()
 		{
 			if(!frozen && progressState >= 0)
 			{
@@ -843,7 +845,7 @@
 			}
 		};
 
-		var _progressBuild = function()
+		let _progressBuild = function()
 		{
 			if(!frozen && progressState < 0)
 			{
@@ -852,7 +854,7 @@
 			return (progressState == 0);
 		};
 
-		var _damage = function(value)
+		let _damage = function(value)
 		{
 			if(!frozen)
 			{
@@ -868,17 +870,17 @@
 			return integrity;
 		};
 
-		var _destroy = function()
+		let _destroy = function()
 		{
 			integrity = 0;
 		};
 
-		var _isDestroyed = function()
+		let _isDestroyed = function()
 		{
 			return (integrity == 0);
 		};
 
-		var _reapair = function(value)
+		let _reapair = function(value)
 		{
 			if(integrity > 0)
 			{
@@ -892,22 +894,22 @@
 			return integrity;
 		};
 
-		var _underConstruction = function()
+		let _underConstruction = function()
 		{
 			return (progressState < 0);
 		};
 
-		var _setBuilded = function()
+		let _setBuilded = function()
 		{
 			progressState = 0;
 		};
 
-		var _isOperative = function()
+		let _isOperative = function()
 		{
 			return (progressState >= 0) && (integrity > 0);
 		};
 
-		var _getImageId = function()
+		let _getImageId = function()
 		{
 			if(_isDestroyed())
 			{
@@ -951,7 +953,7 @@
 		//-----------------------------------------
 	}
 
-	var PipeType = {
+	let PipeType = {
 		NorthEastSouthWest: "nesw",
 		NorthSouth: "ns",
 		EastWest: "ew",
@@ -963,7 +965,7 @@
 	{
 		Building.call(this, "Pipe_" + pipeType + "_" + layer, layer, position, buildingTime);
 
-		//var pipeType = pipeType;
+		//let pipeType = pipeType;
 
 		this.isPipe = function() { return true; };
 
@@ -976,7 +978,7 @@
 	}
 	Pipe.inherits(Building);
 
-	var RobotTypes = {
+	let RobotTypes = {
 		Dozer: "RoboDozer",
 		Digger: "RoboDigger",
 		Miner: "RoboMiner"
@@ -1011,8 +1013,8 @@
 		/** @param {BuildingGraph} graph */
 		BuildingGraph.countAll = function(graph)
 		{
-			var ret = 0;
-			for(var buildingType in graph)
+			let ret = 0;
+			for(let buildingType in graph)
 			{
 				if(graph.hasOwnProperty(buildingType))
 				{
@@ -1025,8 +1027,8 @@
 		/** @param {BuildingGraph} graph */
 		BuildingGraph.countPipes = function(graph)
 		{
-			var ret = 0;
-			for(var buildingType in graph)
+			let ret = 0;
+			for(let buildingType in graph)
 			{
 				if(graph.hasOwnProperty(buildingType))
 				{
@@ -1042,7 +1044,7 @@
 		/** @param {BuildingGraph} graph */
 		BuildingGraph.getHeadquarter = function(graph)
 		{
-			for(var buildingType in graph)
+			for(let buildingType in graph)
 			{
 				if(graph.hasOwnProperty(buildingType))
 				{

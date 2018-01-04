@@ -1,4 +1,6 @@
-	var AreaTypes = {
+"use strict";
+
+	let AreaTypes = {
 		One: "1",
 		TwoEast: "2e",
 		TwoWest: "2w",
@@ -7,8 +9,8 @@
 
 	function PrototypeLibConstructor()
 	{	
-		var list = {};
-		var priorityList = [];
+		let list = {};
+		let priorityList = [];
 
 		/**
 		 *  @param {PipeType} pipeType
@@ -17,10 +19,10 @@
 		 *  @param {object} buildingCost
 		 *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
 		 */
-		var _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
+		let _addPipe = function(pipeType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
-			var buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
-			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			let buildingType = "Pipe_" + pipeType + "_" + terrainLayer;
+			let item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
 			item.createItem = function(position)
 			{
 				return new Pipe(pipeType, terrainLayer, position, buildingTime);
@@ -37,9 +39,9 @@
 		 *  @param {object} buildingCost
 		 *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
 		 */
-		var _add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
+		let _add = function(buildingType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
-			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			let item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
 			list[buildingType] = item;
 			priorityList.push(buildingType);
 			return item;
@@ -50,10 +52,10 @@
 		 *  @param {TerrainLayer} terrainLayer
 		 *  @param {string} color
 		 */
-		var _addResource = function(resourceType, terrainLayer, color)
+		let _addResource = function(resourceType, terrainLayer, color)
 		{
-			var buildingType = "Resource_" + resourceType;
-			var item = new BasePrototype(buildingType, terrainLayer, 0, {}, {});
+			let buildingType = "Resource_" + resourceType;
+			let item = new BasePrototype(buildingType, terrainLayer, 0, {}, {});
 			item.createItem = function(position)
 			{
 				return new Resource(resourceType, terrainLayer, color, position);
@@ -69,10 +71,10 @@
 		 *  @param {object} buildingCost
 		 *  @param {object} parameters (requiredResource, consumption, production, productionWaste, capacity, eventBeginBuilding, eventEndBuilding, eventDestroy)
 		 */
-		var _addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
+		let _addMine = function(resourceType, terrainLayer, buildingTime, buildingCost, parameters)
 		{
-			var buildingType = "Mine" + resourceType;
-			var item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
+			let buildingType = "Mine" + resourceType;
+			let item = new BasePrototype(buildingType, terrainLayer, buildingTime, buildingCost, parameters);
 			item.createItem = function(position)
 			{
 				return new Building(buildingType, terrainLayer, position, buildingTime, "RoboMiner");
@@ -85,7 +87,7 @@
 		/**
 		 *  @param {string} buildingType
 		 */
-		var _get = function(buildingType)
+		let _get = function(buildingType)
 		{
 			return list[buildingType];
 		};
@@ -95,9 +97,9 @@
 		 *  @param {object} position
 		 *  @param {boolean} alreadyBuilt
 		 */
-		var _createBuilding = function(buildingType, position, alreadyBuilt)
+		let _createBuilding = function(buildingType, position, alreadyBuilt)
 		{
-			var ret = list[buildingType].createItem(position);
+			let ret = list[buildingType].createItem(position);
 			if(alreadyBuilt)
 			{
 				ret.setBuilded();
@@ -111,7 +113,7 @@
 		 *  @param {object} position
 		 *  @param {boolean} alreadyBuilt
 		 */
-		var _createPipe = function(pipeType, layer, position, alreadyBuilt)
+		let _createPipe = function(pipeType, layer, position, alreadyBuilt)
 		{
 			return _createBuilding("Pipe_" + pipeType + "_" + layer, position, alreadyBuilt);
 		};
@@ -120,7 +122,7 @@
 		 *  @param {string} resourceType
 		 *  @param {object} position
 		 */
-		var _createResource = function(resourceType, position)
+		let _createResource = function(resourceType, position)
 		{
 			return list["Resource_" + resourceType].createItem(position);
 		};
@@ -140,18 +142,18 @@
 	{
 		parameters = parameters || {};
 
-		var consumption = parameters.consumption || {};
-		var production = parameters.production || {};
-		var productionWaste = parameters.productionWaste || {};
-		var capacity = parameters.capacity || {};
-		var requiredResource = parameters.requiredResource;
+		let consumption = parameters.consumption || {};
+		let production = parameters.production || {};
+		let productionWaste = parameters.productionWaste || {};
+		let capacity = parameters.capacity || {};
+		let requiredResource = parameters.requiredResource;
 
-		var _createItem = function(position)
+		let _createItem = function(position)
 		{
 			return new Building(buildingType, terrainLayer, position, buildingTime);
 		};
 
-		var _getAreaType = function()
+		let _getAreaType = function()
 		{
 			return AreaTypes.One;
 		};
@@ -180,4 +182,4 @@
 	}
 
 	// singleton
-	var PrototypeLib = new PrototypeLibConstructor();
+	let PrototypeLib = new PrototypeLibConstructor();

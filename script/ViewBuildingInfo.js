@@ -1,4 +1,6 @@
-	var BuildingInfoView;
+"use strict";
+
+	let BuildingInfoView;
 
 	function InitializeBuildingInfoView(onChangePosition, onClearCurrentItem)
 	{
@@ -8,16 +10,16 @@
 
 	function BuildingInfoViewConstructor(onChangePosition, onClearCurrentItem)
 	{
-		var currentItem;
+		let currentItem;
 
-		var _initialize = function()
+		let _initialize = function()
 		{
 			_hide();
 		};
 
-		var _refresh = function()
+		let _refresh = function()
 		{
-			var buildingInfoImage = $("#buildingInfoImage");
+			let buildingInfoImage = $("#buildingInfoImage");
 			if(currentItem == null)
 			{
 				$("#buildingInfoDataTitle").html("");
@@ -27,7 +29,7 @@
 				return;
 			}
 
-			var protoType;
+			let protoType;
 			if(currentItem.getBuildingType)
 			{
 				protoType = PrototypeLib.get(currentItem.getBuildingType());
@@ -37,7 +39,7 @@
 				buildingInfoImage.attr("src", ImagesLib.getFileName(protoType.getBuildingImageId()));
 				buildingInfoImage.show();
 
-				var barValue;
+				let barValue;
 				if(currentItem.underConstruction())
 				{
 					barValue = (Math.floor(100 * (protoType.getBuildingTime() + currentItem.getProgressState()) / protoType.getBuildingTime()));
@@ -74,13 +76,13 @@
 			}
 		};
 
-		var _goto = function()
+		let _goto = function()
 		{
 			if(currentItem != null)
 			{
 				if(onChangePosition && currentItem.getPosition)
 				{
-					var tmp = currentItem.getPosition();
+					let tmp = currentItem.getPosition();
 					onChangePosition({ x: tmp.x, y: tmp.y });
 				}
 				if(onClearCurrentItem && !currentItem.getPosition)
@@ -90,13 +92,13 @@
 			}
 		};
 
-		var _hide = function()
+		let _hide = function()
 		{
 			currentItem = null;
 			_refresh();
 		};
 
-		var _show = function(item)
+		let _show = function(item)
 		{
 			currentItem = item;
 			// se si tratta di un edificio esteso seleziono il modulo principale

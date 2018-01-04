@@ -1,6 +1,8 @@
+"use strict";
+
 	function Engine()
 	{
-		var engines = [];
+		let engines = [];
 		engines.push(new WorkforceEngine());
 		engines.push(new BaseProductionEngine());
 		engines.push(new ProductionEngine());
@@ -14,22 +16,22 @@
 		//-------------------------------------
 
 		// simulazione
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 			colonyState.resetAll();
 
-			for(var i = 0; i < engines.length; i++)
+			for(let i = 0; i < engines.length; i++)
 			{
 				engines[i].simulation(colonyState, graphs);
 			}
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
 			colonyState.resetGlobalEvent();
 			_simulation(colonyState, graphs);
 
-			for(var i = 0; i < engines.length; i++)
+			for(let i = 0; i < engines.length; i++)
 			{
 				engines[i].computation(colonyState, graphs, map);
 			}
@@ -49,12 +51,12 @@
 	function WorkforceEngine()
 	{
 		// add to colonyState the simulation result
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
-			var date = colonyState.getDate();
-			var humanWorkUnit = 0;
-			var generations = colonyState.getPopulation().registry;
-			for(var i  = 0; i < generations.length; i++)
+			let date = colonyState.getDate();
+			let humanWorkUnit = 0;
+			let generations = colonyState.getPopulation().registry;
+			for(let i  = 0; i < generations.length; i++)
 			{
 				if(generations[i].getState(date) == GenerationState.Scientists)
 				{
@@ -63,12 +65,12 @@
 			}
 			colonyState.setMaterials( { humanWorkUnit: humanWorkUnit } );
 
-			var roboticsWorkUnit = colonyState.getStored("roboticsWorker");
+			let roboticsWorkUnit = colonyState.getStored("roboticsWorker");
 			colonyState.setMaterials( { roboticsWorkUnit: roboticsWorkUnit } );
 		};
 
 		// return global events
-		var _computation = function(colonyState, graph, map)
+		let _computation = function(colonyState, graph, map)
 		{
 		};
 
@@ -84,19 +86,19 @@
 	function BaseProductionEngine()
 	{
 		// add to colonyState the simulation result
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
-			for(var i = 0; i < graphs.length; i++)
+			for(let i = 0; i < graphs.length; i++)
 			{
 				_internalSimulation(colonyState, graphs[i]);
 			}
 		};
 
-		var _internalSimulation = function(colonyState, graph)
+		let _internalSimulation = function(colonyState, graph)
 		{
 			PrototypeLib.getPriorityList().forEach(function(buildingType)
 			{
-				var buildingProtype = PrototypeLib.get(buildingType);
+				let buildingProtype = PrototypeLib.get(buildingType);
 				if(graph[buildingType] != undefined)
 				{
 					graph[buildingType].forEach(function(tmp)
@@ -139,7 +141,7 @@
 		};
 
 		// return global events
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
 		};
 
@@ -154,19 +156,19 @@
 	function ProductionEngine()
 	{
 		// add to colonyState the simulation result
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
-			var queue = colonyState.getProductionQueue();
-			var ret = [];
-			for(var i = 0; i < queue.length; i++)
+			let queue = colonyState.getProductionQueue();
+			let ret = [];
+			for(let i = 0; i < queue.length; i++)
 			{
-				var item = queue[i];
-				var value = 0;
+				let item = queue[i];
+				let value = 0;
 
 				if(item.getRemainTime() > 0)
 				{
-					var baseItem = RecipeLib.get(item.getName());
-					var cost = baseItem.getCost();
+					let baseItem = RecipeLib.get(item.getName());
+					let cost = baseItem.getCost();
 
 					while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
 					{
@@ -181,23 +183,23 @@
 			colonyState.getSimulationData().productionProgress = ret;
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
-			var progressList = colonyState.getSimulationData().productionProgress;
-			var queue = colonyState.getProductionQueue();
+			let progressList = colonyState.getSimulationData().productionProgress;
+			let queue = colonyState.getProductionQueue();
 
-			for(var i = 0; i < progressList.length; i++)
+			for(let i = 0; i < progressList.length; i++)
 			{
-				var item = progressList[i].item;
+				let item = progressList[i].item;
 
-				for(var ii = 0; ii < progressList[i].value; ii++)
+				for(let ii = 0; ii < progressList[i].value; ii++)
 				{
 					item.progress();
 				}
 
 				if(item.getRemainTime() == 0)
 				{
-					var baseItem = RecipeLib.get(item.getName());
+					let baseItem = RecipeLib.get(item.getName());
 					if(colonyState.haveSpace(baseItem.getResult()))
 					{
 						colonyState.addMaterials(baseItem.getResult());
@@ -221,17 +223,17 @@ Log.dialog("NEW_CREATION: " + item.getName());
 	function ResearchEngine()
 	{
 		// add to colonyState the simulation result
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
-			var queue = colonyState.getResearchQueue();
-			var ret = [];
-			for(var i = 0; i < queue.length; i++)
+			let queue = colonyState.getResearchQueue();
+			let ret = [];
+			for(let i = 0; i < queue.length; i++)
 			{
-				var item = queue[i];
-				var baseItem = RecipeLib.get(item.getName());
-				var cost = baseItem.getCost();
+				let item = queue[i];
+				let baseItem = RecipeLib.get(item.getName());
+				let cost = baseItem.getCost();
 
-				var value = 0;
+				let value = 0;
 				while(colonyState.haveMaterials(cost) && value < item.getRemainTime())
 				{
 					colonyState.delMaterials(cost);
@@ -242,20 +244,20 @@ Log.dialog("NEW_CREATION: " + item.getName());
 			colonyState.getSimulationData().researchProgress = ret;
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
-			var progressList = colonyState.getSimulationData().researchProgress;
-			var queue = colonyState.getResearchQueue();
+			let progressList = colonyState.getSimulationData().researchProgress;
+			let queue = colonyState.getResearchQueue();
 
-			for(var i = 0; i < progressList.length; i++)
+			for(let i = 0; i < progressList.length; i++)
 			{
-				var item = progressList[i].item;
-				for(var ii = 0; ii < progressList[i].value; ii++)
+				let item = progressList[i].item;
+				for(let ii = 0; ii < progressList[i].value; ii++)
 				{
-					var remainTime = item.progress();
+					let remainTime = item.progress();
 					if(remainTime == 0)
 					{
-						var baseItem = RecipeLib.get(item.getName());
+						let baseItem = RecipeLib.get(item.getName());
 						colonyState.addKnowledge(baseItem.getResult());
 						colonyState.addCompletedResearch(item.getName());
 
@@ -278,26 +280,26 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 	// gestione RoboDozer, RoboDigger -- avanzamento e disponibilità per il turno successivo
 	function RobotEngine()
 	{
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
-			var structure = map.getStructure();
-			var dozerCount = 0;
-			var diggerCount = 0;
-			var removedRobot = [];
+			let structure = map.getStructure();
+			let dozerCount = 0;
+			let diggerCount = 0;
+			let removedRobot = [];
 
-			for(var i = 0; i < structure.length; i++)
+			for(let i = 0; i < structure.length; i++)
 			{
 				if(structure[i].getType() == StructureTypes.Robot)
 				{
-					var robotType = structure[i].getRobotType();
+					let robotType = structure[i].getRobotType();
 					if(robotType == RobotTypes.Dozer)
 					{
 						// Dozer
-						var detritus = map.raze(structure[i].getPosition(), structure[i].getLayer());
+						let detritus = map.raze(structure[i].getPosition(), structure[i].getLayer());
 						if(detritus == 0)
 						{
 							// remove
@@ -311,7 +313,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 					else if(robotType == RobotTypes.Digger)
 					{
 						// Digger
-						var finished = map.dig(structure[i].getPosition(), structure[i].getLayer());
+						let finished = map.dig(structure[i].getPosition(), structure[i].getLayer());
 						if(finished)
 						{
 							// remove
@@ -325,7 +327,7 @@ Log.dialog("NEW_DISCOVERY: " + item.getName());
 				}
 			}
 
-			for(var ii = removedRobot.length - 1; ii >= 0; ii--)
+			for(let ii = removedRobot.length - 1; ii >= 0; ii--)
 			{
 				structure.splice(removedRobot[ii], 1); // remove
 			}

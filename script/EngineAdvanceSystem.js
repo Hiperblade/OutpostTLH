@@ -1,11 +1,13 @@
+"use strict";
+
 	// gestione sistemi avanzati (terraforming ecc.)
 	function AdvanceSystemEngine()
 	{
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
 //TODO:21
 		};

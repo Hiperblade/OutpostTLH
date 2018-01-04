@@ -1,31 +1,33 @@
+"use strict";
+
 	function MapView(map, canvasId, backgroundImage, areaSize, onChangePosition)
 	{
-		var canvasMap = document.getElementById(canvasId);
-		var ctx = canvasMap.getContext("2d");
-		var position = { x: 0, y: 0 };
-		var findResources = {};
+		let canvasMap = document.getElementById(canvasId);
+		let ctx = canvasMap.getContext("2d");
+		let position = { x: 0, y: 0 };
+		let findResources = {};
 
-		var _initialize = function()
+		let _initialize = function()
 		{
 			canvasMap.width = 300;
 			canvasMap.height = 150;
 			canvasMap.addEventListener("mousedown", _doMouseDown, false);
 		};
 
-		var _doMouseDown = function(e)
+		let _doMouseDown = function(e)
 		{
 			if(onChangePosition != null)
 			{
-				var newPosition = _fromScreenPosition({ x: e.pageX, y: e.pageY });
+				let newPosition = _fromScreenPosition({ x: e.pageX, y: e.pageY });
 				onChangePosition(newPosition);
 			}
 		};
 
-		var _redraw = function()
+		let _redraw = function()
 		{
 			findResources = {};
-			var knowledge = map.getState().getTheory();
-			for(var know = 0; know < knowledge.length; know++)
+			let knowledge = map.getState().getTheory();
+			for(let know = 0; know < knowledge.length; know++)
 			{
 				if(knowledge[know].indexOf("Find_") == 0)
 				{
@@ -40,8 +42,8 @@
 			ctx.closePath();
 			ctx.fill();
 
-			var structure = map.getStructure();
-			for(var i = 0; i < structure.length; i++)
+			let structure = map.getStructure();
+			for(let i = 0; i < structure.length; i++)
 			{
 				if(structure[i].getType() == StructureTypes.Resource)
 				{
@@ -56,28 +58,28 @@
 			_drawActiveArea();
 		};
 
-		var _setPosition = function(point)
+		let _setPosition = function(point)
 		{
 			position = point;
 			_redraw();
 		};
 
-		var _drawActiveArea = function()
+		let _drawActiveArea = function()
 		{
-			var point = _toScreenPosition(position);
+			let point = _toScreenPosition(position);
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = "lime";
 			ctx.strokeRect(point.x - 1, point.y - areaSize.x - 1, areaSize.y + 2, areaSize.x + 2);
 		};
 
-		var _drawResource = function(position, resource)
+		let _drawResource = function(position, resource)
 		{
 			if(findResources[resource.getResourceType()])
 			{
 				if((resource.getLayer() == map.getLayer()) &&
 					(map.findBuilding( position, resource.getLayer()) == null))
 				{
-					var point = _toScreenPosition(position);
+					let point = _toScreenPosition(position);
 					ctx.beginPath();
 					ctx.arc(point.x, point.y, 3, 0, Math.PI * 2, false);
 					ctx.closePath();
@@ -88,22 +90,22 @@
 			}
 		};
 
-		var _drawBuilding = function(position, building)
+		let _drawBuilding = function(position, building)
 		{
 			if(building.getLayer() == map.getLayer()
 				/*&& building.isPipe()*/)
 			{
-				var point = _toScreenPosition(position);
+				let point = _toScreenPosition(position);
 				ctx.lineWidth = 1;
 				ctx.strokeStyle = "#00FFFF";
 				ctx.strokeRect(point.x, point.y, 1, 1);
 			}
 		};
 
-		var _fromScreenPosition = function(point)
+		let _fromScreenPosition = function(point)
 		{
-			var currentLeft = 0, currentTop = 0;
-			var obj = ctx.canvas;
+			let currentLeft = 0, currentTop = 0;
+			let obj = ctx.canvas;
 			if (obj.offsetParent)
 			{
 				do
@@ -116,7 +118,7 @@
 			return { x: 150 - (point.y - currentTop), y: point.x - currentLeft };
 		};
 
-		var _toScreenPosition = function(point)
+		let _toScreenPosition = function(point)
 		{
 			return { x: 0 + point.y, y: 150 - point.x };
 		};

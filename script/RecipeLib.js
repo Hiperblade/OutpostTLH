@@ -1,11 +1,13 @@
-	var RecipeType = {
+"use strict";
+
+	let RecipeType = {
 		Production: "production",
 		Research: "research"
 	};
 
 	function RecipeLibConstructor()
 	{
-		var list = {};
+		let list = {};
 
 		/**
 		 *  @param {RecipeType} recipeType
@@ -15,7 +17,7 @@
 		 *  @param {object} cost
 		 *  @param {object} result
 		 */
-		var _add = function(recipeType, name, requirement, time, cost, result)
+		let _add = function(recipeType, name, requirement, time, cost, result)
 		{
 			list[name] = new BaseRecipe(recipeType, name, requirement, time, cost, result);
 		};
@@ -23,7 +25,7 @@
 		/**
 		 *  @param {string} name
 		 */
-		var _get = function(name)
+		let _get = function(name)
 		{
 			return list[name];
 		};
@@ -31,7 +33,7 @@
 		/**
 		 *  @param {string} name
 		 */
-		var _create = function(name)
+		let _create = function(name)
 		{
 			return list[name].create();
 		};
@@ -39,14 +41,14 @@
 		/**
 		 *  @param {ColonyState} colonyState
 		 */
-		var _getAvailableProduction = function(colonyState)
+		let _getAvailableProduction = function(colonyState)
 		{
-			var ret = [];
-			for(var name in list)
+			let ret = [];
+			for(let name in list)
 			{
 				if(list.hasOwnProperty(name))
 				{
-					var tmp = list[name];
+					let tmp = list[name];
 					if(tmp.getRecipeType() == RecipeType.Production)
 					{
 						if(colonyState.checkKnowledge(tmp.getRequirement()))
@@ -62,14 +64,14 @@
 		/**
 		 *  @param {ColonyState} colonyState
 		 */
-		var _getAvailableResearch = function(colonyState)
+		let _getAvailableResearch = function(colonyState)
 		{
-			var ret = [];
-			for(var name in list)
+			let ret = [];
+			for(let name in list)
 			{
 				if(list.hasOwnProperty(name))
 				{
-					var tmp = list[name];
+					let tmp = list[name];
 					if(tmp.getRecipeType() == RecipeType.Research)
 					{
 						if(!colonyState.isCompletedKnowledge(name))
@@ -94,7 +96,7 @@
 
 	function BaseRecipe(recipeType, name, requirement, time, cost, result)
 	{
-		var _create = function()
+		let _create = function()
 		{
 			return new Recipe(this);
 		};
@@ -115,11 +117,11 @@
 
 	function Recipe(baseRecipe)
 	{
-		var name = baseRecipe.getName();
-		var time = baseRecipe.getTime();
-		var currentTime = 0;
+		let name = baseRecipe.getName();
+		let time = baseRecipe.getTime();
+		let currentTime = 0;
 
-		var _progress = function()
+		let _progress = function()
 		{
 			if(time > currentTime)
 			{
@@ -141,4 +143,4 @@
 	}
 
 	// singleton
-	var RecipeLib = new RecipeLibConstructor();
+	let RecipeLib = new RecipeLibConstructor();

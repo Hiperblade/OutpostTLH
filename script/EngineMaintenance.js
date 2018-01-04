@@ -1,17 +1,19 @@
+"use strict";
+
 	// calcolo manutenzione
 	function MaintenanceEngine()
 	{
-		var _simulation = function(colonyState, graphs)
+		let _simulation = function(colonyState, graphs)
 		{
 			// costo manutenzione
-			var repairCost = 10;
+			let repairCost = 10;
 
-			var buildingAmount = 0;
-			for(var i = 0; i < graphs.length; i++)
+			let buildingAmount = 0;
+			for(let i = 0; i < graphs.length; i++)
 			{
 				if(BuildingGraph.hasHeadquarter(graphs[i]))
 				{
-					for(var buildingType in graphs[i])
+					for(let buildingType in graphs[i])
 					{
 						if(graphs[i].hasOwnProperty(buildingType))
 						{
@@ -21,8 +23,8 @@
 				}
 			}
 
-			var neglectPercentage;
-			var costAmount = buildingAmount * repairCost;
+			let neglectPercentage;
+			let costAmount = buildingAmount * repairCost;
 			if(colonyState.haveMaterials({ repairUnit: costAmount }))
 			{
 				colonyState.delMaterials({ repairUnit: costAmount });
@@ -30,7 +32,7 @@
 			}
 			else
 			{
-				var tmp = colonyState.getRemainder("repairUnit");
+				let tmp = colonyState.getRemainder("repairUnit");
 				colonyState.delMaterials({ repairUnit: tmp });
 				neglectPercentage = ((costAmount - tmp) * 100) / costAmount;
 			}
@@ -38,20 +40,20 @@
 			colonyState.getSimulationData().neglectPercentage = neglectPercentage;
 		};
 
-		var _computation = function(colonyState, graphs, map)
+		let _computation = function(colonyState, graphs, map)
 		{
-			var neglectPercentage = colonyState.getSimulationData().neglectPercentage;
-			var reapairAmount = 20;
-			var damageVariance = 6;
-			var damageAmount = 0;
+			let neglectPercentage = colonyState.getSimulationData().neglectPercentage;
+			let reapairAmount = 20;
+			let damageVariance = 6;
+			let damageAmount = 0;
 				 if(neglectPercentage < 20) { damageAmount = 0;   }
 			else if(neglectPercentage < 40) { damageAmount = 10;  }
 			else if(neglectPercentage < 80) { damageAmount = 50;  }
 			else							{ damageAmount = 100; }
 
-			var integrity;
-			var buildingType;
-			for(var i = 0; i < graphs.length; i++)
+			let integrity;
+			let buildingType;
+			for(let i = 0; i < graphs.length; i++)
 			{
 				if(BuildingGraph.hasHeadquarter(graphs[i]))
 				{
@@ -71,7 +73,7 @@
 										{
 											colonyState.addToDestroyedList(tmp);
 
-											var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+											let eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
 											if(eventDestroy != undefined)
 											{
 												eventDestroy(tmp, map);
@@ -101,18 +103,18 @@
 						}
 					}
 
-					for(var ii = 0; ii < graphs[i].length; ii++)
+					for(let ii = 0; ii < graphs[i].length; ii++)
 					{
 						graphs[i][ii].progress();
 					}
 
 					//costruzione edifici
-					var buildList = colonyState.getBuildList();
-					for(var iii = 0; iii < buildList.length; iii++)
+					let buildList = colonyState.getBuildList();
+					for(let iii = 0; iii < buildList.length; iii++)
 					{
 						if(buildList[iii].progressBuild())
 						{
-							var eventEndBuilding = PrototypeLib.get(buildList[iii].getBuildingType()).eventEndBuilding;
+							let eventEndBuilding = PrototypeLib.get(buildList[iii].getBuildingType()).eventEndBuilding;
 							if(eventEndBuilding != undefined)
 							{
 								eventEndBuilding(buildList[iii], map);
@@ -136,7 +138,7 @@
 									{
 										colonyState.addToDestroyedList(tmp);
 
-										var eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
+										let eventDestroy = PrototypeLib.get(tmp.getBuildingType()).eventDestroy;
 										if(eventDestroy != undefined)
 										{
 											eventDestroy(tmp, map);

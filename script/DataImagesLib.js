@@ -1,4 +1,4 @@
-var imagesList =[];
+let imagesList =[];
 imagesList.push({ id: "baseTile", fileName: "interface/baseTile.gif" });
 imagesList.push({ id: "button_back", fileName: "interface/button_back.gif" });
 imagesList.push({ id: "button_base", fileName: "interface/button_base.gif" });

@@ -1,39 +1,41 @@
+"use strict";
+
 	function IsometricView(map, canvasId, viewSize, viewTileDimension)
 	{
-		var yTopOffset = viewTileDimension.y * 2;
-		var yBottomOffset = 50;
-		var yCorner = yTopOffset + Math.floor(viewTileDimension.y * (viewSize.y) / 2);
-		var yOffset = yCorner + Math.floor(viewTileDimension.y / 2);
-		//var map = map;
-		var canvasMap = document.getElementById(canvasId);
+		let yTopOffset = viewTileDimension.y * 2;
+		let yBottomOffset = 50;
+		let yCorner = yTopOffset + Math.floor(viewTileDimension.y * (viewSize.y) / 2);
+		let yOffset = yCorner + Math.floor(viewTileDimension.y / 2);
+		//let map = map;
+		let canvasMap = document.getElementById(canvasId);
 		canvasMap.width = viewTileDimension.x * viewSize.x;
 		canvasMap.height = yTopOffset + (viewTileDimension.y * viewSize.y) + yBottomOffset;
-		var ctx = canvasMap.getContext("2d");
-		var canvasMask = document.createElement('canvas');
+		let ctx = canvasMap.getContext("2d");
+		let canvasMask = document.createElement('canvas');
 		canvasMask.id     = canvasId + "Mask";
 		canvasMask.width  = canvasMap.width;
 		canvasMask.height = canvasMap.height;
-		var ctxMask = canvasMask.getContext("2d");
+		let ctxMask = canvasMask.getContext("2d");
 		//DEBUG: document.body.appendChild(canvasMask);
 		//--------
-		var buttons = [];
-		var buttonsCallback = null;
-		var gridCallback = null;
+		let buttons = [];
+		let buttonsCallback = null;
+		let gridCallback = null;
 
-		var images = [];
-		var texts = [];
+		let images = [];
+		let texts = [];
 		//--------
 
-		var size = viewSize;
-		var tileDimension = viewTileDimension;
-		var position = { x: 0, y: 0 };
+		let size = viewSize;
+		let tileDimension = viewTileDimension;
+		let position = { x: 0, y: 0 };
 
-		var _initialize = function()
+		let _initialize = function()
 		{
 			// createMask
 			ctxMask.strokeStyle = "rgb(255,255,255)";
 			//ctxMask.translate(0.5,0.5);
-			var x, y;
+			let x, y;
 			for(x = 0; x < size.x; x++)
 			{
 				for(y = 0; y < size.y; y++)
@@ -50,13 +52,13 @@
 			canvasMap.addEventListener("mousedown", doMouseDown, false);
 			function doMouseDown(e)
 			{
-				var res = _fromScreenPosition({ x: e.pageX, y: e.pageY });
+				let res = _fromScreenPosition({ x: e.pageX, y: e.pageY });
 
 				if(res != 0)
 				{
 					if(typeof res == "number")
 					{
-						for(var i = 0; i < buttons.length; i++)
+						for(let i = 0; i < buttons.length; i++)
 						{
 							if(buttons[i].id == res)
 							{
@@ -96,17 +98,17 @@
 			}
 		};
 
-		var _redraw = function()
+		let _redraw = function()
 		{
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-			var i;
+			let i;
 			// immagini
 			for(i = 0; i < images.length; i++)
 			{
 				if(images[i].image != null)
 				{
-					var img = ImagesLib.getImage(images[i].image);
+					let img = ImagesLib.getImage(images[i].image);
 					ctx.beginPath();
 					ctx.drawImage(img, images[i].position.x, images[i].position.y - img.height);
 					ctx.closePath();
@@ -125,7 +127,7 @@
 			{
 				if(texts[i].textId != null)
 				{
-					var text = TextRepository.get(texts[i].textId);
+					let text = TextRepository.get(texts[i].textId);
 					ctx.beginPath();
 					ctx.fillStyle = "rgb(119,207,60)";
 					ctx.font = texts[i].size + "px Arial";
@@ -136,13 +138,13 @@
 			}
 
 			// terreno
-			var x, y;
+			let x, y;
 			for(x = 0; x < size.x; x++)
 			{
 				for(y = 0; y < size.y; y++)
 				{
-					var patternId = map.getTerrainImageId(position.x + x, position.y + y);
-					var pattern = ImagesLib.getPattern(patternId, ctx);
+					let patternId = map.getTerrainImageId(position.x + x, position.y + y);
+					let pattern = ImagesLib.getPattern(patternId, ctx);
 					if((patternId == null) || (pattern == undefined))
 					{
 						pattern = "rgb(10,10,10)";
@@ -155,12 +157,12 @@
 			ctx.closePath();
 
 			//Risorse ed Edifici e Robot
-			var structure = map.getStructure();
-			var currentLayer = map.getLayer();
-			var lastStructure = null;
+			let structure = map.getStructure();
+			let currentLayer = map.getLayer();
+			let lastStructure = null;
 			for(i = 0; i < structure.length; i++)
 			{
-				var structurePosition = structure[i].getPosition();
+				let structurePosition = structure[i].getPosition();
 				if((structure[i].getLayer() == currentLayer) && (_isVisible(structurePosition)) && (map.isVisible(structurePosition)))
 				{
 					if((lastStructure == null) ||
@@ -174,22 +176,22 @@
 			}
 		};
 
-		var _drawImage = function(ctx, point, image)
+		let _drawImage = function(ctx, point, image)
 		{
-			var p = _toScreenPosition(point);
+			let p = _toScreenPosition(point);
 			ctx.beginPath();
 			ctx.drawImage(image, p.x, p.y - image.height);
 			ctx.closePath();
 			ctx.fill();
 		};
 
-		var _drawTile = function(ctx, tileDimension, point, pattern, strokeStyle)
+		let _drawTile = function(ctx, tileDimension, point, pattern, strokeStyle)
 		{
 			if(strokeStyle == undefined)
 			{
 				strokeStyle	= "#77cf3c";
 			}
-			var p = _toScreenPosition(point);
+			let p = _toScreenPosition(point);
 			ctx.beginPath();
 			ctx.moveTo(p.x                         , p.y - (tileDimension.y / 2));
 			ctx.lineTo(p.x + (tileDimension.x / 2) , p.y);
@@ -203,10 +205,10 @@
 			ctx.stroke();
 		};
 
-		var _drawButton = function(button)
+		let _drawButton = function(button)
 		{
-			var point = button.position;
-			var imageButton = button.imageButton;
+			let point = button.position;
+			let imageButton = button.imageButton;
 			if(button.disabled)
 			{
 				imageButton += "_disabled";
@@ -216,7 +218,7 @@
 				imageButton += "_pressed";
 			}
 
-			var img = ImagesLib.getImage(imageButton);
+			let img = ImagesLib.getImage(imageButton);
 			ctx.beginPath();
 			ctx.drawImage(img, point.x, point.y - img.height);
 			ctx.closePath();
@@ -232,9 +234,9 @@
 			}
 		};
 
-		var _setButtonMask = function(button, erase)
+		let _setButtonMask = function(button, erase)
 		{
-			var id = button.id;
+			let id = button.id;
 			if(erase)
 			{
 				id = 0;
@@ -242,9 +244,9 @@
 
 			if(button.pointGrid == undefined)
 			{
-				var img = ImagesLib.getImage(button.imageButton);
-				var width = img.width;
-				var height = img.height;
+				let img = ImagesLib.getImage(button.imageButton);
+				let width = img.width;
+				let height = img.height;
 				ctxMask.fillStyle = "rgb(0,0," + id + ")";
 				ctxMask.lineWidth = 0.3;
 				ctxMask.strokeStyle = "#000000";
@@ -260,21 +262,21 @@
 			}
 
 			/* Gestione inibita per compatibilit�
-			var img = ImagesLib.getImage(imageButton);
+			let img = ImagesLib.getImage(imageButton);
 			// mask
-			var canvasTmpMask = document.createElement('canvas');
+			let canvasTmpMask = document.createElement('canvas');
 			canvasTmpMask.width  = img.width;
 			canvasTmpMask.height = img.height;
-			var ctxTmpMask = canvasTmpMask.getContext("2d");
+			let ctxTmpMask = canvasTmpMask.getContext("2d");
 			ctxTmpMask.drawImage(img, 0, 0);
-			var imageData = ctxTmpMask.getImageData(0, 0, img.width, img.height);
+			let imageData = ctxTmpMask.getImageData(0, 0, img.width, img.height);
 
-			var data = imageData.data;
-			for(var y = 0; y < img.height; y++)
+			let data = imageData.data;
+			for(let y = 0; y < img.height; y++)
 			{
-				for(var x = 0; x < img.width; x++)
+				for(let x = 0; x < img.width; x++)
 				{
-					var alpha = data[((img.width * y) + x) * 4 + 3];
+					let alpha = data[((img.width * y) + x) * 4 + 3];
 					if(alpha != 0)
 					{
 						data[((img.width * y) + x) * 4] = 0; // red
@@ -287,40 +289,40 @@
 			*/
 		};
 
-		var _setPosition = function(point)
+		let _setPosition = function(point)
 		{
 			position = point;
 			_redraw();
 		};
 
-		var _isVisible = function(point)
+		let _isVisible = function(point)
 		{
-			var relPos = _toRelativePosition(point);
+			let relPos = _toRelativePosition(point);
 			return !(relPos.x < 0 || relPos.y < 0 || relPos.x >= size.x || relPos.y >= size.y);
 		};
 
-		var _toRelativePosition = function(point)
+		let _toRelativePosition = function(point)
 		{
 			return { x: point.x - position.x, y: point.y - position.y };
 		};
 
-		var _toScreenPosition = function(point)
+		let _toScreenPosition = function(point)
 		{
-			var retX = 0;
+			let retX = 0;
 			retX += point.x * 53;
 			retX += point.y * 53;
 
-			var retY = yOffset;
+			let retY = yOffset;
 			retY -= point.x * 23;
 			retY += point.y * 23;
 
 			return { x: retX, y: retY };
 		};
 
-		var _fromScreenPosition = function(point)
+		let _fromScreenPosition = function(point)
 		{
-			var curleft = 0, curtop = 0;
-			var obj = ctx.canvas;
+			let curleft = 0, curtop = 0;
+			let obj = ctx.canvas;
 			if (obj.offsetParent)
 			{
 				do
@@ -329,10 +331,10 @@
 					curtop += obj.offsetTop;
 				} while (obj = obj.offsetParent);
 			}
-			var x = point.x - curleft;
-			var y = point.y - curtop;
+			let x = point.x - curleft;
+			let y = point.y - curtop;
 
-			var data = ctxMask.getImageData(x, y, 1, 1).data; 
+			let data = ctxMask.getImageData(x, y, 1, 1).data; 
 
 			if(data[0] == 0 && data[1] == 0)
 			{
@@ -345,31 +347,31 @@
 			return 0;
 		};
 
-		var _internalAddImageButton = function(id, point, imageButton, callback, image, pointGrid)
+		let _internalAddImageButton = function(id, point, imageButton, callback, image, pointGrid)
 		{
-			var newButton = { id: id, position: point, imageButton: imageButton, callback: callback, image: image, pointGrid: pointGrid };
+			let newButton = { id: id, position: point, imageButton: imageButton, callback: callback, image: image, pointGrid: pointGrid };
 			buttons.push(newButton);
 			_setButtonMask(newButton);
 		};
 
-		var _addImageButton = function(id, point, imageButton, callback, image)
+		let _addImageButton = function(id, point, imageButton, callback, image)
 		{
 			_internalAddImageButton(id, point, imageButton, callback, image);
 		};
 
-		var _addButtonGrid = function(id, point, imageButton, callback)
+		let _addButtonGrid = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, _toScreenPosition(point), imageButton, callback, null, point);
 		};
 
-		var _addButton = function(id, point, imageButton, callback)
+		let _addButton = function(id, point, imageButton, callback)
 		{
 			_internalAddImageButton(id, point, imageButton, callback);
 		};
 
-		var _setButton = function(id, enabled)
+		let _setButton = function(id, enabled)
 		{
-			for(var i = 0; i < buttons.length; i++)
+			for(let i = 0; i < buttons.length; i++)
 			{
 				if(buttons[i].id == id)
 				{
@@ -379,9 +381,9 @@
 			}
 		};
 
-		var _delButton = function(id)
+		let _delButton = function(id)
 		{
-			for(var i = 0; i < buttons.length; i++)
+			for(let i = 0; i < buttons.length; i++)
 			{
 				if(buttons[i].id == id)
 				{
@@ -392,19 +394,19 @@
 			}
 		};
 
-		var _addImageGrid = function(id, point, image)
+		let _addImageGrid = function(id, point, image)
 		{
 			_addImage(id, _toScreenPosition(point), image);
 		};
 
-		var _addImage = function(id, point, image)
+		let _addImage = function(id, point, image)
 		{
 			images.push({ id: id, position: point, image: image });
 		};
 
-		var _setImage = function(id, image)
+		let _setImage = function(id, image)
 		{
-			for(var i = 0; i < images.length; i++)
+			for(let i = 0; i < images.length; i++)
 			{
 				if(images[i].id == id)
 				{
@@ -414,9 +416,9 @@
 			}
 		};
 
-		var _delImage = function(id)
+		let _delImage = function(id)
 		{
-			for(var i = 0; i < images.length; i++)
+			for(let i = 0; i < images.length; i++)
 			{
 				if(images[i].id == id)
 				{
@@ -426,14 +428,14 @@
 			}
 		};
 
-		var _addText = function(id, point, size, textId)
+		let _addText = function(id, point, size, textId)
 		{
 			texts.push({ id: id, position: point, size: size, textId: textId });
 		};
 
-		var _setText = function(id, textId)
+		let _setText = function(id, textId)
 		{
-			for(var i = 0; i < texts.length; i++)
+			for(let i = 0; i < texts.length; i++)
 			{
 				if(texts[i].id == id)
 				{
@@ -443,9 +445,9 @@
 			}
 		};
 
-		var _delText = function(id)
+		let _delText = function(id)
 		{
-			for(var i = 0; i < texts.length; i++)
+			for(let i = 0; i < texts.length; i++)
 			{
 				if(texts[i].id == id)
 				{
@@ -455,7 +457,7 @@
 			}
 		};
 
-		var _setAbsolutePosition = function(point)
+		let _setAbsolutePosition = function(point)
 		{
 			canvasMap.style.top = point.y + "px";
 			canvasMap.style.left = point.x + "px";

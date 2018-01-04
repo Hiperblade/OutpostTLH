@@ -1,4 +1,6 @@
-	var Main;
+"use strict";
+
+	let Main;
 
 	function InitializeMainSystem(mapCanvas, miniMapCanvas, selectorCanvas, siteType)
 	{
@@ -6,7 +8,7 @@
 		return Main;
 	}
 
-	var MainCommand =
+	let MainCommand =
 	{
 		GoNorth: "GoNorth",
 		GoEast: "GoEast",
@@ -35,25 +37,25 @@
 		const MAP_SIZE = { x: 150, y: 300 };
 		const TILE_DIMENSION = { x: 106, y: 46 };
 
-		var site = siteType;
-		var areaSize = { x: 9, y: 9 };
-		var terrainMap;
-		var view;
-		var mapView;
-		var selectorView;
-		var queueView;
-		var buildingInfo;
-		var position = { x: 0, y: 0 };
-		var state = null;
+		let site = siteType;
+		let areaSize = { x: 9, y: 9 };
+		let terrainMap;
+		let view;
+		let mapView;
+		let selectorView;
+		let queueView;
+		let buildingInfo;
+		let position = { x: 0, y: 0 };
+		let state = null;
 
-		var currentTile = null;
+		let currentTile = null;
 
-		var _initialize = function()
+		let _initialize = function()
 		{
 			document.onkeydown = function(event)
 			{
 				event = event || window.event;
-				var e = event.keyCode;
+				let e = event.keyCode;
 				switch(e)
 				{
 					case 38: // up
@@ -125,7 +127,7 @@
 				}
 			};
 
-			var _onChangePosition = function(newPosition)
+			let _onChangePosition = function(newPosition)
 			{
 				newPosition.x -= Math.floor(areaSize.x / 2);
 				newPosition.y -= Math.floor(areaSize.y / 2);
@@ -135,12 +137,12 @@
 				_setPosition(newPosition);
 			};
 
-			var _onClearCurrentItem = function()
+			let _onClearCurrentItem = function()
 			{
 				_executeCommand(MainCommand.ClearSelection);
 			};
 
-			var _onSelected = function(item)
+			let _onSelected = function(item)
 			{
 				if(item != null)
 				{
@@ -155,9 +157,9 @@
 			terrainMap = new TerrainMap(site.getTypology(), MAP_SIZE);
 			state = terrainMap.getState();
 			view = new IsometricView (terrainMap, mapCanvas, areaSize, TILE_DIMENSION);
-			var canvasSize = view.getCanvasSize();
+			let canvasSize = view.getCanvasSize();
 
-			var mainArea = $("#mainScreen");
+			let mainArea = $("#mainScreen");
 			mainArea.css("width", canvasSize.x);
 			mainArea.css("height", canvasSize.y);
 
@@ -174,7 +176,7 @@
 			view.addButtonGrid(13, { x: -1, y: Math.floor(areaSize.y / 2) }, "button_south", function() { _goSouth(); });
 
 			// bordo
-			var index;
+			let index;
 			for(index = 0; index < areaSize.y; index++)
 			{
 				view.addImageGrid(300 + index, { x: -1, y: index }, "tileBorder_left")
@@ -190,7 +192,7 @@
 
 			view.setGridCallback(function(point)
 				{
-					var target = _findBuilding(point);
+					let target = _findBuilding(point);
 					if(!terrainMap.isVisible(point))
 					{
 						return;
@@ -198,7 +200,7 @@
 
 					if(currentTile != null)
 					{
-						var resource;
+						let resource;
 
 						if(currentTile.isRobot)
 						{
@@ -213,7 +215,7 @@
 											//distruggi l'edificio
 											if(!target.isDestroyed())
 											{
-												var eventDestroy = PrototypeLib.get(target.getBuildingType()).eventDestroy;
+												let eventDestroy = PrototypeLib.get(target.getBuildingType()).eventDestroy;
 												if(eventDestroy != undefined)
 												{
 													eventDestroy(target, terrainMap);
@@ -269,9 +271,9 @@ Log.dialog("Non \u00E8 disponibile nessuna " + TextRepository.get(RobotTypes.Dig
 								resource = terrainMap.findResource(point);
 								if(resource != null)
 								{
-									var material = resource.getResourceType();
-									var theory = "Extraction_" + material;
-									var mineType = "Mine" + material;
+									let material = resource.getResourceType();
+									let theory = "Extraction_" + material;
+									let mineType = "Mine" + material;
 
 									if(state.checkKnowledge({theory: [theory]})) // controlo se hai la tecnologia richiesta
 									{
@@ -301,7 +303,7 @@ Log.dialog("Non hai la tecnologia per estrarre questa risorsa!");
 								if(!terrainMap.isRazable(point))
 								{
 									resource = terrainMap.findResource(point);
-									var p = PrototypeLib.get(currentTile.buildingType);
+									let p = PrototypeLib.get(currentTile.buildingType);
 									if(p.getRequiredResource() == undefined && resource == null)
 									{
 										if(_addBuilding(currentTile.buildingType, point))
@@ -379,48 +381,48 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			_setLayer(TerrainLayer.Surface);
 		};
 
-		var _addBuilding = function(buildingType, point)
+		let _addBuilding = function(buildingType, point)
 		{
-			var newBuilding = terrainMap.addBuilding(buildingType, point);
+			let newBuilding = terrainMap.addBuilding(buildingType, point);
 			return (newBuilding != null);
 		};
 
-		var _createCurrentTilePipe = function(pipeType, layer)
+		let _createCurrentTilePipe = function(pipeType, layer)
 		{
 			return { buildingType: "Pipe_" + pipeType + "_" + layer, image: "Pipe_" + pipeType + "_" + layer};
 		};
 
-		var _setPosition = function(point)
+		let _setPosition = function(point)
 		{
 			position = point;
 			view.setPosition(position);
 			mapView.setPosition(position);
 		};
 
-		var _redraw = function()
+		let _redraw = function()
 		{
 			_updateRoboAvailable();
 			view.redraw();
 			mapView.redraw();
 		};
 
-		var _fromScreenPosition = function(point)
+		let _fromScreenPosition = function(point)
 		{
 			return view.fromScreenPosition(point);
 		};
 
-		var _findBuilding = function(point)
+		let _findBuilding = function(point)
 		{
 			return terrainMap.findBuilding(point);
 		};
 
-		var disableCommand = {};
+		let disableCommand = {};
 
-		var _setAbilitationButton = function(name, enable)
+		let _setAbilitationButton = function(name, enable)
 		{
 			disableCommand[name] = !enable;
 
-			var button = $(".button" + name);
+			let button = $(".button" + name);
 			if(enable)
 			{
 				button.addClass("buttonEnable");
@@ -433,7 +435,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _updateRoboAvailable = function()
+		let _updateRoboAvailable = function()
 		{
 			if(state.getRoboDozerAvailable() <= 0)
 			{
@@ -455,7 +457,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _setLayer = function(layer)
+		let _setLayer = function(layer)
 		{
 			_setCurrentTile(null);
 
@@ -482,7 +484,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			_redraw();
 		};
 
-		var _goUp = function()
+		let _goUp = function()
 		{
 			if(terrainMap.getLayer() == TerrainLayer.Underground)
 			{
@@ -495,7 +497,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			_redraw();
 		};
 
-		var _goDown = function()
+		let _goDown = function()
 		{
 			if(terrainMap.getLayer() == TerrainLayer.Surface)
 			{
@@ -508,7 +510,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			_redraw();
 		};
 
-		var _goNorth = function()
+		let _goNorth = function()
 		{
 			if(position.x < terrainMap.getSize().x - view.getSize().x - 1)
 			{
@@ -517,7 +519,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _goSouth = function()
+		let _goSouth = function()
 		{
 			if(position.x > 0)
 			{
@@ -526,7 +528,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _goEast = function()
+		let _goEast = function()
 		{
 			if(position.y < terrainMap.getSize().y - view.getSize().y - 1)
 			{
@@ -535,7 +537,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _goWest = function()
+		let _goWest = function()
 		{
 			if(position.y > 0)
 			{
@@ -544,7 +546,7 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			}
 		};
 
-		var _doNext = function()
+		let _doNext = function()
 		{
 			terrainMap.computation();
 			terrainMap.simulation();
@@ -552,23 +554,23 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 			buildingInfo.refresh();
 		};
 
-		var _setAbsolutePosition = function(point)
+		let _setAbsolutePosition = function(point)
 		{
 //TODO
-			var canvasSize = view.getCanvasSize();
+			let canvasSize = view.getCanvasSize();
 			view.setAbsolutePosition(point);
 
 			selectorView.setAbsolutePosition({x: point.x, y: point.y + canvasSize.y});
 		};
 
-		var _setCurrentTile = function(item)
+		let _setCurrentTile = function(item)
 		{
 			currentTile = item;
 			buildingInfo.show(currentTile);
 			_redraw();
 		};
 
-		var _executeCommand = function(cmd)
+		let _executeCommand = function(cmd)
 		{
 			if(disableCommand[cmd])
 			{

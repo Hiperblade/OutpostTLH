@@ -1,6 +1,8 @@
+"use strict";
+
 	function HelpTutorial()
 	{
-		var _getText = function()
+		let _getText = function()
 		{
 			return "HelpTutorial_Base";
 		};
@@ -18,13 +20,13 @@
 
 	function HelpQueueData(colonyState)
 	{
-		var queue = [new HelpTutorial()];
-		var available = [];
+		let queue = [new HelpTutorial()];
+		let available = [];
 
-		var technology = colonyState.getTechnology();
-		for(var i = 0; i < technology.length; i++)
+		let technology = colonyState.getTechnology();
+		for(let i = 0; i < technology.length; i++)
 		{
-			var item = PrototypeLib.get(technology[i]);
+			let item = PrototypeLib.get(technology[i]);
 			available.push(new HelpTutorialBuilding(technology[i], item.getBuildingImageId()));
 		}
 
@@ -32,10 +34,10 @@
 
 		this.getInfo = function(item)
 		{
-			var text = "";
+			let text = "";
 			if(item != null)
 			{
-				var imgSize = GetImageSize(ImagesLib.getImage(item.getImageId()));
+				let imgSize = GetImageSize(ImagesLib.getImage(item.getImageId()));
 
 				text += '<div class="queueInfo">';
 				if(item.getText != undefined)
@@ -49,7 +51,7 @@
 				}
 				else
 				{
-					var baseImgSize = GetImageSize(ImagesLib.getImage("baseTile"));
+					let baseImgSize = GetImageSize(ImagesLib.getImage("baseTile"));
 
 					text += '<div class="queueInfoTitle" style="height: ' + (imgSize.height + 5) + 'px;">';
 					text += '<div style="float: left; height: ' + imgSize.height + 'px; background: url(\'' + ImagesLib.getFileName("baseTile") + '\') no-repeat; background-position: 0 ' + (imgSize.height - baseImgSize.height) + 'px;">';
@@ -63,13 +65,13 @@
 
 					text += '<div class="queueInfoDetails">';
 
-					var proto = PrototypeLib.get(item.getName());
+					let proto = PrototypeLib.get(item.getName());
 
 					text += '<table>';
 					text += '<tr><td class="tableMainColumn">' + TextRepository.get("TerrainLayer") + ':</td><td></td><td>' + TextRepository.get(proto.getTerrainLayer()) + '</td></tr>';
 
-					var list;
-					var listItem;
+					let list;
+					let listItem;
 					if(proto.getBuildingTime() > 0 || Object.keys(proto.getBuildingCost()).length > 0)
 					{
 						//text += '<tr><td>' + TextRepository.get("BuildingTitle") + '</td></tr>';

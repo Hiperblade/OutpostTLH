@@ -1,3 +1,5 @@
+"use strict";
+
 // --- Base
 TextRepository.add(TerrainLayer.Surface, "Superfice");
 TextRepository.add(TerrainLayer.Underground, "Sottosuolo");

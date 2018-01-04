@@ -1,6 +1,8 @@
+"use strict";
+
 	Function.prototype.inherits = function(superclass)
 	{
-		var temp = function() { };
+		let temp = function() { };
 		temp.prototype = superclass.prototype;
 		this.prototype = new temp();
 	};
@@ -25,12 +27,12 @@
 
 	function LogConstructor()
 	{
-		var _error = function(msg)
+		let _error = function(msg)
 		{
 			alert(msg);
 		};
 
-		var _dialog = function(msg)
+		let _dialog = function(msg)
 		{
 			alert(msg);
 		};
@@ -40,9 +42,9 @@
 	}
 
 	// singleton
-	var Log = new LogConstructor();
+	let Log = new LogConstructor();
 
-	var Colors = {
+	let Colors = {
 		Standard: "rgb(119,207,60)",
 		Dark: "rgb(47,106,8)",
 		Error: "rgb(200,100,100)"
@@ -50,17 +52,17 @@
 
 	function CanvasGrid(ctx, position, fontSize, columnsList)
 	{
-		var columns = columnsList || [];
+		let columns = columnsList || [];
 
-		var _addColumn = function(width)
+		let _addColumn = function(width)
 		{
 			columns.push(width);
 		};
 
-		var _getStartColumn = function(col)
+		let _getStartColumn = function(col)
 		{
-			var ret = 0;
-			for(var i = 0; i < col; i++)
+			let ret = 0;
+			for(let i = 0; i < col; i++)
 			{
 				ret += columns[i];
 			}
@@ -68,20 +70,20 @@
 		};
 
 		/*
-		var _getRowHeight = function()
+		let _getRowHeight = function()
 		{
 			return fontSize + 4;
 		};
 		*/
 
-		var _getStartRow = function(row)
+		let _getStartRow = function(row)
 		{
 			return ((fontSize + 4) * row) + position.y;
 		};
 
-		var _internalSetText = function(row, col, text, textAlign, newColor)
+		let _internalSetText = function(row, col, text, textAlign, newColor)
 		{
-			var oldColor = ctx.fillStyle;
+			let oldColor = ctx.fillStyle;
 			ctx.fillStyle = newColor || oldColor;
 			ctx.font = fontSize + "px Arial";
 			ctx.textAlign = textAlign;
@@ -89,12 +91,12 @@
 			ctx.fillStyle = oldColor;
 		};
 
-		var _setText = function(row, col, text, color)
+		let _setText = function(row, col, text, color)
 		{
 			_internalSetText(row, col, text, "left", color);
 		};
 
-		var _setValue = function(row, col, value, color)
+		let _setValue = function(row, col, value, color)
 		{
 			_internalSetText(row, col + 1, value, "right", color);
 		};

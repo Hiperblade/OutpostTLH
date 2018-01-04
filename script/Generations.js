@@ -1,4 +1,6 @@
-	var GenerationState = {
+"use strict";
+
+	let GenerationState = {
 		Infants: "infants",
 		Students: "students",
 		Researchers: "researchers",
@@ -16,30 +18,30 @@
 
 	function Generation(date, nurseryUnit)
 	{
-		var birthDate = date;
-		var lots = [];
-		for(var i = 0; i < nurseryUnit; i++)
+		let birthDate = date;
+		let lots = [];
+		for(let i = 0; i < nurseryUnit; i++)
 		{
 			lots[i] = new GenerationalLot(birthDate);
 		}
 
-		var _getPopulation = function()
+		let _getPopulation = function()
 		{
-			var ret = 0;
-			for(var i = 0; i < lots.length; i++)
+			let ret = 0;
+			for(let i = 0; i < lots.length; i++)
 			{
 				ret += lots[i].getPopulation();
 			}
 			return ret;
 		};
 
-		var _kill = function()
+		let _kill = function()
 		{
 			if(_getPopulation() > 0)
 			{
 				do
 				{
-					var i = Math.floor(Math.random() * lots.length);
+					let i = Math.floor(Math.random() * lots.length);
 					if(lots[i].getPopulation() > 0)
 					{
 						if(lots[i].kill() == 0)
@@ -55,14 +57,14 @@
 			return 0;
 		};
 
-		var _getState = function(date)
+		let _getState = function(date)
 		{
 			if(_getPopulation() == 0)
 			{
 				return GenerationState.Deads;
 			}
 
-			var age = date - birthDate;
+			let age = date - birthDate;
 			if(age < GenerationConst.AGE_INFANTS)
 			{
 				return GenerationState.Infants;
@@ -73,7 +75,7 @@
 			}
 			else
 			{
-				var minEducationLevel = lots[lots.length - 1].getEducationLevel();
+				let minEducationLevel = lots[lots.length - 1].getEducationLevel();
 				if(minEducationLevel < GenerationConst.EDUCATIONAL_PRIMARY)
 				{
 					return GenerationState.Students;
@@ -89,12 +91,12 @@
 			}
 		};
 
-		var _getNextLot = function()
+		let _getNextLot = function()
 		{
 			if(_getPopulation() > 0)
 			{
-				var minEducationLevel = lots[lots.length - 1].getEducationLevel();
-				for(var i = 0; i < lots.length; i++)
+				let minEducationLevel = lots[lots.length - 1].getEducationLevel();
+				for(let i = 0; i < lots.length; i++)
 				{
 					if(lots[i].getEducationLevel() == minEducationLevel)
 					{
@@ -105,9 +107,9 @@
 			return null;
 		};
 
-		var _teach = function()
+		let _teach = function()
 		{
-			var lot = _getNextLot();
+			let lot = _getNextLot();
 			if(lot != null)
 			{
 				lot.teach();
@@ -132,16 +134,16 @@
 	{
 		const INITIAL_POPULATION = 5;
 
-		var birthDate = date;
-		var deadCount = 0;
-		var educationLevel = 0;
+		let birthDate = date;
+		let deadCount = 0;
+		let educationLevel = 0;
 
-		var _getPopulation = function()
+		let _getPopulation = function()
 		{
 			return INITIAL_POPULATION - deadCount;
 		};
 
-		var _kill = function()
+		let _kill = function()
 		{
 			if(deadCount < INITIAL_POPULATION)
 			{
@@ -150,7 +152,7 @@
 			return _getPopulation();
 		};
 
-		var _teach = function()
+		let _teach = function()
 		{
 			if(deadCount < INITIAL_POPULATION)
 			{
@@ -158,14 +160,14 @@
 			}
 		};
 
-		var _getState = function(date)
+		let _getState = function(date)
 		{
 			if(_getPopulation() == 0)
 			{
 				return GenerationState.Deads;
 			}
 
-			var age = date - birthDate;
+			let age = date - birthDate;
 			if(age < GenerationConst.AGE_INFANTS)
 			{
 				return GenerationState.Infants;
