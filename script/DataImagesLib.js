@@ -274,3 +274,15 @@ imagesList.push({ id: "RadioactiveBar", fileName: "illustrations/RadioactiveBar.
 imagesList.push({ id: "Robo-Digger", fileName: "illustrations/Robo-Digger.png" });
 imagesList.push({ id: "Robo-Dozer", fileName: "illustrations/Robo-Dozer.png" });
 imagesList.push({ id: "Robo-Worker", fileName: "illustrations/Robo-Worker.png" });
+imagesList.push({ id: "Chemistry", fileName: "illustrations/Chemistry.png" });
+imagesList.push({ id: "AdvancedMetallurgy", fileName: "illustrations/AdvancedMetallurgy.png" });
+imagesList.push({ id: "Physics", fileName: "illustrations/Physics.png" });
+imagesList.push({ id: "QuantumPhysics", fileName: "illustrations/QuantumPhysics.png" });
+imagesList.push({ id: "Farming", fileName: "illustrations/Farming.png" });
+imagesList.push({ id: "VerticalFarming", fileName: "illustrations/Farming.png" });
+imagesList.push({ id: "ComputerScience", fileName: "illustrations/ComputerScience.png" });
+imagesList.push({ id: "AI", fileName: "illustrations/AI.png" });
+imagesList.push({ id: "HumanScience", fileName: "illustrations/HumanScience.png" });
+imagesList.push({ id: "Psicology", fileName: "illustrations/Psicology.png" });
+imagesList.push({ id: "Sociology", fileName: "illustrations/Sociology.png" });
+imagesList.push({ id: "SocialControl", fileName: "illustrations/SocialControl.png" });

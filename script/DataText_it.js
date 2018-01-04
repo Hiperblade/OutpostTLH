@@ -173,6 +173,7 @@ TextRepository.add("MineCristal", "Miniera di Cristalli");
 TextRepository.add("MineRadioactive", "Miniera di materiali Radioattivi");
 
 TextRepository.add("Park", "Parco");
+TextRepository.add("SpacePort", "Spazioporto");
 
 // --- Ricerche e Ricette
 TextRepository.add("ElectrostaticEnergy", "Elettricità Statica");
@@ -222,3 +223,41 @@ TextRepository.add("Robo-Digger" + "Description", "Scavatrice Robotica ...");
 
 TextRepository.add("Robo-Dozer", "Ruspa Robotica");
 TextRepository.add("Robo-Dozer" + "Description", "Ruspa Robotica ...");
+
+TextRepository.add("Chemistry", "Chimica");
+TextRepository.add("Chemistry" + "Description", "Chimica ...");
+
+TextRepository.add("AdvancedMetallurgy", "Metallurgia Avanzata");
+TextRepository.add("AdvancedMetallurgy" + "Description", "Metallurgia avanzata ...");
+
+TextRepository.add("Physics", "Fisica");
+TextRepository.add("Physics" + "Description", "Fisica ...");
+
+TextRepository.add("QuantumPhysics", "Fisica Quantistica");
+TextRepository.add("QuantumPhysics" + "Description", "Fisica quantistica ...");
+
+TextRepository.add("Farming", "Allevamento");
+TextRepository.add("Farming" + "Description", "Allevamento ...");
+
+TextRepository.add("VerticalFarming", "Allevamento Verticale");
+TextRepository.add("VerticalFarming" + "Description", "Allevamento verticale ...");
+
+TextRepository.add("ComputerScience", "Informatica");
+TextRepository.add("ComputerScience" + "Description", "Informatica ...");
+
+TextRepository.add("AI", "Intelligenza Artificiale");
+TextRepository.add("AI" + "Description", "Intelligenza artificiale ...");
+
+TextRepository.add("HumanScience", "Scenze Umane");
+TextRepository.add("HumanScience" + "Description", "Scenze umane ...");
+
+TextRepository.add("Psicology", "Psicologia");
+TextRepository.add("Psicology" + "Description", "Psicologia ...");
+
+TextRepository.add("Sociology", "Sociologia");
+TextRepository.add("Sociology" + "Description", "Sociologia ...");
+
+TextRepository.add("SocialControl", "Controllo Sociale");
+TextRepository.add("SocialControl" + "Description", "Controllo sociale ...");
+
+
