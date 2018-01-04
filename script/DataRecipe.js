@@ -18,10 +18,10 @@ RecipeLib.add(RecipeType.Production, "MediKit", { technology: ["PharmaceuticalIn
 RecipeLib.add(RecipeType.Research, "ElectrostaticEnergy",	{ discovery: ["ElectrostaticDischarge"] },	2, { researchElaborationUnit: 1 },							{ technology: ["ElectrostaticCoil"] });
 RecipeLib.add(RecipeType.Research, "GeothermalEnergy",		{ discovery: ["Resource_Fumarole"] },		2, { researchUnit: 10, researchStructureDeep: 1 },			{ technology: ["Geothermal"] });
 
-RecipeLib.add(RecipeType.Research, "Mineralogy",			{ discovery: ["Resource_Mineral"] },		3, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["Extraction_Mineral"] });
 RecipeLib.add(RecipeType.Research, "Metallurgy",			{ discovery: ["Resource_Metal"] },			3, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["Extraction_Metal"] });
-RecipeLib.add(RecipeType.Research, "Chemistry",			{ theory: ["Extraction_Mineral", "Extraction_Metal"] },	7, { researchUnit: 10,  researchStructureSurface: 2 },		{ theory: ["Chemistry"], technology: ["ChemicalFactory", "GoodsFactory"] });
-RecipeLib.add(RecipeType.Research, "AdvancedMetallurgy",	{ theory: ["Extraction_Mineral", "Extraction_Metal"] },	5, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["AdvancedMetallurgy"], technology: ["SmelterAdv", "RoboRemittanceAdv", "ResidentialAdv"] });
+RecipeLib.add(RecipeType.Research, "Mineralogy",			{ discovery: ["Resource_Mineral"] },		3, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["Extraction_Mineral"] });
+RecipeLib.add(RecipeType.Research, "Chemistry",				{ theory: ["Extraction_Metal", "Extraction_Mineral"] },	7, { researchUnit: 10,  researchStructureSurface: 2 },		{ theory: ["Chemistry"], technology: ["ChemicalFactory", "GoodsFactory"] });
+RecipeLib.add(RecipeType.Research, "AdvancedMetallurgy",	{ theory: ["Extraction_Metal", "Extraction_Mineral"] },	5, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["AdvancedMetallurgy"], technology: ["SmelterAdv", "RoboRemittanceAdv", "ResidentialAdv"] });
 RecipeLib.add(RecipeType.Research, "NuclearChemistry",		{ discovery: ["Resource_Radioactive"], theory: ["Chemistry"] },	3, { researchUnit: 5,  researchStructureUnderground: 1 },	{ theory: ["Extraction_Radioactive"] });
 
 RecipeLib.add(RecipeType.Research, "Physics",				{ },										5, { researchUnit: 15, researchStructureSurface: 1 },		{ theory: ["Physics"] });

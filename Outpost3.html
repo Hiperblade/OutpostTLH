@@ -189,15 +189,14 @@
 			}
 
 			var state = main.getState();
-			state.addKnowledge({ discovery: ["ElectrostaticDischarge"] });
-			state.addKnowledge({ discovery: ["Robotics"] });
-			state.addKnowledge({ theory: ["Extraction_Metal"] });
-
-			state.addKnowledge({ theory: ["Find_Metal"] });
-
 			state.addKnowledge({ technology: ["LandingModule"] });
 
+			state.addKnowledge({ discovery: ["ElectrostaticDischarge"] });
+			state.addKnowledge({ discovery: ["Robotics"] });
+			state.addKnowledge({ discovery: ["Resource_Metal"] });
+			//state.addKnowledge({ theory: ["Extraction_Metal"] });
 
+			state.addKnowledge({ theory: ["Find_Metal"] });
 
 			state.addKnowledge({ theory: ["Find_Mineral"] });
 			state.addKnowledge({ theory: ["Find_Radioactive"] });

@@ -13,6 +13,12 @@ TextRepository.add("RoboDozer", "Ruspa Robotica");
 TextRepository.add("RoboDigger", "Scavatrice Robotica");
 TextRepository.add("RoboMiner", "Trivella Robotica");
 
+// --- Risorse
+TextRepository.addDescription("Resource_Metal", "Vena Metallifera", "");
+TextRepository.addDescription("Resource_Mineral", "Giacimento Minerale", "");
+TextRepository.addDescription("Resource_Radioactive", "Materiale Radioattivo", "");
+TextRepository.addDescription("Resource_Fumarole", "Fumarola Geotermica", "");
+
 // --- Testi
 TextRepository.add("Active", "Attivi");
 TextRepository.add("Idle", "Inattivi");
@@ -121,9 +127,11 @@ TextRepository.add("Pipe_ns_deep", "Conduttura");
 TextRepository.add("Pipe_ew_deep", "Conduttura");
 TextRepository.add("Pipe_u_deep", "Elevatore");
 
-TextRepository.add("LandingModule", "Modulo d'Atterraggio");
+TextRepository.addDescription("LandingModule", "Modulo d'Atterraggio", "Modulo di sbarco che permette la creazione di una base e l'atterraggio dei moduli abitativi temporanei.");
 TextRepository.add("SupportModule", "Modulo di Supporto");
-TextRepository.add("MicrowavePlant", "Impianto a Microonde");
+TextRepository.add("LaunchModule", "Modulo di Lancio");
+TextRepository.add("CargoModule", "Modulo Cargo");
+TextRepository.addDescription("MicrowavePlant", "Impianto a Microonde", "Impianto che genera energia elettrica ricevendo microonde da un satellite.");
 TextRepository.add("MicrowaveSatellite", "Satellite a Microonde");
 
 TextRepository.add("ElectrostaticCoil", "Bobina Elettrostatica");
@@ -176,88 +184,31 @@ TextRepository.add("Park", "Parco");
 TextRepository.add("SpacePort", "Spazioporto");
 
 // --- Ricerche e Ricette
-TextRepository.add("ElectrostaticEnergy", "Elettricità Statica");
-TextRepository.add("ElectrostaticEnergy" + "Description", "Lo studio dell'elettricità statica potrebbe permettre la creazione di strutture in grado di raccogliere la carica presente nell'atmosfera del pianeta.");
-
-TextRepository.add("GeothermalEnergy", "Energia Geotermica");
-TextRepository.add("GeothermalEnergy" + "Description", "Energia Geotermica ...");
-
-TextRepository.add("Mineralogy", "Mineralogia");
-TextRepository.add("Mineralogy" + "Description", "Consente l'estrazione dei minrali.");
-
-TextRepository.add("Metallurgy", "Metallurgia");
-TextRepository.add("Metallurgy" + "Description", "Consente l'estrazione dei metalli.");
-
-TextRepository.add("NuclearChemistry", "Chimica Nucleare");
-TextRepository.add("NuclearChemistry" + "Description", "Chimica Nucleare ...");
-
-TextRepository.add("NuclearPhysics", "Fisica Nucleare");
-TextRepository.add("NuclearPhysics" + "Description", "Fisica Nucleare ...");
-
-TextRepository.add("ParticlePhysics", "Fisica delle particelle");
-TextRepository.add("ParticlePhysics" + "Description", "Fisica delle particelle ...");
-
-TextRepository.add("Hydroponics", "Hidroponica");
-TextRepository.add("Hydroponics" + "Description", "Hidroponica ...");
-
-TextRepository.add("Aquaponics", "Acquaponica");
-TextRepository.add("Aquaponics" + "Description", "Acquaponica ...");
-
-TextRepository.add("Medicine", "Medicina");
-TextRepository.add("Medicine" + "Description", "Medicina ...");
-
-TextRepository.add("AdvancedMedicine", "Medicina Avanzata");
-TextRepository.add("AdvancedMedicine" + "Description", "Medicina Avanzata ...");
-
-TextRepository.add("Pharmacology", "Farmacologia");
-TextRepository.add("Pharmacology" + "Description", "Farmacologia ...");
-
-TextRepository.add("Embryology", "Embriologia");
-TextRepository.add("Embryology" + "Description", "Embriologia ...");
-
-TextRepository.add("Robo-Worker", "Lavoratore Robotico");
-TextRepository.add("Robo-Worker" + "Description", "Unità lavorativa di base utilizata in tute le strutture della colonia.");
-
-TextRepository.add("Robo-Digger", "Scavatrice Robotica");
-TextRepository.add("Robo-Digger" + "Description", "Scavatrice Robotica ...");
-
-TextRepository.add("Robo-Dozer", "Ruspa Robotica");
-TextRepository.add("Robo-Dozer" + "Description", "Ruspa Robotica ...");
-
-TextRepository.add("Chemistry", "Chimica");
-TextRepository.add("Chemistry" + "Description", "Chimica ...");
-
-TextRepository.add("AdvancedMetallurgy", "Metallurgia Avanzata");
-TextRepository.add("AdvancedMetallurgy" + "Description", "Metallurgia avanzata ...");
-
-TextRepository.add("Physics", "Fisica");
-TextRepository.add("Physics" + "Description", "Fisica ...");
-
-TextRepository.add("QuantumPhysics", "Fisica Quantistica");
-TextRepository.add("QuantumPhysics" + "Description", "Fisica quantistica ...");
-
-TextRepository.add("Farming", "Allevamento");
-TextRepository.add("Farming" + "Description", "Allevamento ...");
-
-TextRepository.add("VerticalFarming", "Allevamento Verticale");
-TextRepository.add("VerticalFarming" + "Description", "Allevamento verticale ...");
-
-TextRepository.add("ComputerScience", "Informatica");
-TextRepository.add("ComputerScience" + "Description", "Informatica ...");
-
-TextRepository.add("AI", "Intelligenza Artificiale");
-TextRepository.add("AI" + "Description", "Intelligenza artificiale ...");
-
-TextRepository.add("HumanScience", "Scenze Umane");
-TextRepository.add("HumanScience" + "Description", "Scenze umane ...");
-
-TextRepository.add("Psicology", "Psicologia");
-TextRepository.add("Psicology" + "Description", "Psicologia ...");
-
-TextRepository.add("Sociology", "Sociologia");
-TextRepository.add("Sociology" + "Description", "Sociologia ...");
-
-TextRepository.add("SocialControl", "Controllo Sociale");
-TextRepository.add("SocialControl" + "Description", "Controllo sociale ...");
-
-
+TextRepository.addDescription("ElectrostaticEnergy", "Elettricità Statica", "Lo studio dell'elettricità statica potrebbe permettre la creazione di strutture in grado di raccogliere la carica presente nell'atmosfera del pianeta.");
+TextRepository.addDescription("GeothermalEnergy", "Energia Geotermica", "Energia Geotermica ...");
+TextRepository.addDescription("Mineralogy", "Mineralogia", "Consente l'estrazione dei minrali.");
+TextRepository.addDescription("Metallurgy", "Metallurgia", "Consente l'estrazione dei metalli.");
+TextRepository.addDescription("NuclearChemistry", "Chimica Nucleare", "Chimica Nucleare ...");
+TextRepository.addDescription("NuclearPhysics", "Fisica Nucleare", "Fisica Nucleare ...");
+TextRepository.addDescription("ParticlePhysics", "Fisica delle particelle", "Fisica delle particelle ...");
+TextRepository.addDescription("Hydroponics", "Hidroponica", "Hidroponica ...");
+TextRepository.addDescription("Aquaponics", "Acquaponica", "Acquaponica ...");
+TextRepository.addDescription("Medicine", "Medicina", "Medicina ...");
+TextRepository.addDescription("AdvancedMedicine", "Medicina Avanzata", "Medicina Avanzata ...");
+TextRepository.addDescription("Pharmacology", "Farmacologia", "Farmacologia ...");
+TextRepository.addDescription("Embryology", "Embriologia", "Embriologia ...");
+TextRepository.addDescription("Robo-Worker", "Lavoratore Robotico", "Unità lavorativa di base utilizata in tute le strutture della colonia.");
+TextRepository.addDescription("Robo-Digger", "Scavatrice Robotica", "Scavatrice Robotica ...");
+TextRepository.addDescription("Robo-Dozer", "Ruspa Robotica", "Ruspa Robotica ...");
+TextRepository.addDescription("Chemistry", "Chimica", "Chimica ...");
+TextRepository.addDescription("AdvancedMetallurgy", "Metallurgia Avanzata", "Metallurgia avanzata ...");
+TextRepository.addDescription("Physics", "Fisica", "Fisica ...");
+TextRepository.addDescription("QuantumPhysics", "Fisica Quantistica", "Fisica quantistica ...");
+TextRepository.addDescription("Farming", "Allevamento", "Allevamento ...");
+TextRepository.addDescription("VerticalFarming", "Allevamento Verticale", "Allevamento verticale ...");
+TextRepository.addDescription("ComputerScience", "Informatica", "Informatica ...");
+TextRepository.addDescription("AI", "Intelligenza Artificiale", "Intelligenza artificiale ...");
+TextRepository.addDescription("HumanScience", "Scenze Umane", "Scenze umane ...");
+TextRepository.addDescription("Psicology", "Psicologia", "Psicologia ...");
+TextRepository.addDescription("Sociology", "Sociologia", "Sociologia ...");
+TextRepository.addDescription("SocialControl", "Controllo Sociale", "Controllo sociale ...");

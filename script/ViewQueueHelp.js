@@ -23,6 +23,15 @@ function HelpQueueData(colonyState)
 	let queue = [new HelpTutorial()];
 	let available = [];
 
+	let discovery = colonyState.getDiscovery();
+	for(let i = 0; i < discovery.length; i++)
+	{
+		if(discovery[i].startsWith("Resource_"))
+		{
+			queue.push(new HelpTutorialBuilding(discovery[i], discovery[i]));
+		}
+	}
+	
 	let technology = colonyState.getTechnology();
 	for(let i = 0; i < technology.length; i++)
 	{

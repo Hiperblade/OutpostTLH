@@ -198,10 +198,9 @@ function MainSystemConstructor(mapCanvas, miniMapCanvas, selectorCanvas, siteTyp
 					return;
 				}
 
+				let resource;
 				if(currentTile != null)
 				{
-					let resource;
-
 					if(currentTile.isRobot)
 					{
 						if(currentTile.robotType == RobotTypes.Dozer)
@@ -367,7 +366,15 @@ Log.dialog("Questo edificio richiede la presenza della risorsa " + p.getRequired
 					}
 					else
 					{
-						buildingInfo.hide();
+						resource = terrainMap.findResource(point);
+						if(resource != null)
+						{
+							buildingInfo.show(resource);
+						}
+						else
+						{
+							buildingInfo.hide();
+						}
 					}
 				}
 			});
