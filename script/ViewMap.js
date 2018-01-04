@@ -1,137 +1,137 @@
 "use strict";
 
-	function MapView(map, canvasId, backgroundImage, areaSize, onChangePosition)
+function MapView(map, canvasId, backgroundImage, areaSize, onChangePosition)
+{
+	let canvasMap = document.getElementById(canvasId);
+	let ctx = canvasMap.getContext("2d");
+	let position = { x: 0, y: 0 };
+	let findResources = {};
+
+	let _initialize = function()
 	{
-		let canvasMap = document.getElementById(canvasId);
-		let ctx = canvasMap.getContext("2d");
-		let position = { x: 0, y: 0 };
-		let findResources = {};
+		canvasMap.width = 300;
+		canvasMap.height = 150;
+		canvasMap.addEventListener("mousedown", _doMouseDown, false);
+	};
 
-		let _initialize = function()
+	let _doMouseDown = function(e)
+	{
+		if(onChangePosition != null)
 		{
-			canvasMap.width = 300;
-			canvasMap.height = 150;
-			canvasMap.addEventListener("mousedown", _doMouseDown, false);
-		};
+			let newPosition = _fromScreenPosition({ x: e.pageX, y: e.pageY });
+			onChangePosition(newPosition);
+		}
+	};
 
-		let _doMouseDown = function(e)
+	let _redraw = function()
+	{
+		findResources = {};
+		let knowledge = map.getState().getTheory();
+		for(let know = 0; know < knowledge.length; know++)
 		{
-			if(onChangePosition != null)
+			if(knowledge[know].indexOf("Find_") == 0)
 			{
-				let newPosition = _fromScreenPosition({ x: e.pageX, y: e.pageY });
-				onChangePosition(newPosition);
+				findResources[knowledge[know].substr(5)] = true;
 			}
-		};
+		}
 
-		let _redraw = function()
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+		ctx.beginPath();
+		ctx.drawImage(ImagesLib.getImage(backgroundImage), 0, 0);
+		ctx.closePath();
+		ctx.fill();
+
+		let structure = map.getStructure();
+		for(let i = 0; i < structure.length; i++)
 		{
-			findResources = {};
-			let knowledge = map.getState().getTheory();
-			for(let know = 0; know < knowledge.length; know++)
+			if(structure[i].getType() == StructureTypes.Resource)
 			{
-				if(knowledge[know].indexOf("Find_") == 0)
-				{
-					findResources[knowledge[know].substr(5)] = true;
-				}
+				_drawResource(structure[i].getPosition(), structure[i]);
 			}
-
-			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-			ctx.beginPath();
-			ctx.drawImage(ImagesLib.getImage(backgroundImage), 0, 0);
-			ctx.closePath();
-			ctx.fill();
-
-			let structure = map.getStructure();
-			for(let i = 0; i < structure.length; i++)
+			else if(structure[i].getType() == StructureTypes.Building)
 			{
-				if(structure[i].getType() == StructureTypes.Resource)
-				{
-					_drawResource(structure[i].getPosition(), structure[i]);
-				}
-				else if(structure[i].getType() == StructureTypes.Building)
-				{
-					_drawBuilding(structure[i].getPosition(), structure[i]);
-				}
+				_drawBuilding(structure[i].getPosition(), structure[i]);
 			}
+		}
 
-			_drawActiveArea();
-		};
+		_drawActiveArea();
+	};
 
-		let _setPosition = function(point)
+	let _setPosition = function(point)
+	{
+		position = point;
+		_redraw();
+	};
+
+	let _drawActiveArea = function()
+	{
+		let point = _toScreenPosition(position);
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = "lime";
+		ctx.strokeRect(point.x - 1, point.y - areaSize.x - 1, areaSize.y + 2, areaSize.x + 2);
+	};
+
+	let _drawResource = function(position, resource)
+	{
+		if(findResources[resource.getResourceType()])
 		{
-			position = point;
-			_redraw();
-		};
+			if((resource.getLayer() == map.getLayer()) &&
+				(map.findBuilding( position, resource.getLayer()) == null))
+			{
+				let point = _toScreenPosition(position);
+				ctx.beginPath();
+				ctx.arc(point.x, point.y, 3, 0, Math.PI * 2, false);
+				ctx.closePath();
+				ctx.lineWidth = 1;
+				ctx.strokeStyle = resource.getColor();
+				ctx.stroke();
+			}
+		}
+	};
 
-		let _drawActiveArea = function()
+	let _drawBuilding = function(position, building)
+	{
+		if(building.getLayer() == map.getLayer()
+			/*&& building.isPipe()*/)
 		{
 			let point = _toScreenPosition(position);
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = "lime";
-			ctx.strokeRect(point.x - 1, point.y - areaSize.x - 1, areaSize.y + 2, areaSize.x + 2);
-		};
+			ctx.strokeStyle = "#00FFFF";
+			ctx.strokeRect(point.x, point.y, 1, 1);
+		}
+	};
 
-		let _drawResource = function(position, resource)
+	let _fromScreenPosition = function(point)
+	{
+		let currentLeft = 0, currentTop = 0;
+		let obj = ctx.canvas;
+		if (obj.offsetParent)
 		{
-			if(findResources[resource.getResourceType()])
+			do
 			{
-				if((resource.getLayer() == map.getLayer()) &&
-					(map.findBuilding( position, resource.getLayer()) == null))
-				{
-					let point = _toScreenPosition(position);
-					ctx.beginPath();
-					ctx.arc(point.x, point.y, 3, 0, Math.PI * 2, false);
-					ctx.closePath();
-					ctx.lineWidth = 1;
-					ctx.strokeStyle = resource.getColor();
-					ctx.stroke();
-				}
+				currentLeft += obj.offsetLeft;
+				currentTop += obj.offsetTop;
 			}
-		};
+			while (obj = obj.offsetParent);
+		}
+		return { x: 150 - (point.y - currentTop), y: point.x - currentLeft };
+	};
 
-		let _drawBuilding = function(position, building)
-		{
-			if(building.getLayer() == map.getLayer()
-				/*&& building.isPipe()*/)
-			{
-				let point = _toScreenPosition(position);
-				ctx.lineWidth = 1;
-				ctx.strokeStyle = "#00FFFF";
-				ctx.strokeRect(point.x, point.y, 1, 1);
-			}
-		};
+	let _toScreenPosition = function(point)
+	{
+		return { x: 0 + point.y, y: 150 - point.x };
+	};
 
-		let _fromScreenPosition = function(point)
-		{
-			let currentLeft = 0, currentTop = 0;
-			let obj = ctx.canvas;
-			if (obj.offsetParent)
-			{
-				do
-				{
-					currentLeft += obj.offsetLeft;
-					currentTop += obj.offsetTop;
-				}
-				while (obj = obj.offsetParent);
-			}
-			return { x: 150 - (point.y - currentTop), y: point.x - currentLeft };
-		};
+	_initialize();
 
-		let _toScreenPosition = function(point)
-		{
-			return { x: 0 + point.y, y: 150 - point.x };
-		};
+	//-----------------------------------------
 
-		_initialize();
+	this.getPosition = function(){ return position; };
 
-		//-----------------------------------------
+	this.setPosition = _setPosition;
+	this.redraw = _redraw;
+	this.fromScreenPosition = _fromScreenPosition;
 
-		this.getPosition = function(){ return position; };
-
-		this.setPosition = _setPosition;
-		this.redraw = _redraw;
-		this.fromScreenPosition = _fromScreenPosition;
-
-		//-----------------------------------------
-	}
+	//-----------------------------------------
+}
